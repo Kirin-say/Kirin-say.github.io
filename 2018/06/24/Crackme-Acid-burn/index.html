@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="referrer" content="no-referrer" />
+    <meta name="description" content="程序两种破解方式：Serial&#x2F;Name  &amp;&amp; Serial Serial定位到关键字符串： 1Try Again!! 定位到serial处理函数Tserial_button1Click或者根据其弹出窗口利用MessageBox来找到关键函数: 12345MessageBoxA_0和MessageBoxA处下断点 &#x2F;&#x2F;这里有两个MessageBox，为了不漏掉">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Crackme-Acid burn">
+<meta property="og:url" content="http://yoursite.com/2018/06/24/Crackme-Acid-burn/index.html">
+<meta property="og:site_name" content="Kirin&#39;s Blog">
+<meta property="og:description" content="程序两种破解方式：Serial&#x2F;Name  &amp;&amp; Serial Serial定位到关键字符串： 1Try Again!! 定位到serial处理函数Tserial_button1Click或者根据其弹出窗口利用MessageBox来找到关键函数: 12345MessageBoxA_0和MessageBoxA处下断点 &#x2F;&#x2F;这里有两个MessageBox，为了不漏掉">
+<meta property="article:published_time" content="2018-06-24T11:43:30.000Z">
+<meta property="article:modified_time" content="2018-10-16T10:13:44.000Z">
+<meta property="article:author" content="Kirin">
+<meta property="article:tag" content="Re">
+<meta property="article:tag" content="Crackme">
+<meta name="twitter:card" content="summary">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>Crackme-Acid burn</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+      
+<link rel="stylesheet" href="/css/rtl.css">
+
+    
+    <!-- rss -->
+    
+    
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Articles</a></li>
+         
+          <li><a href="/links/">Links</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2018/08/16/TJCTF2018-Re-PWN/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2018/06/07/pwnable-tw-applestore/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://yoursite.com/2018/06/24/Crackme-Acid-burn/" target="_blank" rel="noopener"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://yoursite.com/2018/06/24/Crackme-Acid-burn/&text=Crackme-Acid burn" target="_blank" rel="noopener"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://yoursite.com/2018/06/24/Crackme-Acid-burn/&title=Crackme-Acid burn" target="_blank" rel="noopener"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://yoursite.com/2018/06/24/Crackme-Acid-burn/&is_video=false&description=Crackme-Acid burn" target="_blank" rel="noopener"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Crackme-Acid burn&body=Check out this article: http://yoursite.com/2018/06/24/Crackme-Acid-burn/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://yoursite.com/2018/06/24/Crackme-Acid-burn/&title=Crackme-Acid burn" target="_blank" rel="noopener"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://yoursite.com/2018/06/24/Crackme-Acid-burn/&title=Crackme-Acid burn" target="_blank" rel="noopener"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://yoursite.com/2018/06/24/Crackme-Acid-burn/&title=Crackme-Acid burn" target="_blank" rel="noopener"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://yoursite.com/2018/06/24/Crackme-Acid-burn/&title=Crackme-Acid burn" target="_blank" rel="noopener"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://yoursite.com/2018/06/24/Crackme-Acid-burn/&name=Crackme-Acid burn&description=" target="_blank" rel="noopener"><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Serial"><span class="toc-number">1.</span> <span class="toc-text">Serial</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Serial-Name"><span class="toc-number">2.</span> <span class="toc-text">Serial&#x2F;Name</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        Crackme-Acid burn
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Kirin's Blog</span>
+      </span>
+      
+    <div class="postdate">
+        <time datetime="2018-06-24T11:43:30.000Z" itemprop="datePublished">2018-06-24</time>
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/categories/Crackme/">Crackme</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/Crackme/" rel="tag">Crackme</a>, <a class="tag-link" href="/tags/Re/" rel="tag">Re</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <p>程序两种破解方式：<br>Serial/Name  &amp;&amp; Serial</p>
+<h2 id="Serial"><a href="#Serial" class="headerlink" title="Serial"></a>Serial</h2><p>定位到关键字符串：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Try Again!!</span><br></pre></td></tr></table></figure>
+<p>定位到serial处理函数Tserial_button1Click<br>或者根据其弹出窗口<br>利用<strong>MessageBox</strong>来找到关键函数:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">MessageBoxA_0和MessageBoxA处下断点 &#x2F;&#x2F;这里有两个MessageBox，为了不漏掉，在所有调用MessageBox处下断点</span><br><span class="line">断在弹出错误窗口前</span><br><span class="line">在栈中即可看到调用窗口的函数</span><br><span class="line">再在此函数的栈帧中即可看到调用此函数的函数</span><br><span class="line">以此类推，几次之后不断回看即可找到关键函数</span><br></pre></td></tr></table></figure>
+<p>看到函数判断处：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">sub_4039FC(v10, v11);</span><br><span class="line">if ( v4 )</span><br><span class="line">&#123;</span><br><span class="line">  v9 &#x3D; 0;</span><br><span class="line">  sub_42A170(*off_430A48, &quot;God Job dude !! &#x3D;)&quot;, &quot;Congratz!&quot;, 0);</span><br><span class="line">&#125;</span><br><span class="line">else</span><br><span class="line">&#123;</span><br><span class="line">  v9 &#x3D; 0;</span><br><span class="line">  sub_42A170(*off_430A48, &quot;Try Again!!&quot;, &quot;Failed!&quot;, 0);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>关键在sub_4039FC(v10, v11)的处理<br>动态调试即可看到：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">v10 -&gt;我们的输入</span><br><span class="line">v11 -&gt;字符串&quot;Hello Dude!&quot;</span><br></pre></td></tr></table></figure>
+<p>这里即可猜出我们需要的输入为”Hello Dude!”<br>不过还是来看一下sub_4039FC：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br></pre></td><td class="code"><pre><span class="line">int __fastcall sub_4039FC(int input, int *data)</span><br><span class="line">&#123;</span><br><span class="line">  int *v2; &#x2F;&#x2F; esi</span><br><span class="line">  int *v3; &#x2F;&#x2F; edi</span><br><span class="line">  unsigned int len_input; &#x2F;&#x2F; eax</span><br><span class="line">  unsigned int len_data; &#x2F;&#x2F; edx</span><br><span class="line">  _BOOL1 v6; &#x2F;&#x2F; cf</span><br><span class="line">  int v7; &#x2F;&#x2F; edx</span><br><span class="line">  int v8; &#x2F;&#x2F; edx</span><br><span class="line">  int v9; &#x2F;&#x2F; ecx</span><br><span class="line">  int v10; &#x2F;&#x2F; ebx</span><br><span class="line">  char v11; &#x2F;&#x2F; [esp-4h] [ebp-10h]</span><br><span class="line"></span><br><span class="line">  v2 &#x3D; (int *)input;</span><br><span class="line">  v3 &#x3D; data;</span><br><span class="line">  if ( (int *)input !&#x3D; data )</span><br><span class="line">  &#123;</span><br><span class="line">    if ( input )</span><br><span class="line">    &#123;</span><br><span class="line">      if ( data )</span><br><span class="line">      &#123;</span><br><span class="line">        len_input &#x3D; *(_DWORD *)(input - 4);</span><br><span class="line">        len_data &#x3D; *(data - 1);                   &#x2F;&#x2F;字符串位置前一双字是字符串长度</span><br><span class="line">        v6 &#x3D; len_input &lt; len_data;</span><br><span class="line">        input &#x3D; len_input - len_data;</span><br><span class="line">        if ( (unsigned __int8)v6 | (input &#x3D;&#x3D; 0) )&#x2F;&#x2F; if(len_input&lt;&#x3D;len_data)</span><br><span class="line">          len_data +&#x3D; input;                    &#x2F;&#x2F; len_data&#x3D;len_input</span><br><span class="line">        v11 &#x3D; len_data;</span><br><span class="line">        v7 &#x3D; len_data &gt;&gt; 2;                     &#x2F;&#x2F; v7&#x3D;len_input&#x2F;4</span><br><span class="line">        if ( v7 )</span><br><span class="line">        &#123;</span><br><span class="line">          while ( *v2 &#x3D;&#x3D; *v3 )                  &#x2F;&#x2F; 每四字符比较一次</span><br><span class="line">          &#123;</span><br><span class="line">            v8 &#x3D; v7 - 1;</span><br><span class="line">            if ( !v8 )</span><br><span class="line">            &#123;</span><br><span class="line">              ++v2;</span><br><span class="line">              ++v3;</span><br><span class="line">              goto LABEL_13;</span><br><span class="line">            &#125;</span><br><span class="line">            if ( v2[1] !&#x3D; v3[1] )               &#x2F;&#x2F; 比较下四个字节</span><br><span class="line">              return input;                     &#x2F;&#x2F; v2+2  -&gt; si指针+4</span><br><span class="line">            v2 +&#x3D; 2;</span><br><span class="line">            v3 +&#x3D; 2;</span><br><span class="line">            v7 &#x3D; v8 - 1;                        &#x2F;&#x2F; v8&#x3D;v7-1;v7&#x3D;v8-1;  -&gt;  v7--;</span><br><span class="line">            if ( !v7 )</span><br><span class="line">              goto LABEL_13;</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        else</span><br><span class="line">        &#123;</span><br><span class="line">LABEL_13:</span><br><span class="line">          if ( !(v11 &amp; 3)</span><br><span class="line">            || (v9 &#x3D; *v2, v10 &#x3D; *v3, (unsigned __int8)*v2 &#x3D;&#x3D; (unsigned __int8)*v3)</span><br><span class="line">            &amp;&amp; ((v11 &amp; 3) &#x3D;&#x3D; 1 || BYTE1(v9) &#x3D;&#x3D; BYTE1(v10) &amp;&amp; ((v11 &amp; 3) &#x3D;&#x3D; 2 || (v9 &amp; 0xFF0000) &#x3D;&#x3D; (v10 &amp; 0xFF0000))) )</span><br><span class="line">          &#123;</span><br><span class="line">            input *&#x3D; 2;</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">      else</span><br><span class="line">      &#123;</span><br><span class="line">        input &#x3D; *(_DWORD *)(input - 4);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    else</span><br><span class="line">    &#123;</span><br><span class="line">      input &#x3D; -*(data - 1);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  return input;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这里F5没有把真实情况说明出来<br>在汇编中可以清晰看出<br>这里每次都利用cmp，使比较结果体现在ZF中</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br></pre></td><td class="code"><pre><span class="line">CODE:004039FC sub_4039FC      proc near               ; CODE XREF: sub_40BB24+6B↓p</span><br><span class="line">CODE:004039FC                                         ; sub_40F918+25↓p ...</span><br><span class="line">CODE:004039FC                 push    ebx</span><br><span class="line">CODE:004039FD                 push    esi</span><br><span class="line">CODE:004039FE                 push    edi</span><br><span class="line">CODE:004039FF                 mov     esi, eax</span><br><span class="line">CODE:00403A01                 mov     edi, edx</span><br><span class="line">CODE:00403A03                 cmp     eax, edx</span><br><span class="line">CODE:00403A05                 jz      loc_403A9A</span><br><span class="line">CODE:00403A0B                 test    esi, esi</span><br><span class="line">CODE:00403A0D                 jz      short loc_403A77</span><br><span class="line">CODE:00403A0F                 test    edi, edi</span><br><span class="line">CODE:00403A11                 jz      short loc_403A7E</span><br><span class="line">CODE:00403A13                 mov     eax, [esi-4]</span><br><span class="line">CODE:00403A16                 mov     edx, [edi-4]</span><br><span class="line">CODE:00403A19                 sub     eax, edx</span><br><span class="line">CODE:00403A1B                 ja      short loc_403A1F</span><br><span class="line">CODE:00403A1D                 add     edx, eax</span><br><span class="line">CODE:00403A1F</span><br><span class="line">CODE:00403A1F loc_403A1F:                             ; CODE XREF: sub_4039FC+1F↑j</span><br><span class="line">CODE:00403A1F                 push    edx</span><br><span class="line">CODE:00403A20                 shr     edx, 2</span><br><span class="line">CODE:00403A23                 jz      short loc_403A4B</span><br><span class="line">CODE:00403A25</span><br><span class="line">CODE:00403A25 loc_403A25:                             ; CODE XREF: sub_4039FC+45↓j</span><br><span class="line">CODE:00403A25                 mov     ecx, [esi]</span><br><span class="line">CODE:00403A27                 mov     ebx, [edi]</span><br><span class="line">CODE:00403A29                 cmp     ecx, ebx</span><br><span class="line">CODE:00403A2B                 jnz     short loc_403A85</span><br><span class="line">CODE:00403A2D                 dec     edx</span><br><span class="line">CODE:00403A2E                 jz      short loc_403A45</span><br><span class="line">CODE:00403A30                 mov     ecx, [esi+4]</span><br><span class="line">CODE:00403A33                 mov     ebx, [edi+4]</span><br><span class="line">CODE:00403A36                 cmp     ecx, ebx</span><br><span class="line">CODE:00403A38                 jnz     short loc_403A85</span><br><span class="line">CODE:00403A3A                 add     esi, 8</span><br><span class="line">CODE:00403A3D                 add     edi, 8</span><br><span class="line">CODE:00403A40                 dec     edx</span><br><span class="line">CODE:00403A41                 jnz     short loc_403A25</span><br><span class="line">CODE:00403A43                 jmp     short loc_403A4B</span><br><span class="line">CODE:00403A45 ; ---------------------------------------------------------------------------</span><br><span class="line">CODE:00403A45</span><br><span class="line">CODE:00403A45 loc_403A45:                             ; CODE XREF: sub_4039FC+32↑j</span><br><span class="line">CODE:00403A45                 add     esi, 4</span><br><span class="line">CODE:00403A48                 add     edi, 4</span><br><span class="line">CODE:00403A4B</span><br><span class="line">CODE:00403A4B loc_403A4B:                             ; CODE XREF: sub_4039FC+27↑j</span><br><span class="line">CODE:00403A4B                                         ; sub_4039FC+47↑j</span><br><span class="line">CODE:00403A4B                 pop     edx</span><br><span class="line">CODE:00403A4C                 and     edx, 3</span><br><span class="line">CODE:00403A4F                 jz      short loc_403A73</span><br><span class="line">CODE:00403A51                 mov     ecx, [esi]</span><br><span class="line">CODE:00403A53                 mov     ebx, [edi]</span><br><span class="line">CODE:00403A55                 cmp     cl, bl</span><br><span class="line">CODE:00403A57                 jnz     short loc_403A9A</span><br><span class="line">CODE:00403A59                 dec     edx</span><br><span class="line">CODE:00403A5A                 jz      short loc_403A73</span><br><span class="line">CODE:00403A5C                 cmp     ch, bh</span><br><span class="line">CODE:00403A5E                 jnz     short loc_403A9A</span><br><span class="line">CODE:00403A60                 dec     edx</span><br><span class="line">CODE:00403A61                 jz      short loc_403A73</span><br><span class="line">CODE:00403A63                 and     ebx, 0FF0000h</span><br><span class="line">CODE:00403A69                 and     ecx, 0FF0000h</span><br><span class="line">CODE:00403A6F                 cmp     ecx, ebx</span><br><span class="line">CODE:00403A71                 jnz     short loc_403A9A</span><br><span class="line">CODE:00403A73</span><br><span class="line">CODE:00403A73 loc_403A73:                             ; CODE XREF: sub_4039FC+53↑j</span><br><span class="line">CODE:00403A73                                         ; sub_4039FC+5E↑j ...</span><br><span class="line">CODE:00403A73                 add     eax, eax</span><br><span class="line">CODE:00403A75                 jmp     short loc_403A9A</span><br><span class="line">CODE:00403A77 ; ---------------------------------------------------------------------------</span><br><span class="line">CODE:00403A77</span><br><span class="line">CODE:00403A77 loc_403A77:                             ; CODE XREF: sub_4039FC+11↑j</span><br><span class="line">CODE:00403A77                 mov     edx, [edi-4]</span><br><span class="line">CODE:00403A7A                 sub     eax, edx</span><br><span class="line">CODE:00403A7C                 jmp     short loc_403A9A</span><br><span class="line">CODE:00403A7E ; ---------------------------------------------------------------------------</span><br><span class="line">CODE:00403A7E</span><br><span class="line">CODE:00403A7E loc_403A7E:                             ; CODE XREF: sub_4039FC+15↑j</span><br><span class="line">CODE:00403A7E                 mov     eax, [esi-4]</span><br><span class="line">CODE:00403A81                 sub     eax, edx</span><br><span class="line">CODE:00403A83                 jmp     short loc_403A9A</span><br><span class="line">CODE:00403A85 ; ---------------------------------------------------------------------------</span><br><span class="line">CODE:00403A85</span><br><span class="line">CODE:00403A85 loc_403A85:                             ; CODE XREF: sub_4039FC+2F↑j</span><br><span class="line">CODE:00403A85                                         ; sub_4039FC+3C↑j</span><br><span class="line">CODE:00403A85                 pop     edx</span><br><span class="line">CODE:00403A86                 cmp     cl, bl</span><br><span class="line">CODE:00403A88                 jnz     short loc_403A9A</span><br><span class="line">CODE:00403A8A                 cmp     ch, bh</span><br><span class="line">CODE:00403A8C                 jnz     short loc_403A9A</span><br><span class="line">CODE:00403A8E                 shr     ecx, 10h</span><br><span class="line">CODE:00403A91                 shr     ebx, 10h</span><br><span class="line">CODE:00403A94                 cmp     cl, bl</span><br><span class="line">CODE:00403A96                 jnz     short loc_403A9A</span><br><span class="line">CODE:00403A98                 cmp     ch, bh</span><br><span class="line">CODE:00403A9A</span><br><span class="line">CODE:00403A9A loc_403A9A:                             ; CODE XREF: sub_4039FC+9↑j</span><br><span class="line">CODE:00403A9A                                         ; sub_4039FC+5B↑j ...</span><br><span class="line">CODE:00403A9A                 pop     edi</span><br><span class="line">CODE:00403A9B                 pop     esi</span><br><span class="line">CODE:00403A9C                 pop     ebx</span><br><span class="line">CODE:00403A9D                 retn</span><br><span class="line">CODE:00403A9D sub_4039FC      endp</span><br></pre></td></tr></table></figure>
+<p>可以得到其比较过程：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">首先其根据输入的长度来调整需要比较的长度</span><br><span class="line">而后每四个字符比较一次</span><br><span class="line">不足四字符的时候，进入：</span><br><span class="line">CODE:00403A4B                 pop     edx</span><br><span class="line">CODE:00403A4C                 and     edx, 3</span><br><span class="line">CODE:00403A4F                 jz      short loc_403A73</span><br><span class="line">CODE:00403A51                 mov     ecx, [esi]</span><br><span class="line">CODE:00403A53                 mov     ebx, [edi]</span><br><span class="line">CODE:00403A55                 cmp     cl, bl</span><br><span class="line">CODE:00403A57                 jnz     short loc_403A9A</span><br><span class="line">CODE:00403A59                 dec     edx</span><br><span class="line">CODE:00403A5A                 jz      short loc_403A73</span><br><span class="line">CODE:00403A5C                 cmp     ch, bh</span><br><span class="line">CODE:00403A5E                 jnz     short loc_403A9A</span><br><span class="line">CODE:00403A60                 dec     edx</span><br><span class="line">CODE:00403A61                 jz      short loc_403A73</span><br><span class="line">CODE:00403A63                 and     ebx, 0FF0000h</span><br><span class="line">CODE:00403A69                 and     ecx, 0FF0000h</span><br><span class="line">CODE:00403A6F                 cmp     ecx, ebx</span><br><span class="line">CODE:00403A71                 jnz     short loc_403A9A</span><br><span class="line">分别比较最后0-3个字符</span><br><span class="line">最终将cmp结果体现在ZF中</span><br><span class="line">在Tserial_button1Click中判断的v4既是ZF位</span><br></pre></td></tr></table></figure>
+<p>故而我们输入”Hello Dude!”即可</p>
+<h2 id="Serial-Name"><a href="#Serial-Name" class="headerlink" title="Serial/Name"></a>Serial/Name</h2><p>同样可以通过string或者MessageBox来定位关键处理函数：TNS_BitBtn1Click<br>可以看到同样有一步判断：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">sub_4039FC(v17, v16);</span><br><span class="line">if ( v7 )</span><br><span class="line">  sub_42A170(*off_430A48, &quot;Good job dude &#x3D;)&quot;, &quot;Congratz !!&quot;, 0);</span><br><span class="line">else</span><br><span class="line">  sub_42A170(*off_430A48, &quot;Sorry , The serial is incorect !&quot;, &quot;Try Again!&quot;, 0);</span><br></pre></td></tr></table></figure>
+<p>同样是那个比较函数，不过比较的字符为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">CW-7954-CRACKED</span><br></pre></td></tr></table></figure>
+<p>猜测是通过我们输入的Name生成Serial与我们输入的Serial比较<br>向上寻找生成Serial的地方：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">    if ( sub_406930((_BYTE *)dword_43176C) &gt;&#x3D; 4 ) &#x2F;&#x2F; 判断输入名字长度&gt;&#x3D;4</span><br><span class="line">  &#123;</span><br><span class="line">    sub_41AA58(*(_DWORD *)(v4 + 476), &amp;v17);    &#x2F;&#x2F; 将Name首地址存于v17</span><br><span class="line">    dword_431750 *&#x3D; *(unsigned __int8 *)v17;    &#x2F;&#x2F; 取name第一字节*dword_431750 </span><br><span class="line">    dword_431750 *&#x3D; 2;                          &#x2F;&#x2F; dword_431750*&#x3D;2</span><br><span class="line">    sub_403708(&amp;v20, (signed __int32)&amp;str_CW[1]);&#x2F;&#x2F; 将字符串&quot;CW&quot;地址存于v20</span><br><span class="line">    sub_403708(&amp;v19, (signed __int32)&amp;str_CRACKED[1]);&#x2F;&#x2F; 将字符串&quot;CRACKED&quot;地址存于v19</span><br><span class="line">    sub_406718(dword_431750, (int)&amp;v15, v4, a4, v7);&#x2F;&#x2F; sprintf(&amp;v15,&quot;%d&quot;,dword_431750)</span><br><span class="line">    sub_4039AC((int)&amp;v18, 5);                   &#x2F;&#x2F; 字符串拼接存入v18</span><br><span class="line">    sub_41AA58(*(_DWORD *)(v4 + 480), &amp;v17);    &#x2F;&#x2F; 取我们输入的serial存入v17</span><br><span class="line">    sub_4039FC(v18, v17);                       &#x2F;&#x2F; 比较生成的serial与我们输入的serial</span><br><span class="line">    if ( v8 )</span><br><span class="line">      sub_42A170(*off_430A48, &quot;Good job dude &#x3D;)&quot;, &quot;Congratz !!&quot;, 0);</span><br><span class="line">    else</span><br><span class="line">      sub_42A170(*off_430A48, &quot;Sorry , The serial is incorect !&quot;, &quot;Try Again!&quot;, 0);</span><br><span class="line">  &#125;</span><br><span class="line">  else</span><br><span class="line">  &#123;</span><br><span class="line">    sub_42A170(*off_430A48, &quot;Sorry , The serial is incorect !&quot;, &quot;Try Again!&quot;, 0);</span><br><span class="line">  &#125;</span><br><span class="line">动态调试中可以看到dword_431750初始为0x29</span><br></pre></td></tr></table></figure>
+<p>对应汇编：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">CODE:0042FA79                 lea     edx, [ebp+var_10]</span><br><span class="line">CODE:0042FA7C                 mov     eax, [ebx+1DCh]</span><br><span class="line">CODE:0042FA82                 call    sub_41AA58</span><br><span class="line">CODE:0042FA87                 mov     eax, [ebp+var_10]</span><br><span class="line">CODE:0042FA8A                 movzx   eax, byte ptr [eax]</span><br><span class="line">CODE:0042FA8D                 imul    ds:dword_431750</span><br><span class="line">CODE:0042FA93                 mov     ds:dword_431750, eax</span><br><span class="line">CODE:0042FA98                 mov     eax, ds:dword_431750</span><br><span class="line">CODE:0042FA9D                 add     ds:dword_431750, eax</span><br><span class="line">CODE:0042FAA3                 lea     eax, [ebp+var_4]</span><br><span class="line">CODE:0042FAA6                 mov     edx, offset _str_CW.Text</span><br><span class="line">CODE:0042FAAB                 call    sub_403708</span><br><span class="line">CODE:0042FAB0                 lea     eax, [ebp+var_8]</span><br><span class="line">CODE:0042FAB3                 mov     edx, offset _str_CRACKED.Text</span><br><span class="line">CODE:0042FAB8                 call    sub_403708</span><br><span class="line">CODE:0042FABD                 push    [ebp+var_4]</span><br><span class="line">CODE:0042FAC0                 push    offset _str___5.Text     ;&quot;-&quot;</span><br><span class="line">CODE:0042FAC5                 lea     edx, [ebp+var_18]</span><br><span class="line">CODE:0042FAC8                 mov     eax, ds:dword_431750</span><br><span class="line">CODE:0042FACD                 call    sub_406718</span><br><span class="line">CODE:0042FAD2                 push    [ebp+var_18]</span><br><span class="line">CODE:0042FAD5                 push    offset _str___5.Text     ; &quot;-&quot;</span><br><span class="line">CODE:0042FADA                 push    [ebp+var_8]</span><br><span class="line">CODE:0042FADD                 lea     eax, [ebp+var_C]</span><br><span class="line">CODE:0042FAE0                 mov     edx, 5</span><br><span class="line">CODE:0042FAE5                 call    sub_4039AC</span><br><span class="line">CODE:0042FAEA                 lea     edx, [ebp+var_10]</span><br><span class="line">CODE:0042FAED                 mov     eax, [ebx+1E0h]</span><br><span class="line">CODE:0042FAF3                 call    sub_41AA58</span><br><span class="line">CODE:0042FAF8                 mov     edx, [ebp+var_10]</span><br><span class="line">CODE:0042FAFB                 mov     eax, [ebp+var_C]</span><br><span class="line">CODE:0042FAFE                 call    sub_4039FC</span><br></pre></td></tr></table></figure>
+<p>call    sub_4039AC时栈：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">esp:0019F710</span><br><span class="line">0019F710  0042FBB8  CODE:_str_CRACKED+8</span><br><span class="line">0019F714  0042FBC8  CODE:_str___5+8</span><br><span class="line">0019F718  0249A484  debug048:0249A484  -&gt;sprintf(&amp;v15,&quot;%d&quot;,dword_431750)</span><br><span class="line">0019F71C  0042FBC8  CODE:_str___5+8</span><br><span class="line">0019F720  0042FBAC  CODE:_str_CW+8</span><br></pre></td></tr></table></figure>
+<p>拼接即分5部分：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">_str_+8即为_str_.Text(_str_的字符部分，前面有_str_._top和_str_.Len)</span><br><span class="line">&quot;CW&quot;+&quot;-&quot;+sprintf(&amp;v15,&quot;%d&quot;,dword_431750)后转换成的十进制字符串+&quot;-&quot;+&quot;CRACKED&quot;</span><br></pre></td></tr></table></figure>
+<p>所以只有Name的第一字节为有效字节，用于生成Serial：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">name&#x3D;&quot;&quot;</span><br><span class="line">serial&#x3D;&quot;CW-&quot;+str(ord(name[0])*0x29*2)[:4]+&quot;-CRACKED&quot;</span><br><span class="line">print serial</span><br></pre></td></tr></table></figure>
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Articles</a></li>
+         
+          <li><a href="/links/">Links</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Serial"><span class="toc-number">1.</span> <span class="toc-text">Serial</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Serial-Name"><span class="toc-number">2.</span> <span class="toc-text">Serial&#x2F;Name</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://yoursite.com/2018/06/24/Crackme-Acid-burn/" target="_blank" rel="noopener"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://yoursite.com/2018/06/24/Crackme-Acid-burn/&text=Crackme-Acid burn" target="_blank" rel="noopener"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://yoursite.com/2018/06/24/Crackme-Acid-burn/&title=Crackme-Acid burn" target="_blank" rel="noopener"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://yoursite.com/2018/06/24/Crackme-Acid-burn/&is_video=false&description=Crackme-Acid burn" target="_blank" rel="noopener"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Crackme-Acid burn&body=Check out this article: http://yoursite.com/2018/06/24/Crackme-Acid-burn/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://yoursite.com/2018/06/24/Crackme-Acid-burn/&title=Crackme-Acid burn" target="_blank" rel="noopener"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://yoursite.com/2018/06/24/Crackme-Acid-burn/&title=Crackme-Acid burn" target="_blank" rel="noopener"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://yoursite.com/2018/06/24/Crackme-Acid-burn/&title=Crackme-Acid burn" target="_blank" rel="noopener"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://yoursite.com/2018/06/24/Crackme-Acid-burn/&title=Crackme-Acid burn" target="_blank" rel="noopener"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://yoursite.com/2018/06/24/Crackme-Acid-burn/&name=Crackme-Acid burn&description=" target="_blank" rel="noopener"><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2020 Kirin
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Articles</a></li>
+         
+          <li><a href="/links/">Links</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+</body>
+</html>
+<!-- styles -->
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+
+<!-- jquery -->
+
+<script src="/lib/jquery/jquery.min.js"></script>
+
+
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+

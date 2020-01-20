@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="referrer" content="no-referrer" />
+    <meta name="description" content="0x01 babyheap in FireShell CTF 2019free into fastbin?? 123456789new()#0x70-&gt;tcache chunkdelete()#free into tcache binedit(p64(fake_addr))#UAF-&gt;edit fd #attention: to fix tcache bin:(* tcache_chu">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Some Tips in EXPs of Recent Challenges">
+<meta property="og:url" content="http://yoursite.com/2019/01/28/Some-Tips-in-EXPs-of-Recent-Challenges/index.html">
+<meta property="og:site_name" content="Kirin&#39;s Blog">
+<meta property="og:description" content="0x01 babyheap in FireShell CTF 2019free into fastbin?? 123456789new()#0x70-&gt;tcache chunkdelete()#free into tcache binedit(p64(fake_addr))#UAF-&gt;edit fd #attention: to fix tcache bin:(* tcache_chu">
+<meta property="article:published_time" content="2019-01-28T12:58:25.000Z">
+<meta property="article:modified_time" content="2019-01-30T13:04:24.000Z">
+<meta property="article:author" content="Kirin">
+<meta property="article:tag" content="PWN">
+<meta name="twitter:card" content="summary">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>Some Tips in EXPs of Recent Challenges</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+      
+<link rel="stylesheet" href="/css/rtl.css">
+
+    
+    <!-- rss -->
+    
+    
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Articles</a></li>
+         
+          <li><a href="/links/">Links</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2019/02/04/A-Tip-of-PHP-Variable-Name-in-Web-Server/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2019/01/28/FireShell-CTF-2019-PWN/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://yoursite.com/2019/01/28/Some-Tips-in-EXPs-of-Recent-Challenges/" target="_blank" rel="noopener"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://yoursite.com/2019/01/28/Some-Tips-in-EXPs-of-Recent-Challenges/&text=Some Tips in EXPs of Recent Challenges" target="_blank" rel="noopener"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://yoursite.com/2019/01/28/Some-Tips-in-EXPs-of-Recent-Challenges/&title=Some Tips in EXPs of Recent Challenges" target="_blank" rel="noopener"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://yoursite.com/2019/01/28/Some-Tips-in-EXPs-of-Recent-Challenges/&is_video=false&description=Some Tips in EXPs of Recent Challenges" target="_blank" rel="noopener"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Some Tips in EXPs of Recent Challenges&body=Check out this article: http://yoursite.com/2019/01/28/Some-Tips-in-EXPs-of-Recent-Challenges/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://yoursite.com/2019/01/28/Some-Tips-in-EXPs-of-Recent-Challenges/&title=Some Tips in EXPs of Recent Challenges" target="_blank" rel="noopener"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://yoursite.com/2019/01/28/Some-Tips-in-EXPs-of-Recent-Challenges/&title=Some Tips in EXPs of Recent Challenges" target="_blank" rel="noopener"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://yoursite.com/2019/01/28/Some-Tips-in-EXPs-of-Recent-Challenges/&title=Some Tips in EXPs of Recent Challenges" target="_blank" rel="noopener"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://yoursite.com/2019/01/28/Some-Tips-in-EXPs-of-Recent-Challenges/&title=Some Tips in EXPs of Recent Challenges" target="_blank" rel="noopener"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://yoursite.com/2019/01/28/Some-Tips-in-EXPs-of-Recent-Challenges/&name=Some Tips in EXPs of Recent Challenges&description=" target="_blank" rel="noopener"><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#0x01-babyheap-in-FireShell-CTF-2019"><span class="toc-number">1.</span> <span class="toc-text">0x01 babyheap in FireShell CTF 2019</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#0x02-realloc-error-in-anheng-CTF-2019-1"><span class="toc-number">2.</span> <span class="toc-text">0x02 realloc error in anheng CTF 2019.1</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        Some Tips in EXPs of Recent Challenges
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Kirin's Blog</span>
+      </span>
+      
+    <div class="postdate">
+        <time datetime="2019-01-28T12:58:25.000Z" itemprop="datePublished">2019-01-28</time>
+    </div>
+
+
+      
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/PWN/" rel="tag">PWN</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h3 id="0x01-babyheap-in-FireShell-CTF-2019"><a href="#0x01-babyheap-in-FireShell-CTF-2019" class="headerlink" title="0x01 babyheap in FireShell CTF 2019"></a>0x01 babyheap in FireShell CTF 2019</h3><p><strong>free into fastbin??</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">new()#0x70-&gt;tcache chunk</span><br><span class="line">delete()#free into tcache bin</span><br><span class="line">edit(p64(fake_addr))#UAF-&gt;edit fd </span><br><span class="line">#attention: to fix tcache bin:(* tcache_chunk )*fake_addr-&gt;fd&#x3D;0</span><br><span class="line">new()</span><br><span class="line">new()#malloc tcache chunk in fake_addr</span><br><span class="line">new()#0x70-&gt;tcache chunk</span><br><span class="line">#free into fastbin??</span><br><span class="line">delete()</span><br></pre></td></tr></table></figure>
+<p><strong>make sure-&gt;free into fastbin</strong><br><strong>debug-&gt;breakpoint before last delete():</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">pwndbg&gt; p main_arena </span><br><span class="line">$2 &#x3D; &#123;</span><br><span class="line">  mutex &#x3D; 0, </span><br><span class="line">  flags &#x3D; 0, </span><br><span class="line">  have_fastchunks &#x3D; 1, </span><br><span class="line">  fastbinsY &#x3D; &#123;0x0, 0x0, 0x0, 0x0, 0x0, 0xcbc2c0, 0x0, 0x0, 0x0, 0x0&#125;</span><br><span class="line">#free into fastbin</span><br><span class="line">......</span><br><span class="line">......</span><br></pre></td></tr></table></figure>
+<p><strong>It can also be seen&amp;&amp;something more:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">pwndbg&gt; bins</span><br><span class="line">tcachebins</span><br><span class="line">0x70 [ -1]: 0x0#attention：-1</span><br><span class="line">fastbins</span><br><span class="line">0x20: 0x0</span><br><span class="line">0x30: 0x0</span><br><span class="line">0x40: 0x0</span><br><span class="line">0x50: 0x0</span><br><span class="line">0x60: 0x0</span><br><span class="line">0x70: 0xcbc2c0 ◂— 0x0</span><br><span class="line">0x80: 0x0</span><br><span class="line">unsortedbin</span><br><span class="line">all: 0x0</span><br><span class="line">smallbins</span><br><span class="line">empty</span><br><span class="line">largebins</span><br><span class="line">empty</span><br></pre></td></tr></table></figure>
+<p><strong>tcache info：</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">pwndbg&gt; p  *(struct tcache_perthread_struct *) 0xcbc010</span><br><span class="line">$3 &#x3D; &#123;</span><br><span class="line">  counts &#x3D; &quot;\000\000\000\000\000\377&quot;, &#39;\000&#39; &lt;repeats 57 times&gt;, </span><br><span class="line">  entries &#x3D; &#123;0x0 &lt;repeats 64 times&gt;&#125;</span><br><span class="line">&#125;#octal</span><br><span class="line"></span><br><span class="line">#malloc.c:</span><br><span class="line">#typedef struct tcache_perthread_struct</span><br><span class="line">#&#123;</span><br><span class="line"># char counts[TCACHE_MAX_BINS];</span><br><span class="line">#  tcache_entry *entries[TCACHE_MAX_BINS];</span><br><span class="line">#&#125; tcache_perthread_struct;</span><br></pre></td></tr></table></figure>
+<p>It can be seen：<br><strong>tcache-&gt;counts[0x70]=0377=0xFF</strong></p>
+<p><strong>Hardware breakpoint at tcache-&gt;counts[0x70]:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">#read-&gt;rwatch</span><br><span class="line">#write-&gt;watch</span><br><span class="line">#read&amp;write-&gt;awatch</span><br><span class="line">#example：int format: (r&#x2F;a)watch *(int *)addr</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">pwndbg&gt; awatch *0x1f05015 </span><br><span class="line">Hardware access (read&#x2F;write) watchpoint 1: *0x1f05015</span><br><span class="line"></span><br><span class="line">pwndbg&gt; c</span><br><span class="line">......</span><br><span class="line">......</span><br><span class="line">►  0x7fa54bb7f212 &lt;malloc+418&gt;    add    rsp, 0x18</span><br><span class="line">   0x7fa54bb7f216 &lt;malloc+422&gt;    mov    rax, rdx</span><br><span class="line">   0x7fa54bb7f219 &lt;malloc+425&gt;    pop    rbx</span><br><span class="line">   0x7fa54bb7f21a &lt;malloc+426&gt;    pop    rbp</span><br><span class="line">   0x7fa54bb7f21b &lt;malloc+427&gt;    ret    </span><br><span class="line">......</span><br><span class="line">......</span><br><span class="line"></span><br><span class="line">pwndbg&gt; vmmap</span><br><span class="line">......</span><br><span class="line">0x7fa54bae8000     0x7fa54bccf000 r-xp   1e7000 0      &#x2F;lib&#x2F;x86_64-linux-gnu&#x2F;libc-2.27.so</span><br><span class="line">......</span><br></pre></td></tr></table></figure>
+<p><strong>function offset:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">offset&#x3D;0x7fa54bb7f212-0x7fa54bae8000&#x3D;0x97212</span><br></pre></td></tr></table></figure>
+<p><strong>reverse libc-2.27.so with ida:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">.text:00000000000971F0                 lea     rsi, [rcx+rax*8]</span><br><span class="line">.text:00000000000971F4                 mov     rdx, [rsi+40h]</span><br><span class="line">.text:00000000000971F8                 test    rdx, rdx</span><br><span class="line">.text:00000000000971FB                 jz      loc_970DC</span><br><span class="line">.text:0000000000097201                 cmp     rax, 3Fh</span><br><span class="line">.text:0000000000097205                 ja      short loc_97220</span><br><span class="line">.text:0000000000097207                 mov     rdi, [rdx]</span><br><span class="line">.text:000000000009720A                 mov     [rsi+40h], rdi</span><br><span class="line">.text:000000000009720E                 sub     byte ptr [rcx+rax], 1</span><br><span class="line">.text:0000000000097212</span><br><span class="line">.text:0000000000097212 loc_97212:                              ; CODE XREF: malloc+9E↑j</span><br><span class="line">.text:0000000000097212                                         ; malloc+A6↑j ...</span><br><span class="line">.text:0000000000097212                 add     rsp, 18h</span><br><span class="line">.text:0000000000097216                 mov     rax, rdx</span><br><span class="line">.text:0000000000097219                 pop     rbx</span><br><span class="line">.text:000000000009721A                 pop     rbp</span><br><span class="line">.text:000000000009721B                 retn</span><br><span class="line"></span><br><span class="line">#breakpoint at</span><br><span class="line">#.text:000000000009720E                 sub     byte ptr [rcx+rax], 1</span><br><span class="line">#can make sure that:</span><br><span class="line">#sub     byte ptr [rcx+rax], 1-------&gt;</span><br><span class="line">#tcache-&gt;counts[0x70]&#x3D;0xFF</span><br></pre></td></tr></table></figure>
+<p><strong>correspond to source code in malloc.c:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">tcache_get (size_t tc_idx)</span><br><span class="line">&#123;</span><br><span class="line">  tcache_entry *e &#x3D; tcache-&gt;entries[tc_idx];</span><br><span class="line">  assert (tc_idx &lt; TCACHE_MAX_BINS);</span><br><span class="line">  assert (tcache-&gt;entries[tc_idx] &gt; 0);</span><br><span class="line">  tcache-&gt;entries[tc_idx] &#x3D; e-&gt;next;</span><br><span class="line">  --(tcache-&gt;counts[tc_idx]);#this position</span><br><span class="line">  return (void *) e;</span><br><span class="line">&#125;</span><br><span class="line">#tcache_put (mchunkptr chunk, size_t tc_idx)</span><br><span class="line">#&#123;</span><br><span class="line">#  tcache_entry *e &#x3D; (tcache_entry *) chunk2mem (chunk);</span><br><span class="line">#  assert (tc_idx &lt; TCACHE_MAX_BINS);</span><br><span class="line">#  e-&gt;next &#x3D; tcache-&gt;entries[tc_idx];</span><br><span class="line">#  tcache-&gt;entries[tc_idx] &#x3D; e;</span><br><span class="line">#  ++(tcache-&gt;counts[tc_idx]);</span><br><span class="line">#&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>to sum up:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">new()#tcache-&gt;counts[0x70]&#x3D;0</span><br><span class="line">delete()#tcache-&gt;counts[0x70]&#x3D;1</span><br><span class="line">edit(p64(fake_addr))#UAF-&gt;edit fd-&gt;add a chunk in tcache bin</span><br><span class="line">new()#malloc from tcache bin-&gt;</span><br><span class="line">#tcache-&gt;counts[0x70]--</span><br><span class="line">#tcache-&gt;counts[0x70]&#x3D;0</span><br><span class="line">new()#malloc from tcache bin--&gt;</span><br><span class="line">#tcache-&gt;counts[0x70]--</span><br><span class="line">#tcache-&gt;counts[0x70]&#x3D;0-1&#x3D;0xFF</span><br><span class="line">new()#0x70-&gt;tcache chunk</span><br><span class="line">delete()#(char )tcache-&gt;counts[0x70]&#x3D;0xFF&gt;7</span><br><span class="line">#so this chunk free into fastbin bin</span><br></pre></td></tr></table></figure>
+<h3 id="0x02-realloc-error-in-anheng-CTF-2019-1"><a href="#0x02-realloc-error-in-anheng-CTF-2019-1" class="headerlink" title="0x02 realloc error in anheng CTF 2019.1"></a>0x02 realloc error in anheng CTF 2019.1</h3><p><strong>some errors happened when I realloc fake_chunk at __malloc_hook-0x13(chunk_size=0x7F):</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">realloc(): invalid pointer: 0x00007f00eb485aed</span><br></pre></td></tr></table></figure>
+<p><strong>debug step by step, we can find somthing wrong：</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"> ► 0x7fdc316ae724 &lt;realloc+100&gt;    test   r14b, 0xf</span><br><span class="line">   0x7fdc316ae728 &lt;realloc+104&gt;    jne    realloc+928 &lt;0x7fdc316aea60&gt;</span><br><span class="line">    ↓</span><br><span class="line">   0x7fdc316aea60 &lt;realloc+928&gt;    mov    ebp, dword ptr [rip + 0x33f6ea] &lt;0x7fdc319ee150&gt;</span><br><span class="line">   0x7fdc316aea66 &lt;realloc+934&gt;    jmp    realloc+266 &lt;0x7fdc316ae7ca&gt;</span><br><span class="line">    ↓</span><br><span class="line">   0x7fdc316ae7ca &lt;realloc+266&gt;    mov    eax, ebp</span><br><span class="line">   0x7fdc316ae7cc &lt;realloc+268&gt;    and    eax, 5</span><br><span class="line"></span><br><span class="line">#IDA:</span><br><span class="line">#  if ( v5 &lt;&#x3D; -(signed __int64)v6 &amp;&amp; !(v5 &amp; 0xF) )</span><br><span class="line">#  &#123;</span><br><span class="line">#    _R12 &#x3D; 0LL;</span><br><span class="line">#    goto LABEL_9;</span><br><span class="line">#  &#125;</span><br></pre></td></tr></table></figure>
+<p><strong>correspond to source code in malloc.c:</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">  <span class="comment">/* Little security check which won't hurt performance: the allocator</span></span><br><span class="line"><span class="comment">     never wrapps around at the end of the address space.  Therefore</span></span><br><span class="line"><span class="comment">     we can exclude some size values which might appear here by</span></span><br><span class="line"><span class="comment">     accident or by "design" from some intruder.  We need to bypass</span></span><br><span class="line"><span class="comment">     this check for dumped fake mmap chunks from the old main arena</span></span><br><span class="line"><span class="comment">     because the new malloc may provide additional alignment.  */</span></span><br><span class="line">  <span class="keyword">if</span> ((__builtin_expect ((<span class="keyword">uintptr_t</span>) oldp &gt; (<span class="keyword">uintptr_t</span>) -oldsize, <span class="number">0</span>)</span><br><span class="line">       || __builtin_expect (misaligned_chunk (oldp), <span class="number">0</span>))</span><br><span class="line">      &amp;&amp; !DUMPED_MAIN_ARENA_CHUNK (oldp))</span><br><span class="line">      malloc_printerr (<span class="string">"realloc(): invalid pointer"</span>);</span><br><span class="line"></span><br><span class="line">something <span class="keyword">else</span>:</span><br><span class="line">#define misaligned_chunk(p) \</span><br><span class="line">  ((<span class="keyword">uintptr_t</span>)(MALLOC_ALIGNMENT == <span class="number">2</span> * SIZE_SZ ? (p) : chunk2mem (p)) \</span><br><span class="line">   &amp; MALLOC_ALIGN_MASK)</span><br></pre></td></tr></table></figure>
+<p><strong>to sum up:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">realloc(): invalid pointer: 0x00007f00eb485aed</span><br><span class="line">reason：</span><br><span class="line">Although the header of fake_chunk(0x7F) can bypass the check of chunk_size(like malloc) </span><br><span class="line">but there is memory alignment check when realloc a chunk:</span><br><span class="line">0x00007f00eb485aed&amp;0xF!&#x3D;0-&gt;</span><br><span class="line">malloc_printerr (&quot;realloc(): invalid pointer&quot;);</span><br></pre></td></tr></table></figure>
+<p>how could it success when edit fake chunk at &amp;<strong>malloc_hook-0x3.<br>In fact, it also works when we edit fake chunk address at &amp;</strong>malloc_hook.<br>This is related to the flow of program：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">  v9 = strtol(nptr, <span class="number">0L</span>L, <span class="number">10</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">while</span> ( v9 - <span class="number">0x80</span> &gt; <span class="number">0xF80</span> );</span><br><span class="line"><span class="built_in">printf</span>(<span class="string">"Description :"</span>, <span class="number">0L</span>L);</span><br><span class="line"><span class="keyword">if</span> ( *(_DWORD *)(*v10 + <span class="number">0x40</span>LL) &lt; v9 )</span><br><span class="line">&#123;</span><br><span class="line">  *(_BYTE *)v10 = (<span class="keyword">unsigned</span> __int64)<span class="built_in">realloc</span>((<span class="keyword">void</span> *)*v10, v9 + <span class="number">68</span>);</span><br><span class="line">  v6 = <span class="number">0</span>;</span><br><span class="line">  <span class="keyword">while</span> ( <span class="number">1</span> )</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="built_in">read</span>(<span class="number">0</span>, (<span class="keyword">void</span> *)(v6 + <span class="number">68L</span>L + *v10), <span class="number">1u</span>LL);</span><br><span class="line">    <span class="keyword">if</span> ( *(_BYTE *)(v6 + <span class="number">68L</span>L + *v10) == <span class="number">10</span> )</span><br><span class="line">      <span class="keyword">break</span>;</span><br><span class="line">    <span class="keyword">if</span> ( ++v6 &gt;= v9 + <span class="number">68</span> )</span><br><span class="line">      <span class="keyword">goto</span> LABEL_33;</span><br><span class="line">  &#125;</span><br><span class="line">  *(_BYTE *)(v6 + <span class="number">68L</span>L + *v10) = <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">&#123;</span><br><span class="line">  v5 = <span class="number">0</span>;</span><br><span class="line">  <span class="keyword">while</span> ( <span class="number">1</span> )</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="built_in">read</span>(<span class="number">0</span>, (<span class="keyword">void</span> *)(v5 + <span class="number">68L</span>L + *v10), <span class="number">1u</span>LL);</span><br><span class="line">    <span class="keyword">if</span> ( *(_BYTE *)(v5 + <span class="number">68L</span>L + *v10) == <span class="number">10</span> )</span><br><span class="line">      <span class="keyword">break</span>;</span><br><span class="line">    <span class="keyword">if</span> ( ++v5 &gt;= v9 )</span><br><span class="line">      <span class="keyword">goto</span> LABEL_33;</span><br><span class="line">  &#125;</span><br><span class="line">  *(_BYTE *)(v5 + <span class="number">68L</span>L + *v10) = <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>when the size we request below the size of note we malloc before：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">read(0, (void *)(v5 + 68LL + *v10), 1uLL);</span><br><span class="line"> if ( *(_BYTE *)(v5 + 68LL + *v10) &#x3D;&#x3D; 10 )</span><br><span class="line">        break;</span><br><span class="line"> if ( ++v5 &gt;&#x3D; v9 )</span><br><span class="line">        goto LABEL_33;</span><br></pre></td></tr></table></figure>
+<p><strong>The program will read the stdin directly into the fake_addr, and realloc won’t be called：</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">the size of note(struct info:offset of chunk2mem(chunk_addr)&#x3D;0x40):</span><br><span class="line"></span><br><span class="line">__malloc_hook-0x3&#x2F;__malloc_hook+0x40-&gt;a number usually greater than 0x20(we request in exp) </span><br><span class="line">In this case, it will read the stdin directly into the fake_addr</span><br><span class="line">__malloc_hook-0x13+0x40-&gt;Null(0)</span><br><span class="line">In this case, it will call the realloc-&gt;error happened</span><br></pre></td></tr></table></figure>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Articles</a></li>
+         
+          <li><a href="/links/">Links</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#0x01-babyheap-in-FireShell-CTF-2019"><span class="toc-number">1.</span> <span class="toc-text">0x01 babyheap in FireShell CTF 2019</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#0x02-realloc-error-in-anheng-CTF-2019-1"><span class="toc-number">2.</span> <span class="toc-text">0x02 realloc error in anheng CTF 2019.1</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://yoursite.com/2019/01/28/Some-Tips-in-EXPs-of-Recent-Challenges/" target="_blank" rel="noopener"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://yoursite.com/2019/01/28/Some-Tips-in-EXPs-of-Recent-Challenges/&text=Some Tips in EXPs of Recent Challenges" target="_blank" rel="noopener"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://yoursite.com/2019/01/28/Some-Tips-in-EXPs-of-Recent-Challenges/&title=Some Tips in EXPs of Recent Challenges" target="_blank" rel="noopener"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://yoursite.com/2019/01/28/Some-Tips-in-EXPs-of-Recent-Challenges/&is_video=false&description=Some Tips in EXPs of Recent Challenges" target="_blank" rel="noopener"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Some Tips in EXPs of Recent Challenges&body=Check out this article: http://yoursite.com/2019/01/28/Some-Tips-in-EXPs-of-Recent-Challenges/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://yoursite.com/2019/01/28/Some-Tips-in-EXPs-of-Recent-Challenges/&title=Some Tips in EXPs of Recent Challenges" target="_blank" rel="noopener"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://yoursite.com/2019/01/28/Some-Tips-in-EXPs-of-Recent-Challenges/&title=Some Tips in EXPs of Recent Challenges" target="_blank" rel="noopener"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://yoursite.com/2019/01/28/Some-Tips-in-EXPs-of-Recent-Challenges/&title=Some Tips in EXPs of Recent Challenges" target="_blank" rel="noopener"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://yoursite.com/2019/01/28/Some-Tips-in-EXPs-of-Recent-Challenges/&title=Some Tips in EXPs of Recent Challenges" target="_blank" rel="noopener"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://yoursite.com/2019/01/28/Some-Tips-in-EXPs-of-Recent-Challenges/&name=Some Tips in EXPs of Recent Challenges&description=" target="_blank" rel="noopener"><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2020 Kirin
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Articles</a></li>
+         
+          <li><a href="/links/">Links</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+</body>
+</html>
+<!-- styles -->
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+
+<!-- jquery -->
+
+<script src="/lib/jquery/jquery.min.js"></script>
+
+
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+

