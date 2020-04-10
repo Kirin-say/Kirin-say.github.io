@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="referrer" content="no-referrer" />
+    <meta name="description" content="0x01 Input your lucky number_string首先关注一下输入： 123.text:004011BE                 mov     ecx, ds:?cin@std@@3V?$basic_istream@DU?$char_traits@D@std@@@1@A ; std::basic_istream&lt;char,std::char_traits&lt;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="巅峰极客第一场_Re">
+<meta property="og:url" content="http://yoursite.com/2018/07/21/%E5%B7%85%E5%B3%B0%E6%9E%81%E5%AE%A2%E7%AC%AC%E4%B8%80%E5%9C%BA-Re/index.html">
+<meta property="og:site_name" content="Kirin&#39;s Blog">
+<meta property="og:description" content="0x01 Input your lucky number_string首先关注一下输入： 123.text:004011BE                 mov     ecx, ds:?cin@std@@3V?$basic_istream@DU?$char_traits@D@std@@@1@A ; std::basic_istream&lt;char,std::char_traits&lt;">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/7434375-90cef1f097541077.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/7434375-b30256374abf59f1.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/7434375-ef9de5598d7f02b3.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="article:published_time" content="2018-07-21T10:22:08.000Z">
+<meta property="article:modified_time" content="2018-08-26T14:01:40.000Z">
+<meta property="article:author" content="Kirin">
+<meta property="article:tag" content="CTF">
+<meta property="article:tag" content="Re">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://upload-images.jianshu.io/upload_images/7434375-90cef1f097541077.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>巅峰极客第一场_Re</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+      
+<link rel="stylesheet" href="/css/rtl.css">
+
+    
+    <!-- rss -->
+    
+    
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Articles</a></li>
+         
+          <li><a href="/links/">Links</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2018/08/16/TJCTF2018-Re-PWN/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2018/06/24/Crackme-Acid-burn/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://yoursite.com/2018/07/21/%E5%B7%85%E5%B3%B0%E6%9E%81%E5%AE%A2%E7%AC%AC%E4%B8%80%E5%9C%BA-Re/" target="_blank" rel="noopener"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://yoursite.com/2018/07/21/%E5%B7%85%E5%B3%B0%E6%9E%81%E5%AE%A2%E7%AC%AC%E4%B8%80%E5%9C%BA-Re/&text=巅峰极客第一场_Re" target="_blank" rel="noopener"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://yoursite.com/2018/07/21/%E5%B7%85%E5%B3%B0%E6%9E%81%E5%AE%A2%E7%AC%AC%E4%B8%80%E5%9C%BA-Re/&title=巅峰极客第一场_Re" target="_blank" rel="noopener"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://yoursite.com/2018/07/21/%E5%B7%85%E5%B3%B0%E6%9E%81%E5%AE%A2%E7%AC%AC%E4%B8%80%E5%9C%BA-Re/&is_video=false&description=巅峰极客第一场_Re" target="_blank" rel="noopener"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=巅峰极客第一场_Re&body=Check out this article: http://yoursite.com/2018/07/21/%E5%B7%85%E5%B3%B0%E6%9E%81%E5%AE%A2%E7%AC%AC%E4%B8%80%E5%9C%BA-Re/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://yoursite.com/2018/07/21/%E5%B7%85%E5%B3%B0%E6%9E%81%E5%AE%A2%E7%AC%AC%E4%B8%80%E5%9C%BA-Re/&title=巅峰极客第一场_Re" target="_blank" rel="noopener"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://yoursite.com/2018/07/21/%E5%B7%85%E5%B3%B0%E6%9E%81%E5%AE%A2%E7%AC%AC%E4%B8%80%E5%9C%BA-Re/&title=巅峰极客第一场_Re" target="_blank" rel="noopener"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://yoursite.com/2018/07/21/%E5%B7%85%E5%B3%B0%E6%9E%81%E5%AE%A2%E7%AC%AC%E4%B8%80%E5%9C%BA-Re/&title=巅峰极客第一场_Re" target="_blank" rel="noopener"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://yoursite.com/2018/07/21/%E5%B7%85%E5%B3%B0%E6%9E%81%E5%AE%A2%E7%AC%AC%E4%B8%80%E5%9C%BA-Re/&title=巅峰极客第一场_Re" target="_blank" rel="noopener"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://yoursite.com/2018/07/21/%E5%B7%85%E5%B3%B0%E6%9E%81%E5%AE%A2%E7%AC%AC%E4%B8%80%E5%9C%BA-Re/&name=巅峰极客第一场_Re&description=" target="_blank" rel="noopener"><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#0x01-Input-your-lucky-number-string"><span class="toc-number">1.</span> <span class="toc-text">0x01 Input your lucky number_string</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x02-Simple-Base-N"><span class="toc-number">2.</span> <span class="toc-text">0x02 Simple Base-N</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x03-Interesting-Pointer"><span class="toc-number">3.</span> <span class="toc-text">0x03 Interesting Pointer</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        巅峰极客第一场_Re
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Kirin's Blog</span>
+      </span>
+      
+    <div class="postdate">
+        <time datetime="2018-07-21T10:22:08.000Z" itemprop="datePublished">2018-07-21</time>
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/categories/CTF/">CTF</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/CTF/" rel="tag">CTF</a>, <a class="tag-link" href="/tags/Re/" rel="tag">Re</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h2 id="0x01-Input-your-lucky-number-string"><a href="#0x01-Input-your-lucky-number-string" class="headerlink" title="0x01 Input your lucky number_string"></a>0x01 Input your lucky number_string</h2><p>首先关注一下输入：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">.text:004011BE                 mov     ecx, ds:?cin@std@@3V?$basic_istream@DU?$char_traits@D@std@@@1@A ; std::basic_istream&lt;char,std::char_traits&lt;char&gt;&gt; std::cin</span><br><span class="line">.text:004011C4                 lea     eax, [ebp+var_28]</span><br><span class="line">.text:004011C7                 push    eax</span><br></pre></td></tr></table></figure>
+<p>ebp+var_28处保存输入<br>接下来两次传参调用同一个函数：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">.text:00401260                 jz      loc_401300</span><br><span class="line">.text:00401266                 push    [ebp+var_28]</span><br><span class="line">.text:00401269                 sub     esi, edi</span><br><span class="line">.text:0040126B                 add     edi, offset loc_401000</span><br><span class="line">.text:00401271                 mov     edx, esi</span><br><span class="line">.text:00401273                 mov     ecx, edi</span><br><span class="line">.text:00401275                 call    sub_401100</span><br></pre></td></tr></table></figure>
+<p>关注到中间有一步调用有问题：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">.text:0040127A                 lea     eax, [ebp+var_24]</span><br><span class="line">.text:0040127D                 push    eax</span><br><span class="line">.text:0040127E                 push    offset aSeedOfFlag ; &quot;seed_of_flag&quot;</span><br><span class="line">.text:00401283                 call    loc_401000</span><br></pre></td></tr></table></figure>
+<p> loc_401000函数被编码<br>动态调试发现程序调用call    sub_401100对loc_401000处进行解码<br>且使用的key是我们输入值的最后一字节：<br>首先动态调试看解码初始地址：<br><img src="https://upload-images.jianshu.io/upload_images/7434375-90cef1f097541077.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="图片.png"><br>(地址开始的初始值是09)<br>初始指令：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">.text:00271013                 or      ds:0DF5227D1h[ecx], ecx</span><br></pre></td></tr></table></figure>
+<p>显然不行，考虑到后期栈平衡，此处应为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">push ebx</span><br></pre></td></tr></table></figure>
+<p>所以我们的输入值是：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">0x09^0x53&#x3D;90</span><br></pre></td></tr></table></figure>
+<p>(实际上考虑到输入值仅最后字节有效，直接测试0x00~0xff即可)<br><img src="https://upload-images.jianshu.io/upload_images/7434375-b30256374abf59f1.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="flag"></p>
+<h2 id="0x02-Simple-Base-N"><a href="#0x02-Simple-Base-N" class="headerlink" title="0x02 Simple Base-N"></a>0x02 Simple Base-N</h2><p>动态调试发现输入流保存在byte_305018<br>分析sub_301100函数：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">     if ( (unsigned __int8)(v3 - 97) &lt;&#x3D; 0x19u )</span><br><span class="line">        v1[v2] &#x3D; (v3 - 84) % 26 + 97;</span><br><span class="line">      if ( (unsigned __int8)(v3 - 65) &lt;&#x3D; 0x19u )</span><br><span class="line">        v1[v2] &#x3D; (v3 - 52) % 26 + 65;</span><br><span class="line">      ++v2;</span><br><span class="line">&#96;</span><br></pre></td></tr></table></figure>
+<p>看到其对字母进行了线性映射<br>再往下，只看关键点：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">check((int)&amp;byte_305018[1], strlen(byte_305018));</span><br><span class="line"> v5 &#x3D; strcmp(a0, &quot;weNTDk5LZsNRHk6cVogqTZmFy2NRP7X4ZHLTBZwg&quot;);</span><br></pre></td></tr></table></figure>
+<p>这里对输入字符串进行处理<br>我们需要得到weNTDk5LZsNRHk6cVogqTZmFy2NRP7X4ZHLTBZwg<br>进入check,只看关键点：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">sub_301170((unsigned __int8 *)&amp;byte_305018[v2], v4);</span><br><span class="line">  v2 +&#x3D; 5;</span><br><span class="line">  v4 -&#x3D; 5;</span><br><span class="line">  v3 +&#x3D; 8;</span><br></pre></td></tr></table></figure>
+<p>比较明显，使用输入流的每五位生成结果的八位：<br>查看sub_301170，依然只看关键点：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br></pre></td><td class="code"><pre><span class="line">.text:00301173                 movzx   eax, byte ptr [ecx]</span><br><span class="line">.text:00301176                 push    ebx</span><br><span class="line">.text:00301177                 push    esi</span><br><span class="line">.text:00301178                 push    edi</span><br><span class="line">.text:00301179                 mov     ebx, edx</span><br><span class="line">.text:0030117B                 cdq</span><br><span class="line">.text:0030117C                 mov     edi, eax</span><br><span class="line">.text:0030117E                 mov     esi, edx</span><br><span class="line">.text:00301180                 movzx   eax, byte ptr [ecx+1]</span><br><span class="line">.text:00301184                 cdq</span><br><span class="line">.text:00301185                 shld    esi, edi, 8</span><br><span class="line">.text:00301189                 shl     edi, 8</span><br><span class="line">.text:0030118C                 add     edi, eax</span><br><span class="line">.text:0030118E                 movzx   eax, byte ptr [ecx+2]</span><br><span class="line">.text:00301192                 adc     esi, edx</span><br><span class="line">.text:00301194                 cdq</span><br><span class="line">.text:00301195                 shld    esi, edi, 8</span><br><span class="line">.text:00301199                 shl     edi, 8</span><br><span class="line">.text:0030119C                 add     edi, eax</span><br><span class="line">.text:0030119E                 movzx   eax, byte ptr [ecx+3]</span><br><span class="line">.text:003011A2                 adc     esi, edx</span><br><span class="line">.text:003011A4                 cdq</span><br><span class="line">.text:003011A5                 shld    esi, edi, 8</span><br><span class="line">.text:003011A9                 shl     edi, 8</span><br><span class="line">.text:003011AC                 add     edi, eax</span><br><span class="line">.text:003011AE                 movzx   eax, byte ptr [ecx+4]</span><br><span class="line">.text:003011B2                 adc     esi, edx</span><br><span class="line">.text:003011B4                 cdq</span><br><span class="line">.text:003011B5                 shld    esi, edi, 8</span><br><span class="line">.text:003011B9                 shl     edi, 8</span><br><span class="line">.text:003011BC                 add     edi, eax</span><br><span class="line">.text:003011BE                 mov     ecx, edi</span><br><span class="line">.text:003011C0                 adc     esi, edx</span><br><span class="line">.text:003011C2                 mov     edx, [ebp+arg_0]</span><br><span class="line">.text:003011C5                 mov     eax, esi</span><br><span class="line">.text:003011C7                 shr     eax, 3</span><br><span class="line">.text:003011CA                 movzx   eax, byte ptr dword_30507C[eax]</span><br><span class="line">.text:003011D1                 mov     [edx], al</span><br><span class="line">.text:003011D3                 mov     eax, esi</span><br><span class="line">.text:003011D5                 shrd    ecx, eax, 1Eh</span><br><span class="line">.text:003011D9                 shr     eax, 1Eh</span><br><span class="line">.text:003011DC                 and     ecx, 1Fh</span><br><span class="line">.text:003011DF                 movzx   eax, byte ptr dword_30507C[ecx]</span><br><span class="line">.text:003011E6                 mov     ecx, edi</span><br><span class="line">.text:003011E8                 mov     [edx+1], al</span><br><span class="line">.text:003011EB                 mov     eax, esi</span><br><span class="line">.text:003011ED                 shrd    ecx, eax, 19h</span><br><span class="line">.text:003011F1                 shr     eax, 19h</span><br><span class="line">.text:003011F4                 and     ecx, 1Fh</span><br><span class="line">.text:003011F7                 movzx   eax, byte ptr dword_30507C[ecx]</span><br><span class="line">.text:003011FE                 mov     ecx, edi</span><br><span class="line">.text:00301200                 mov     [edx+2], al</span><br><span class="line">.text:00301203                 mov     eax, esi</span><br><span class="line">.text:00301205                 shrd    ecx, eax, 14h</span><br><span class="line">.text:00301209                 shr     eax, 14h</span><br><span class="line">.text:0030120C                 and     ecx, 1Fh</span><br><span class="line">.text:0030120F                 movzx   eax, byte ptr dword_30507C[ecx]</span><br><span class="line">.text:00301216                 mov     ecx, edi</span><br><span class="line">.text:00301218                 mov     [edx+3], al</span><br><span class="line">.text:0030121B                 mov     eax, esi</span><br><span class="line">.text:0030121D                 shrd    ecx, eax, 0Fh</span><br><span class="line">.text:00301221                 shr     eax, 0Fh</span><br><span class="line">.text:00301224                 and     ecx, 1Fh</span><br><span class="line">.text:00301227                 movzx   eax, byte ptr dword_30507C[ecx]</span><br><span class="line">.text:0030122E                 mov     ecx, edi</span><br><span class="line">.text:00301230                 mov     [edx+4], al</span><br><span class="line">.text:00301233                 mov     eax, esi</span><br><span class="line">.text:00301235                 shrd    ecx, eax, 0Ah</span><br><span class="line">.text:00301239                 shr     eax, 0Ah</span><br><span class="line">.text:0030123C                 and     ecx, 1Fh</span><br><span class="line">.text:0030123F                 movzx   eax, byte ptr dword_30507C[ecx]</span><br><span class="line">.text:00301246                 mov     [edx+5], al</span><br><span class="line">.text:00301249                 mov     eax, edi</span><br><span class="line">.text:0030124B                 shrd    eax, esi, 5</span><br><span class="line">.text:0030124F                 and     eax, 1Fh</span><br><span class="line">.text:00301252                 shr     esi, 5</span><br><span class="line">.text:00301255                 and     edi, 1Fh</span><br><span class="line">.text:00301258                 movzx   eax, byte ptr dword_30507C[eax]</span><br><span class="line">.text:0030125F                 mov     [edx+6], al</span><br><span class="line">.text:00301262                 movzx   eax, byte ptr dword_30507C[edi]</span><br><span class="line">.text:00301269                 mov     [edx+7], al</span><br></pre></td></tr></table></figure>
+<p>很清楚的结构：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">输入：abcde</span><br><span class="line">a&gt;&gt;3</span><br><span class="line">abcde&gt;&gt;1eh</span><br><span class="line">abcde&gt;&gt;19h</span><br><span class="line">abcde&gt;&gt;14h</span><br><span class="line">abcde&gt;&gt;0fh</span><br><span class="line">abcde&gt;&gt;0ah</span><br><span class="line">abcde&gt;&gt;5</span><br><span class="line">bcde</span><br><span class="line">以上8个数据&amp;1f后再重新映射到dword_30507C：</span><br><span class="line">NoPqRsTuVwXyZaBcDeFgHiJkLm567234</span><br></pre></td></tr></table></figure>
+<p>其实就是自定义一个base32映射关系，再rot13<br>逆算法解也可：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">key1&#x3D;&quot;weNTDk5LZsNRHk6cVogqTZmFy2NRP7X4ZHLTBZwg&quot;</span><br><span class="line">key2&#x3D;&quot;NoPqRsTuVwXyZaBcDeFgHiJkLm567234&quot;</span><br><span class="line">key3&#x3D;&quot;abcdefghijklmnopqrstuvwxyz&quot;</span><br><span class="line">key4&#x3D;&quot;ABCDEFGHIJKLMNOPQRSTUVWXYZ&quot;</span><br><span class="line">key5&#x3D;[0x23,0x1e,0x19,0x14,0xf,0xa,0x5,0x0]</span><br><span class="line">ans&#x3D;&quot;&quot;</span><br><span class="line">for i in range(5):</span><br><span class="line">	flag&#x3D;[0,0,0,0,0,0,0,0]</span><br><span class="line">	z&#x3D;0</span><br><span class="line">	for j in range(8):</span><br><span class="line">		flag[j]&#x3D;key2.find(key1[i*8+j])&lt;&lt;key5[j]</span><br><span class="line">		z&#x3D;z|flag[j]</span><br><span class="line">	ans+&#x3D;hex(z)[2:]</span><br><span class="line">ans&#x3D;ans.decode(&quot;hex&quot;)</span><br><span class="line">print ans</span><br><span class="line">sum&#x3D;&quot;&quot;</span><br><span class="line">for i in ans:</span><br><span class="line">	if i in key3:</span><br><span class="line">		sum+&#x3D;chr((ord(i)-110)%26+97)</span><br><span class="line">	elif i in key4:</span><br><span class="line">		sum+&#x3D;chr((ord(i)-78)%26+65)</span><br><span class="line">	else:</span><br><span class="line">		sum+&#x3D;i</span><br><span class="line">print sum</span><br></pre></td></tr></table></figure>
+<h2 id="0x03-Interesting-Pointer"><a href="#0x03-Interesting-Pointer" class="headerlink" title="0x03 Interesting Pointer"></a>0x03 Interesting Pointer</h2><p>看到关键判断：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">while ( i &lt;&#x3D; 2 )</span><br><span class="line">     &#123;</span><br><span class="line">       v6 &#x3D; i + 1;</span><br><span class="line">       *(&amp;v8 + v6) &#x3D; (*(&amp;v14 + i))((int)&amp;v8, v12, v13);</span><br><span class="line">       v12 &#x3D; ++i;</span><br><span class="line">       v13 &#x3D; i + 1;</span><br><span class="line">     &#125;</span><br><span class="line">     if ( v11 )</span><br><span class="line">     &#123;</span><br><span class="line">       result &#x3D; -1;</span><br><span class="line">     &#125;</span><br><span class="line">     else</span><br><span class="line">     &#123;</span><br><span class="line">       get_key(v18, v17);</span><br><span class="line">       system(&quot;PAUSE&quot;);</span><br><span class="line">       result &#x3D; 0;</span><br><span class="line">     &#125;</span><br></pre></td></tr></table></figure>
+<p>其中：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">.text:0040158F                 mov     dword ptr [esp+48h], offset _func0</span><br><span class="line">.text:00401597                 mov     dword ptr [esp+4Ch], offset _func1</span><br><span class="line">.text:0040159F                 mov     dword ptr [esp+50h], offset _func2</span><br></pre></td></tr></table></figure>
+<p>所以：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">v9&#x3D;func0(v12,v13)&#x3D;1</span><br><span class="line">v10&#x3D;func1(v11,v12)</span><br><span class="line">v11&#x3D;func2(v10,v11)</span><br></pre></td></tr></table></figure>
+<p>其中：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">func0是一个交换函数</span><br><span class="line">func1&#x3D;abs(*(_DWORD *)(4 * a2 + a1) + *(_DWORD *)(4 * a3 + a1))- abs(*(_DWORD *)(4 * a3 + a1)) - abs(*(_DWORD *)(4 * a2 + a1))+ 2;</span><br><span class="line">func2&#x3D;abs(*(_DWORD *)(4 * a3 + a1)) - abs(*(_DWORD *)(4 * a3 + a1) + *(_DWORD *)(4 * a2 + a1))+ abs(*(_DWORD *)(4 * a2 + a1)) + 2;</span><br></pre></td></tr></table></figure>
+<p>按照绝对值不等式推知，这里不可能成立<br>po叔提示是overflow，又发出了data，突然明白了：<br>具体不说明了，利用str读取文件时没有长度限制而覆盖后面参数，使得func1交换v10和v11从而交换调用顺序<br>data:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">3132333435363738393061626364653131313131000000000000000000000000FFFFFFFF0700000008000000</span><br></pre></td></tr></table></figure>
+<p><img src="https://upload-images.jianshu.io/upload_images/7434375-ef9de5598d7f02b3.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="flag"></p>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Articles</a></li>
+         
+          <li><a href="/links/">Links</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#0x01-Input-your-lucky-number-string"><span class="toc-number">1.</span> <span class="toc-text">0x01 Input your lucky number_string</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x02-Simple-Base-N"><span class="toc-number">2.</span> <span class="toc-text">0x02 Simple Base-N</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x03-Interesting-Pointer"><span class="toc-number">3.</span> <span class="toc-text">0x03 Interesting Pointer</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://yoursite.com/2018/07/21/%E5%B7%85%E5%B3%B0%E6%9E%81%E5%AE%A2%E7%AC%AC%E4%B8%80%E5%9C%BA-Re/" target="_blank" rel="noopener"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://yoursite.com/2018/07/21/%E5%B7%85%E5%B3%B0%E6%9E%81%E5%AE%A2%E7%AC%AC%E4%B8%80%E5%9C%BA-Re/&text=巅峰极客第一场_Re" target="_blank" rel="noopener"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://yoursite.com/2018/07/21/%E5%B7%85%E5%B3%B0%E6%9E%81%E5%AE%A2%E7%AC%AC%E4%B8%80%E5%9C%BA-Re/&title=巅峰极客第一场_Re" target="_blank" rel="noopener"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://yoursite.com/2018/07/21/%E5%B7%85%E5%B3%B0%E6%9E%81%E5%AE%A2%E7%AC%AC%E4%B8%80%E5%9C%BA-Re/&is_video=false&description=巅峰极客第一场_Re" target="_blank" rel="noopener"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=巅峰极客第一场_Re&body=Check out this article: http://yoursite.com/2018/07/21/%E5%B7%85%E5%B3%B0%E6%9E%81%E5%AE%A2%E7%AC%AC%E4%B8%80%E5%9C%BA-Re/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://yoursite.com/2018/07/21/%E5%B7%85%E5%B3%B0%E6%9E%81%E5%AE%A2%E7%AC%AC%E4%B8%80%E5%9C%BA-Re/&title=巅峰极客第一场_Re" target="_blank" rel="noopener"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://yoursite.com/2018/07/21/%E5%B7%85%E5%B3%B0%E6%9E%81%E5%AE%A2%E7%AC%AC%E4%B8%80%E5%9C%BA-Re/&title=巅峰极客第一场_Re" target="_blank" rel="noopener"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://yoursite.com/2018/07/21/%E5%B7%85%E5%B3%B0%E6%9E%81%E5%AE%A2%E7%AC%AC%E4%B8%80%E5%9C%BA-Re/&title=巅峰极客第一场_Re" target="_blank" rel="noopener"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://yoursite.com/2018/07/21/%E5%B7%85%E5%B3%B0%E6%9E%81%E5%AE%A2%E7%AC%AC%E4%B8%80%E5%9C%BA-Re/&title=巅峰极客第一场_Re" target="_blank" rel="noopener"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://yoursite.com/2018/07/21/%E5%B7%85%E5%B3%B0%E6%9E%81%E5%AE%A2%E7%AC%AC%E4%B8%80%E5%9C%BA-Re/&name=巅峰极客第一场_Re&description=" target="_blank" rel="noopener"><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2020 Kirin
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Articles</a></li>
+         
+          <li><a href="/links/">Links</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+</body>
+</html>
+<!-- styles -->
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+
+<!-- jquery -->
+
+<script src="/lib/jquery/jquery.min.js"></script>
+
+
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+

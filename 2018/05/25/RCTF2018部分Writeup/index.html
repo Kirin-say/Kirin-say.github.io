@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="referrer" content="no-referrer" />
+    <meta name="description" content="0x01 Sign签到题载入idaAlt+T查找RCTF即得flag 0x02 git签到题查看commit信息： 12345678Revert# 请为您的变更输入提交说明。以 &#39;#&#39; 开始的行将被忽略，而一个空的提交# 说明将会终止提交。## 位于分支 rctf# 要提交的变更：#	删除：     flag.txt# 需要利用git revert来恢复flag.txtgit ba">
+<meta property="og:type" content="article">
+<meta property="og:title" content="RCTF2018部分Writeup">
+<meta property="og:url" content="http://yoursite.com/2018/05/25/RCTF2018%E9%83%A8%E5%88%86Writeup/index.html">
+<meta property="og:site_name" content="Kirin&#39;s Blog">
+<meta property="og:description" content="0x01 Sign签到题载入idaAlt+T查找RCTF即得flag 0x02 git签到题查看commit信息： 12345678Revert# 请为您的变更输入提交说明。以 &#39;#&#39; 开始的行将被忽略，而一个空的提交# 说明将会终止提交。## 位于分支 rctf# 要提交的变更：#	删除：     flag.txt# 需要利用git revert来恢复flag.txtgit ba">
+<meta property="article:published_time" content="2018-05-25T11:39:14.000Z">
+<meta property="article:modified_time" content="2018-08-18T11:41:08.000Z">
+<meta property="article:author" content="Kirin">
+<meta property="article:tag" content="CTF">
+<meta name="twitter:card" content="summary">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>RCTF2018部分Writeup</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+      
+<link rel="stylesheet" href="/css/rtl.css">
+
+    
+    <!-- rss -->
+    
+    
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Articles</a></li>
+         
+          <li><a href="/links/">Links</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2018/06/01/pwnable-tw-start/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2018/05/24/2018%E8%A5%BF%E6%99%AE%E6%9D%AF%E9%93%81%E4%BA%BA%E4%B8%89%E9%A1%B9%E6%95%B0%E6%8D%AE%E8%B5%9B/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://yoursite.com/2018/05/25/RCTF2018%E9%83%A8%E5%88%86Writeup/" target="_blank" rel="noopener"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://yoursite.com/2018/05/25/RCTF2018%E9%83%A8%E5%88%86Writeup/&text=RCTF2018部分Writeup" target="_blank" rel="noopener"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://yoursite.com/2018/05/25/RCTF2018%E9%83%A8%E5%88%86Writeup/&title=RCTF2018部分Writeup" target="_blank" rel="noopener"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://yoursite.com/2018/05/25/RCTF2018%E9%83%A8%E5%88%86Writeup/&is_video=false&description=RCTF2018部分Writeup" target="_blank" rel="noopener"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=RCTF2018部分Writeup&body=Check out this article: http://yoursite.com/2018/05/25/RCTF2018%E9%83%A8%E5%88%86Writeup/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://yoursite.com/2018/05/25/RCTF2018%E9%83%A8%E5%88%86Writeup/&title=RCTF2018部分Writeup" target="_blank" rel="noopener"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://yoursite.com/2018/05/25/RCTF2018%E9%83%A8%E5%88%86Writeup/&title=RCTF2018部分Writeup" target="_blank" rel="noopener"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://yoursite.com/2018/05/25/RCTF2018%E9%83%A8%E5%88%86Writeup/&title=RCTF2018部分Writeup" target="_blank" rel="noopener"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://yoursite.com/2018/05/25/RCTF2018%E9%83%A8%E5%88%86Writeup/&title=RCTF2018部分Writeup" target="_blank" rel="noopener"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://yoursite.com/2018/05/25/RCTF2018%E9%83%A8%E5%88%86Writeup/&name=RCTF2018部分Writeup&description=" target="_blank" rel="noopener"><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#0x01-Sign"><span class="toc-number">1.</span> <span class="toc-text">0x01 Sign</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#0x02-git"><span class="toc-number">2.</span> <span class="toc-text">0x02 git</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#0x03-cpushop"><span class="toc-number">3.</span> <span class="toc-text">0x03  cpushop</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#0x04-Number-Game"><span class="toc-number">4.</span> <span class="toc-text">0x04 Number Game</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#0x05-babyre"><span class="toc-number">5.</span> <span class="toc-text">0x05  babyre</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#0x06-babyre2"><span class="toc-number">6.</span> <span class="toc-text">0x06 babyre2</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        RCTF2018部分Writeup
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Kirin's Blog</span>
+      </span>
+      
+    <div class="postdate">
+        <time datetime="2018-05-25T11:39:14.000Z" itemprop="datePublished">2018-05-25</time>
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/categories/CTF/">CTF</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/CTF/" rel="tag">CTF</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h3 id="0x01-Sign"><a href="#0x01-Sign" class="headerlink" title="0x01 Sign"></a>0x01 Sign</h3><p>签到题<br>载入ida<br>Alt+T查找RCTF即得flag</p>
+<h3 id="0x02-git"><a href="#0x02-git" class="headerlink" title="0x02 git"></a>0x02 git</h3><p>签到题<br>查看commit信息：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Revert</span><br><span class="line"># 请为您的变更输入提交说明。以 &#39;#&#39; 开始的行将被忽略，而一个空的提交</span><br><span class="line"># 说明将会终止提交。</span><br><span class="line">#</span><br><span class="line"># 位于分支 rctf</span><br><span class="line"># 要提交的变更：</span><br><span class="line">#	删除：     flag.txt</span><br><span class="line">#</span><br></pre></td></tr></table></figure>
+<p>需要利用<strong>git revert</strong>来恢复flag.txt<br>git bash 下打开:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git reflog</span><br></pre></td></tr></table></figure>
+<p>看到有一次合并：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">f671986 HEAD@&#123;5&#125;: checkout: moving from master to develop</span><br></pre></td></tr></table></figure>
+<p>而后：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git revert f671986</span><br></pre></td></tr></table></figure>
+<p>即可恢复txt文件，得到flag</p>
+<h3 id="0x03-cpushop"><a href="#0x03-cpushop" class="headerlink" title="0x03  cpushop"></a>0x03  cpushop</h3><p>hash长度扩展攻击<br>我们需要flag的价格:price&lt;money<br>利用hashdump附加请求信息：<strong>&amp;price=0</strong><br>而后根据正常的sign值得到附加信息后的sign<br>发送新的请求即得flag</p>
+<h3 id="0x04-Number-Game"><a href="#0x04-Number-Game" class="headerlink" title="0x04 Number Game"></a>0x04 Number Game</h3><p>第一关直接碰撞即可<br>而后可以看到number game是很早的一个猜数游戏<br>github上可以找到一种生成树策略：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https:&#x2F;&#x2F;github.com&#x2F;AustinGuo&#x2F;GessNumber</span><br></pre></td></tr></table></figure>
+<p>直接套入脚本，过关即得flag</p>
+<h3 id="0x05-babyre"><a href="#0x05-babyre" class="headerlink" title="0x05  babyre"></a>0x05  babyre</h3><p>调试后发现堆中几个参数不可控<br>直接运行发现每个字节依次运算，与位置无关<br>找到对应关系根据密文破解<br>或者直接pwntools按位爆破也可以:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">key &#x3D; [0xb8a6ee10,0xb986234f,0xf1b1602,0x2571a420,0x805feee3,0x958b0534,0x8a0ad7,0xf3a32248,0x45c66c5a,0xcda47499,0xee152dad,0x77591917,0xb118982f,0x7386bd6a,0xdf1708d2,0x67d38af2,0xc567b6b6,0x526ba076,0xae4c822d,0xa1e10430,0xc3f2de73,0x7f08e077,0x7240b7ba,0x20067e4b,0x28def57e,0x545c15ad,0xb02881cf,0x15d71041,0x9f9e33a3,0x6958d9df,0x51a1924f,0x299fa574,0x3e968078,0x6e7b9de9,0x3e5daef6,0x70573efe,0x94bec810,0xde26ea93,0x7f7a8193,0x7147adb7,0xe554cf78,0xf0dc5e15,0x730a451b,0x90347c6c,0x8699b5f,0x834c762a,0x97e8bb26,0xc1ca6398,0x6aed0d44,0xe498e228,0xb80c91fe,0x9935e5ee,0xbeed92ae,0x5067d2a7,0x239b768c,0x3b6eb4ce,0x354689e2,0x8028bcb,0x86447eef,0x86c95e28,0x8a0ad7,0xe887091c,0xa8f27e12,0x7d8aa463,0xc15dfd82,0x9c513266,0x30a3769a,0xaa8afbba,0x1edc3864,0xaa7a15df,0x6c1194bf,0xeade7bf1,0x115f3801,0x42bafa35,0xa5a30516,0x4e032f9f,0x121ee8ab,0xe75d55e4,0x7f543d62,0x153f1a32,0x6d076b18,0xf3857621,0x6d7df3e1,0xfbcb7aa0,0x36b897bd,0x82c974fc,0xf5650025,0x90f77ba1,0xf9b8d92b,0x9323bc07,0xa5c88e2,0x7390c17b,0x760e65f9,0xb13ad888,0x1667aba8]</span><br><span class="line">crypto &#x3D; [0xb80c91fe,0x70573efe,0xbeed92ae,0x7f7a8193,0x7390c17b,0x90347c6c,0xaa7a15df,0xaa7a15df,0x526ba076,0x153f1a32,0x545c15ad,0x7d8aa463,0x526ba076,0xfbcb7aa0,0x7d8aa463,0x9c513266,0x526ba076,0x6d7df3e1,0xaa7a15df,0x9c513266,0x1edc3864,0x9323bc07,0x7d8aa463,0xfbcb7aa0,0x153f1a32,0x526ba076,0xf5650025,0xaa7a15df,0x1edc3864,0xb13ad888]</span><br><span class="line">flag&#x3D;&quot;&quot;</span><br><span class="line">for i in crypto:</span><br><span class="line">     j&#x3D;0</span><br><span class="line">     for k in range(32,127):</span><br><span class="line">          if key[k]&#x3D;&#x3D;i:</span><br><span class="line">             flag+&#x3D;chr(k)</span><br><span class="line">             break</span><br><span class="line">          k+&#x3D;1</span><br><span class="line">     print flag</span><br></pre></td></tr></table></figure>
+<h3 id="0x06-babyre2"><a href="#0x06-babyre2" class="headerlink" title="0x06 babyre2"></a>0x06 babyre2</h3><p>载入ida调试,看到这里：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">mov     rax, 20656D6F636C6557h</span><br><span class="line">mov     qword ptr [rsp+198h+s], rax</span><br><span class="line">mov     rax, 2046544352206F74h</span><br><span class="line">mov     [rsp+198h+var_D0], 0FFFFFFFFFFFFFFFFh</span><br><span class="line">mov     [rsp+198h+var_110], rax</span><br><span class="line">mov     rax, 6548202138313032h</span><br><span class="line">mov     [rsp+198h+var_C8], 0FFFFFFFFFFFFFFFFh</span><br><span class="line">mov     [rsp+198h+var_108], rax</span><br><span class="line">mov     rax, 2061207369206572h</span><br><span class="line">mov     [rsp+198h+var_C0], 0FFFFFFFFFFFFFFFFh</span><br><span class="line">mov     [rsp+198h+var_100], rax</span><br><span class="line">mov     rax, 6320455279626142h</span><br><span class="line">mov     [rsp+198h+var_B8], 0FFFFFFFFFFFFFFFFh</span><br><span class="line">mov     [rsp+198h+var_B0], 0FFFFFFFFFFFFFFFFh</span><br><span class="line">mov     [rsp+198h+var_A8], 0FFFFFFFFFFFFFFFFh</span><br><span class="line">mov     [rsp+198h+var_A0], 0FFFFFFFFFFFFFFFFh</span><br><span class="line">mov     [rsp+198h+var_F8], rax</span><br><span class="line">mov     rax, 65676E656C6C6168h</span><br><span class="line">mov     [rsp+198h+var_F0], rax</span><br><span class="line">mov     rax, 756F7920726F6620h</span><br><span class="line">mov     [rsp+198h+var_E8], rax</span><br></pre></td></tr></table></figure>
+<p>这些数据依照顺序依次参与：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">mov     rax, qword ptr [rsp+198h+s]</span><br><span class="line">xor     ecx, ecx</span><br><span class="line">mul     [rsp+198h+var_198]</span><br><span class="line">mov     rsi, rdx</span><br><span class="line">mov     rdi, rax</span><br><span class="line">mov     rdx, 0FFFFFFFFFFFFFFC5h</span><br><span class="line">call    sub_400BA0</span><br></pre></td></tr></table></figure>
+<p>这里可以看到几个参数：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">我们输入字符与上文数据的乘积</span><br><span class="line">乘积高16位存于rsi寄存器</span><br><span class="line">乘积低16位存于rdi寄存器</span><br><span class="line">参数0FFFFFFFFFFFFFFC5h存于rdx中</span><br></pre></td></tr></table></figure>
+<p>看一下sub_400BA0的伪代码：<br>很显然进行运算的只有：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">else</span><br><span class="line">  &#123;</span><br><span class="line">    if ( a2 &lt;&#x3D; *((_QWORD *)&amp;a1 + 1) )</span><br><span class="line">    &#123;</span><br><span class="line">      if ( !a2 )</span><br><span class="line">        v3 &#x3D; 1 &#x2F; 0uLL;</span><br><span class="line">      *(_QWORD *)&amp;v17 &#x3D; a1;</span><br><span class="line">      *((_QWORD *)&amp;v17 + 1) &#x3D; *((_QWORD *)&amp;a1 + 1) % v3;</span><br><span class="line">      v5 &#x3D; v17 % v3;</span><br><span class="line">    &#125;</span><br><span class="line">    else</span><br><span class="line">    &#123;</span><br><span class="line">      v5 &#x3D; a1 % a2;</span><br><span class="line">    &#125;</span><br><span class="line">    result &#x3D; v5;</span><br><span class="line">  &#125;</span><br><span class="line">  return result;</span><br></pre></td></tr></table></figure>
+<p>很显然，这里的高16位与低16位都需要对0FFFFFFFFFFFFFFC5h取模，而后return<br>继续看数次调用sub_400BA0并retn后的运算：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line">movdqa  xmm1, [rsp+198h+var_98]</span><br><span class="line">mov     qword ptr [rsp+198h+var_28+8], rax</span><br><span class="line">movdqa  xmm0, cs:xmmword_602070</span><br><span class="line">pxor    xmm1, cs:xmmword_602060</span><br><span class="line">movdqa  xmm4, [rsp+198h+var_78]</span><br><span class="line">pxor    xmm0, [rsp+198h+var_88]</span><br><span class="line">movdqa  xmm3, [rsp+198h+var_68]</span><br><span class="line">pxor    xmm4, cs:xmmword_602080</span><br><span class="line">movdqa  xmm2, [rsp+198h+var_58]</span><br><span class="line">pxor    xmm3, cs:xmmword_602090</span><br><span class="line">por     xmm1, xmm0</span><br><span class="line">pxor    xmm2, cs:xmmword_6020A0</span><br><span class="line">movdqa  xmm0, [rsp+198h+var_38]</span><br><span class="line">por     xmm4, xmm1</span><br><span class="line">movdqa  xmm1, [rsp+198h+var_48]</span><br><span class="line">pxor    xmm0, cs:xmmword_6020C0</span><br><span class="line">por     xmm3, xmm4</span><br><span class="line">pxor    xmm1, cs:xmmword_6020B0</span><br><span class="line">por     xmm2, xmm3</span><br><span class="line">movdqa  xmm3, xmm2</span><br><span class="line">movdqa  xmm2, xmm1</span><br><span class="line">movdqa  xmm1, xmm0</span><br><span class="line">movdqa  xmm0, cs:xmmword_6020D0</span><br><span class="line">por     xmm2, xmm3</span><br><span class="line">pxor    xmm0, xmmword ptr [rsp+198h+var_28]</span><br><span class="line">por     xmm1, xmm2</span><br><span class="line">por     xmm0, xmm1</span><br><span class="line">movdqa  xmm1, xmm0</span><br><span class="line">psrldq  xmm1, 8</span><br><span class="line">por     xmm0, xmm1</span><br><span class="line">movq    rax, xmm0</span><br><span class="line">test    rax, rax</span><br><span class="line">jz      short loc_400A86</span><br><span class="line">jz      short loc_400A86</span><br><span class="line">mov     edi, offset s   ; &quot;Incorrect.&quot;</span><br><span class="line">call    _puts</span><br><span class="line">loc_400A68:                             ; CODE XREF: main+520↓j</span><br><span class="line">xor     eax, eax</span><br><span class="line">mov     rcx, [rsp+198h+var_10]</span><br><span class="line">xor     rcx, fs:28h</span><br><span class="line">jnz     short loc_400A92</span><br><span class="line">add     rsp, 190h</span><br><span class="line">pop     rbp</span><br><span class="line"> loc_400A86:                             ; CODE XREF: main+4EC↑j</span><br><span class="line">mov     edi, offset aCorrectCongrat ; &quot;Correct. Congratulations!&quot;</span><br><span class="line">call    _puts</span><br><span class="line">jmp     short loc_400A68</span><br></pre></td></tr></table></figure>
+<p>对应伪代码（实际汇编的运算逻辑更清晰一些）：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">5 &#x3D; _mm_or_si128(</span><br><span class="line">         _mm_xor_si128(_mm_load_si128((const __m128i *)&amp;xmmword_6020D0), v46),</span><br><span class="line">         _mm_or_si128(</span><br><span class="line">           _mm_xor_si128(_mm_load_si128((const __m128i *)&amp;v45), (__m128i)xmmword_6020C0),</span><br><span class="line">           _mm_or_si128(</span><br><span class="line">             _mm_xor_si128(_mm_load_si128((const __m128i *)&amp;v44), (__m128i)xmmword_6020B0),</span><br><span class="line">             _mm_or_si128(</span><br><span class="line">               _mm_xor_si128(_mm_load_si128((const __m128i *)&amp;v43), (__m128i)xmmword_6020A0),</span><br><span class="line">               _mm_or_si128(</span><br><span class="line">                 _mm_xor_si128(_mm_load_si128((const __m128i *)&amp;v42), (__m128i)xmmword_602090),</span><br><span class="line">                 _mm_or_si128(</span><br><span class="line">                   _mm_xor_si128(_mm_load_si128((const __m128i *)&amp;v41), (__m128i)xmmword_602080),</span><br><span class="line">                   _mm_or_si128(</span><br><span class="line">                     _mm_xor_si128(v4, (__m128i)xmmword_602060),</span><br><span class="line">                     _mm_xor_si128(_mm_load_si128((const __m128i *)&amp;xmmword_602070), v40))))))));</span><br><span class="line">  if ( (unsigned __int64)*(_OWORD *)&amp;_mm_or_si128(v5, _mm_srli_si128(v5, 8)) )</span><br><span class="line">    puts(&quot;Incorrect.&quot;);</span><br><span class="line">  else</span><br><span class="line">    puts(&quot;Correct. Congratulations!&quot;);</span><br><span class="line">  return 0LL;</span><br></pre></td></tr></table></figure>
+<p>很显然，这里只是对应比较运算后的数据与内存中固定的数据：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">.data:0000000000602060 xmmword_602060  xmmword 7BA58F82BD8980352B7192452905E8FBh</span><br><span class="line">.data:0000000000602060                                         ; DATA XREF: main+438↑r</span><br><span class="line">.data:0000000000602070 xmmword_602070  xmmword 163F756FCC221AB0A3112746582E1434h</span><br><span class="line">.data:0000000000602070                                         ; DATA XREF: main+430↑r</span><br><span class="line">.data:0000000000602080 xmmword_602080  xmmword 0DCDD8B49EA5D7E14ECC78E6FB9CBA1FEh</span><br><span class="line">.data:0000000000602080                                         ; DATA XREF: main+45B↑r</span><br><span class="line">.data:0000000000602090 xmmword_602090  xmmword 0AAAAAAAAAA975D1CA2845FE0B3096F8Eh</span><br><span class="line">.data:0000000000602090                                         ; DATA XREF: main+46C↑r</span><br><span class="line">.data:00000000006020A0 xmmword_6020A0  xmmword 55555555555559A355555555555559A3h</span><br><span class="line">.data:00000000006020A0                                         ; DATA XREF: main+478↑r</span><br><span class="line">.data:00000000006020B0 xmmword_6020B0  xmmword 55555555555559A355555555555559A3h</span><br><span class="line">.data:00000000006020B0                                         ; DATA XREF: main+4A2↑r</span><br><span class="line">.data:00000000006020C0 xmmword_6020C0  xmmword 55555555555559A355555555555559A3h</span><br><span class="line">.data:00000000006020C0                                         ; DATA XREF: main+496↑r</span><br><span class="line">.data:00000000006020D0 xmmword_6020D0  xmmword 55555555555559A355555555555559A3h</span><br><span class="line">.data:00000000006020D0                                         ; DATA XREF: main+4BA↑r</span><br></pre></td></tr></table></figure>
+<p>shift+E提取数据<br>我们需要求出对应的x满足：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">x:所要求的的flag</span><br><span class="line">y:内存中的比较数据(已知)</span><br><span class="line">k:最开始的参与乘积的数据(已知)</span><br><span class="line">x需要满足：</span><br><span class="line">kx ≡ y mod 0FFFFFFFFFFFFFFC5h</span><br></pre></td></tr></table></figure>
+<p>实际上，我们只需要求k关于0FFFFFFFFFFFFFFC5h的乘法逆元，即X满足：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kX  ≡ 1 mod 0FFFFFFFFFFFFFFC5h</span><br></pre></td></tr></table></figure>
+<p>而后kXy即满足：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kXy ≡ y mod 0FFFFFFFFFFFFFFC5h</span><br></pre></td></tr></table></figure>
+<p>故而：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">所求：x&#x3D;Xy</span><br></pre></td></tr></table></figure>
+<p>这里直接利用PyCrypto库中的inverse函数(求乘法逆元)即可：<br>逐位运算即得flag：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">from pwn import *</span><br><span class="line">from Crypto.Util.number import *</span><br><span class="line"></span><br><span class="line">key1 &#x3D;[0x20656D6F636C6557,0x2046544352206F74,0x6548202138313032,0x2061207369206572,0x6320455279626142,0x65676E656C6C6168,0x756F7920726F6620,0xFFFFFFFFFFFF002E,0xFFFFFFFFFFFFFFFF,0xFFFFFFFFFFFFFFFF,0xFFFFFFFFFFFFFFFF,0xFFFFFFFFFFFFFFFF,0xFFFFFFFFFFFFFFFF,0xFFFFFFFFFFFFFFFF,0xFFFFFFFFFFFFFFFF,0xFFFFFFFFFFFFFFFF]</span><br><span class="line">key2 &#x3D;[0x2B7192452905E8FB,0x7BA58F82BD898035,0xA3112746582E1434,0x163F756FCC221AB0,0xECC78E6FB9CBA1FE,0x0DCDD8B49EA5D7E14,0xA2845FE0B3096F8E,0x0AAAAAAAAAA975D1C,0x55555555555559A3,0x55555555555559A3,0x55555555555559A3,0x55555555555559A3,0x55555555555559A3,0x55555555555559A3,0x55555555555559A3,0x55555555555559A3]</span><br><span class="line">key3 &#x3D; 0xFFFFFFFFFFFFFFC5</span><br><span class="line">flag&#x3D;&quot;&quot;</span><br><span class="line">for i in range(len(key1)):</span><br><span class="line">   flag+&#x3D;p64(key2[i] * inverse(key1[i],key3)%key3)</span><br><span class="line">print flag</span><br></pre></td></tr></table></figure>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Articles</a></li>
+         
+          <li><a href="/links/">Links</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#0x01-Sign"><span class="toc-number">1.</span> <span class="toc-text">0x01 Sign</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#0x02-git"><span class="toc-number">2.</span> <span class="toc-text">0x02 git</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#0x03-cpushop"><span class="toc-number">3.</span> <span class="toc-text">0x03  cpushop</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#0x04-Number-Game"><span class="toc-number">4.</span> <span class="toc-text">0x04 Number Game</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#0x05-babyre"><span class="toc-number">5.</span> <span class="toc-text">0x05  babyre</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#0x06-babyre2"><span class="toc-number">6.</span> <span class="toc-text">0x06 babyre2</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://yoursite.com/2018/05/25/RCTF2018%E9%83%A8%E5%88%86Writeup/" target="_blank" rel="noopener"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://yoursite.com/2018/05/25/RCTF2018%E9%83%A8%E5%88%86Writeup/&text=RCTF2018部分Writeup" target="_blank" rel="noopener"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://yoursite.com/2018/05/25/RCTF2018%E9%83%A8%E5%88%86Writeup/&title=RCTF2018部分Writeup" target="_blank" rel="noopener"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://yoursite.com/2018/05/25/RCTF2018%E9%83%A8%E5%88%86Writeup/&is_video=false&description=RCTF2018部分Writeup" target="_blank" rel="noopener"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=RCTF2018部分Writeup&body=Check out this article: http://yoursite.com/2018/05/25/RCTF2018%E9%83%A8%E5%88%86Writeup/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://yoursite.com/2018/05/25/RCTF2018%E9%83%A8%E5%88%86Writeup/&title=RCTF2018部分Writeup" target="_blank" rel="noopener"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://yoursite.com/2018/05/25/RCTF2018%E9%83%A8%E5%88%86Writeup/&title=RCTF2018部分Writeup" target="_blank" rel="noopener"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://yoursite.com/2018/05/25/RCTF2018%E9%83%A8%E5%88%86Writeup/&title=RCTF2018部分Writeup" target="_blank" rel="noopener"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://yoursite.com/2018/05/25/RCTF2018%E9%83%A8%E5%88%86Writeup/&title=RCTF2018部分Writeup" target="_blank" rel="noopener"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://yoursite.com/2018/05/25/RCTF2018%E9%83%A8%E5%88%86Writeup/&name=RCTF2018部分Writeup&description=" target="_blank" rel="noopener"><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2020 Kirin
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Articles</a></li>
+         
+          <li><a href="/links/">Links</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+</body>
+</html>
+<!-- styles -->
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+
+<!-- jquery -->
+
+<script src="/lib/jquery/jquery.min.js"></script>
+
+
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+

