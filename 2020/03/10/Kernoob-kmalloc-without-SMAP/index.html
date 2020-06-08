@@ -7,15 +7,15 @@
     <meta name="HandheldFriendly" content="True">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
     <meta name="referrer" content="no-referrer" />
-    <meta name="description" content="赛后才知道题目本身因为出题和部署失误附件有flag，而且可以通过修改&#x2F;bin&#x2F;umount直接在exit适时候提权（qemu部署下，文件权限不严格应该都会有这个锅）不过赛时终归是用驱动UAF正常解法做出来的，大部分时间在找一条利用链来bypass kmalloc(without SMAP)分配较小堆块、存在xor时，如何分配chunk到内核空间并且不产生crash，在分配后恢复堆空间： Analy">
+    <meta name="description" content="补坑：这里的XOR其实是slub分配器开启CONFIG_SLAB_FREELIST_HARDENED后的一种保护机制，机制比较简单，不再说明，在内核代码的freelist_ptr中可以看到，不过在这题中我利用高地址xor为0用于落入用户空间并修复list的bypass的方法感觉在没有SMAP保护前提下还是比较通用的。当然就这个题目而言还可以选择double fetch的方法。 赛后才知道题目本身因">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Kernoob: kmalloc without SMAP">
 <meta property="og:url" content="http://yoursite.com/2020/03/10/Kernoob-kmalloc-without-SMAP/index.html">
 <meta property="og:site_name" content="Kirin&#39;s Blog">
-<meta property="og:description" content="赛后才知道题目本身因为出题和部署失误附件有flag，而且可以通过修改&#x2F;bin&#x2F;umount直接在exit适时候提权（qemu部署下，文件权限不严格应该都会有这个锅）不过赛时终归是用驱动UAF正常解法做出来的，大部分时间在找一条利用链来bypass kmalloc(without SMAP)分配较小堆块、存在xor时，如何分配chunk到内核空间并且不产生crash，在分配后恢复堆空间： Analy">
+<meta property="og:description" content="补坑：这里的XOR其实是slub分配器开启CONFIG_SLAB_FREELIST_HARDENED后的一种保护机制，机制比较简单，不再说明，在内核代码的freelist_ptr中可以看到，不过在这题中我利用高地址xor为0用于落入用户空间并修复list的bypass的方法感觉在没有SMAP保护前提下还是比较通用的。当然就这个题目而言还可以选择double fetch的方法。 赛后才知道题目本身因">
 <meta property="og:image" content="https://upload-images.jianshu.io/upload_images/7434375-4f90bf4d73b2ef0a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 <meta property="article:published_time" content="2020-03-10T06:44:18.000Z">
-<meta property="article:modified_time" content="2020-03-10T08:45:54.678Z">
+<meta property="article:modified_time" content="2020-06-08T15:59:40.464Z">
 <meta property="article:author" content="Kirin">
 <meta property="article:tag" content="kernel">
 <meta name="twitter:card" content="summary">
@@ -150,7 +150,8 @@
   
 
   <div class="content" itemprop="articleBody">
-    <p>赛后才知道题目本身因为出题和部署失误附件有flag，而且可以通过修改/bin/umount直接在exit适时候提权（qemu部署下，文件权限不严格应该都会有这个锅）<br>不过赛时终归是用驱动UAF正常解法做出来的，大部分时间在找一条利用链来bypass kmalloc(without SMAP)分配较小堆块、存在xor时，如何分配chunk到内核空间并且不产生crash，在分配后恢复堆空间：</p>
+    <p><strong>补坑：这里的XOR其实是slub分配器开启CONFIG_SLAB_FREELIST_HARDENED后的一种保护机制，机制比较简单，不再说明，在内核代码的freelist_ptr中可以看到，不过在这题中我利用高地址xor为0用于落入用户空间并修复list的bypass的方法感觉在没有SMAP保护前提下还是比较通用的。当然就这个题目而言还可以选择double fetch的方法。</strong></p>
+<p>赛后才知道题目本身因为出题和部署失误附件有flag，而且可以通过修改/bin/umount直接在exit适时候提权（qemu部署下，文件权限不严格应该都会有这个锅）<br>不过赛时终归是用驱动UAF正常解法做出来的，大部分时间在找一条利用链来bypass kmalloc(without SMAP)分配较小堆块、存在xor时，如何分配chunk到内核空间并且不产生crash，在分配后恢复堆空间：</p>
 <h2 id="Analyze"><a href="#Analyze" class="headerlink" title="Analyze"></a>Analyze</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">#!&#x2F;bin&#x2F;bash</span><br><span class="line"></span><br><span class="line">stty intr ^]</span><br><span class="line">cd &#96;dirname $0&#96;</span><br><span class="line">timeout --foreground 600 qemu-system-x86_64 \</span><br><span class="line">    -m 128M \</span><br><span class="line">    -nographic \</span><br><span class="line">    -kernel bzImage \</span><br><span class="line">    -append &#39;console&#x3D;ttyS0 loglevel&#x3D;3 pti&#x3D;off oops&#x3D;panic panic&#x3D;1 nokaslr&#39; \</span><br><span class="line">    -monitor &#x2F;dev&#x2F;null \</span><br><span class="line">    -initrd initramfs.cpio \</span><br><span class="line">    -smp 2,cores&#x3D;2,threads&#x3D;1 \</span><br><span class="line">    -cpu qemu64,smep 2&gt;&#x2F;dev&#x2F;null</span><br></pre></td></tr></table></figure>
 <p>注意到没有开启kalsr和smap<br>内核加载了noob驱动，在ioctl的0x30001操作中在delete时存在UAF：</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">signed</span> __int64 __usercall del_note@&lt;rax&gt;(__int64 a1@&lt;rbp&gt;, _QWORD *a2@&lt;rdi&gt;)</span><br><span class="line">&#123;</span><br><span class="line">  __int64 v3; <span class="comment">// [rsp-10h] [rbp-10h]</span></span><br><span class="line"></span><br><span class="line">  _fentry__(a2);</span><br><span class="line">  v3 = *((_QWORD *)&amp;pool + <span class="number">2</span> * *a2);</span><br><span class="line">  <span class="keyword">if</span> ( *a2 &gt; <span class="number">0x1F</span>uLL )</span><br><span class="line">    <span class="keyword">return</span> <span class="number">-1L</span>L;</span><br><span class="line">  <span class="keyword">if</span> ( !v3 )</span><br><span class="line">    <span class="keyword">return</span> <span class="number">-1L</span>L;</span><br><span class="line">  kfree(v3);</span><br><span class="line">  <span class="keyword">return</span> <span class="number">0L</span>L;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
