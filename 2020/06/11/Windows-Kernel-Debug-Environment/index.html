@@ -7,14 +7,14 @@
     <meta name="HandheldFriendly" content="True">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
     <meta name="referrer" content="no-referrer" />
-    <meta name="description" content="Debug with QEMUQEMU模式下可以选择直接使用-s启动gdbserver来调试内核，不过没办法加载符号表可以选择开启两个QEMU，其中一个作为调试器，使用Windbg通过串口调试比较稳定且同时可以支持远程的方案: 1234调试机：-serial tcp::9090,server,nowait被调试机：-serial tcp:127.0.0.1:9090 或者添加串口设备(我在尝试的时">
+    <meta name="description" content="Debug with QEMUQEMU模式下可以选择直接使用-s启动gdbserver来调试内核，速度比较快，而且可以比较直观看到运行情况，不过没办法加载符号表，Crash后详情信息没办法AnalyzeTip：可以在最后稳定调试阶段，记录好符号地址，在qemu monitor中savevm，然后每次运行loadvm即可（这样可以便利很多调试场景）可以选择开启两个QEMU，其中一个作为调试器，使用W">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Windows Kernel: Debug Environment">
 <meta property="og:url" content="http://yoursite.com/2020/06/11/Windows-Kernel-Debug-Environment/index.html">
 <meta property="og:site_name" content="Kirin&#39;s Blog">
-<meta property="og:description" content="Debug with QEMUQEMU模式下可以选择直接使用-s启动gdbserver来调试内核，不过没办法加载符号表可以选择开启两个QEMU，其中一个作为调试器，使用Windbg通过串口调试比较稳定且同时可以支持远程的方案: 1234调试机：-serial tcp::9090,server,nowait被调试机：-serial tcp:127.0.0.1:9090 或者添加串口设备(我在尝试的时">
+<meta property="og:description" content="Debug with QEMUQEMU模式下可以选择直接使用-s启动gdbserver来调试内核，速度比较快，而且可以比较直观看到运行情况，不过没办法加载符号表，Crash后详情信息没办法AnalyzeTip：可以在最后稳定调试阶段，记录好符号地址，在qemu monitor中savevm，然后每次运行loadvm即可（这样可以便利很多调试场景）可以选择开启两个QEMU，其中一个作为调试器，使用W">
 <meta property="article:published_time" content="2020-06-11T12:29:28.000Z">
-<meta property="article:modified_time" content="2020-06-11T12:35:24.775Z">
+<meta property="article:modified_time" content="2020-06-11T12:41:50.052Z">
 <meta property="article:author" content="Kirin">
 <meta name="twitter:card" content="summary">
     
@@ -142,7 +142,7 @@
   
 
   <div class="content" itemprop="articleBody">
-    <h2 id="Debug-with-QEMU"><a href="#Debug-with-QEMU" class="headerlink" title="Debug with QEMU"></a>Debug with QEMU</h2><p>QEMU模式下可以选择直接使用-s启动gdbserver来调试内核，不过没办法加载符号表<br>可以选择开启两个QEMU，其中一个作为调试器，使用Windbg通过串口调试<br>比较稳定且同时可以支持远程的方案:</p>
+    <h2 id="Debug-with-QEMU"><a href="#Debug-with-QEMU" class="headerlink" title="Debug with QEMU"></a>Debug with QEMU</h2><p>QEMU模式下可以选择直接使用-s启动gdbserver来调试内核，速度比较快，而且可以比较直观看到运行情况，不过没办法加载符号表，Crash后详情信息没办法Analyze<br><strong>Tip：可以在最后稳定调试阶段，记录好符号地址，在qemu monitor中savevm，然后每次运行loadvm即可（这样可以便利很多调试场景）</strong><br>可以选择开启两个QEMU，其中一个作为调试器，使用Windbg通过串口调试<br>比较稳定且同时可以支持远程的方案:</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">调试机：</span><br><span class="line">-serial tcp::9090,server,nowait</span><br><span class="line">被调试机：</span><br><span class="line">-serial tcp:127.0.0.1:9090</span><br></pre></td></tr></table></figure>
 <p>或者添加串口设备(我在尝试的时候不是很稳定):</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">调试机：</span><br><span class="line">-chardev socket,id&#x3D;serial1,path&#x3D;&#x2F;tmp&#x2F;serial,server,nowait \</span><br><span class="line">-device isa-serial,chardev&#x3D;serial1,id&#x3D;serial1</span><br><span class="line">被调试机：</span><br><span class="line">-chardev socket,id&#x3D;serial1,path&#x3D;&#x2F;tmp&#x2F;serial \</span><br><span class="line">-device isa-serial,chardev&#x3D;serial1,id&#x3D;serial1</span><br></pre></td></tr></table></figure>
