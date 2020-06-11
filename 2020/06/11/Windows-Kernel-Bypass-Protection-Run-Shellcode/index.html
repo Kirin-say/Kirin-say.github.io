@@ -7,14 +7,14 @@
     <meta name="HandheldFriendly" content="True">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
     <meta name="referrer" content="no-referrer" />
-    <meta name="description" content="Bypass SMEP &amp;&amp; SMAPCR4寄存器：(第0位开始算起)20位：SMEP21位：SMAP和Linux kernel相同，需要一条chain来修改CR4寄存器 123pop rcx; retcr4_valuemov cr4, rcx; ret Windows中CR4寄存器修改可能会被Check到，产生： 1Bug Check 0x139: KERNEL_SECURITY">
+    <meta name="description" content="Bypass SMEP &amp;&amp; SMAPCR4寄存器：(第0位开始算起)20位：SMEP21位：SMAP和Linux Kernel相同，需要一条chain来修改CR4寄存器 123pop rcx; retcr4_valuemov cr4, rcx; ret Windows中CR4寄存器修改可能会被Check到，产生： 1Bug Check 0x139: KERNEL_SECURITY">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Windows Kernel: Bypass Protection &amp;&amp; Run Shellcode">
 <meta property="og:url" content="http://yoursite.com/2020/06/11/Windows-Kernel-Bypass-Protection-Run-Shellcode/index.html">
 <meta property="og:site_name" content="Kirin&#39;s Blog">
-<meta property="og:description" content="Bypass SMEP &amp;&amp; SMAPCR4寄存器：(第0位开始算起)20位：SMEP21位：SMAP和Linux kernel相同，需要一条chain来修改CR4寄存器 123pop rcx; retcr4_valuemov cr4, rcx; ret Windows中CR4寄存器修改可能会被Check到，产生： 1Bug Check 0x139: KERNEL_SECURITY">
+<meta property="og:description" content="Bypass SMEP &amp;&amp; SMAPCR4寄存器：(第0位开始算起)20位：SMEP21位：SMAP和Linux Kernel相同，需要一条chain来修改CR4寄存器 123pop rcx; retcr4_valuemov cr4, rcx; ret Windows中CR4寄存器修改可能会被Check到，产生： 1Bug Check 0x139: KERNEL_SECURITY">
 <meta property="article:published_time" content="2020-06-11T12:30:49.000Z">
-<meta property="article:modified_time" content="2020-06-11T12:32:26.752Z">
+<meta property="article:modified_time" content="2020-06-11T14:46:34.798Z">
 <meta property="article:author" content="Kirin">
 <meta name="twitter:card" content="summary">
     
@@ -140,7 +140,7 @@
   
 
   <div class="content" itemprop="articleBody">
-    <h2 id="Bypass-SMEP-amp-amp-SMAP"><a href="#Bypass-SMEP-amp-amp-SMAP" class="headerlink" title="Bypass SMEP &amp;&amp; SMAP"></a>Bypass SMEP &amp;&amp; SMAP</h2><p>CR4寄存器：(第0位开始算起)<br>20位：SMEP<br>21位：SMAP<br>和Linux kernel相同，需要一条chain来修改CR4寄存器</p>
+    <h2 id="Bypass-SMEP-amp-amp-SMAP"><a href="#Bypass-SMEP-amp-amp-SMAP" class="headerlink" title="Bypass SMEP &amp;&amp; SMAP"></a>Bypass SMEP &amp;&amp; SMAP</h2><p>CR4寄存器：(第0位开始算起)<br>20位：SMEP<br>21位：SMAP<br>和Linux Kernel相同，需要一条chain来修改CR4寄存器</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">pop rcx; ret</span><br><span class="line">cr4_value</span><br><span class="line">mov cr4, rcx; ret</span><br></pre></td></tr></table></figure>
 <p>Windows中CR4寄存器修改可能会被Check到，产生：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Bug Check 0x139: KERNEL_SECURITY_CHECK_FAILURE</span><br></pre></td></tr></table></figure>
@@ -153,7 +153,7 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">1: kd&gt; uf nt!MiGetPTEaddress</span><br><span class="line">nt!MiGetPteAddress:</span><br><span class="line">fffff802&#96;25ad8dc8 48c1e909        shr     rcx,9</span><br><span class="line">fffff802&#96;25ad8dcc 48b8f8ffffff7f000000 mov rax,7FFFFFFFF8h</span><br><span class="line">fffff802&#96;25ad8dd6 4823c8          and     rcx,rax</span><br><span class="line">fffff802&#96;25ad8dd9 48b8000000000092ffff mov rax,0FFFF920000000000h</span><br><span class="line">fffff802&#96;25ad8de3 4803c1          add     rax,rcx</span><br><span class="line">fffff802&#96;25ad8de6 c3              ret</span><br></pre></td></tr></table></figure>
 <p>PTE、PDE、PDPTE对应位置都没有问题，但是看到对应的PML4表项：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">kd&gt; dq ffffae572b95c000</span><br><span class="line">ffffae57&#96;2b95c000   8a000000&#96;ad029867    00000000&#96;00000000</span><br><span class="line">......</span><br><span class="line">......</span><br></pre></td></tr></table></figure>
-<p>可以看到对应最高位NX-bit为1，所以直接跳转会不可执行，但是vmware环境下对应最高为:0a000000……，最高位NX-bit为0，在关闭SMEP、SMAP后可以直接执行<br><strong>这里占坑，只能大致根据自己的debug和现有资料猜测实现的原理：</strong><br>其实这四个表项的NX-bit，经过调试，都会起作用，所以这里的PML4表项的NX-bit猜测是在进入内核态才会设置的<br>在QEMU中使用gdbserver调试，分别断在用户态和内核态，可以看到，在用户态这个表项对应位置的NX-bit为0，在内核态为1<br>所以猜测这是最开始硬件实现的一种SMEP机制</p>
+<p>可以看到对应最高位NX-bit为1，所以直接跳转会不可执行，但是Vmware环境下对应为:0a000000……，最高位NX-bit为0，在关闭SMEP、SMAP后可以直接执行<br><strong>这里占坑，只能大致根据自己的debug和现有资料猜测实现的原理：</strong><br>其实这四个表项的NX-bit，经过调试，都会起作用，所以这里的PML4表项的NX-bit猜测是在进入内核态才会设置的<br><strong>Windbg中可以在内核attach到对应的进程，bp到用户态代码，继续运行可以断在用户态，但是在qemu monitor中info registers看到RIP依然是在内核态，猜测这应该是Kernel Debug设计上的问题，没真正返回用户态，而是在内核中支持Debug的代码中，在这个“用户态”看到对应的PML4表项开启了NX<br>最后选择在QEMU中使用gdbserver调试，分别断在用户态和内核态，这时候在qemu monitor中info registers看到RIP指向用户态，此时表项对应位置的NX-bit为0(在内核态为1)</strong><br>以gdb为准(因为从monitor看出QEMU内部的gdbserver更能显示当前运行状态)，猜测这是最开始硬件实现SMEP的一种机制</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">这里有类似的说明，不过情况不一样，但是有助于理解：</span><br><span class="line">https:&#x2F;&#x2F;ricklarabee.blogspot.com&#x2F;2017&#x2F;01&#x2F;virtual-memory-page-tables-and-one-bit.html</span><br><span class="line">http:&#x2F;&#x2F;hypervsir.blogspot.com&#x2F;2014&#x2F;11&#x2F;implement-software-based-smep-with-non.html</span><br></pre></td></tr></table></figure>
 <p>经过调试可以找到：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">KVASCODE:0000000140352DC1                 mov     cr3, rbp</span><br><span class="line">KVASCODE:0000000140352DC4</span><br><span class="line">KVASCODE:0000000140352DC4 loc_140352DC4:                          ; CODE XREF: sub_140352D80+C↑j</span><br><span class="line">KVASCODE:0000000140352DC4                 mov     rbp, r9</span><br><span class="line">KVASCODE:0000000140352DC7                 bt      esp, 1</span><br><span class="line">KVASCODE:0000000140352DCB                 jb      short loc_140352DD6</span><br><span class="line">KVASCODE:0000000140352DCD                 verw    word ptr gs:702Ah</span><br><span class="line">KVASCODE:0000000140352DD6</span><br><span class="line">KVASCODE:0000000140352DD6 loc_140352DD6:                          ; CODE XREF: sub_140352D80+4B↑j</span><br><span class="line">KVASCODE:0000000140352DD6                 mov     rsp, r8</span><br><span class="line">KVASCODE:0000000140352DD9                 swapgs</span><br><span class="line">KVASCODE:0000000140352DDC                 sysret</span><br><span class="line">KVASCODE:0000000140352DDF                 rent</span><br></pre></td></tr></table></figure>
@@ -184,7 +184,7 @@
 <h2 id="Return-to-Userspace-Safely"><a href="#Return-to-Userspace-Safely" class="headerlink" title="Return to Userspace Safely"></a>Return to Userspace Safely</h2><p>提权后需要安全地返回用户空间<br>只能视情况而定，主要的思路：</p>
 <ul>
 <li>构造好寄存器环境后sysret</li>
-<li>恢复rbp栈帧，而后ret到未破坏程序流时正常的执行位置(一般在KiSystemServiceExit)</li>
+<li>恢复rbp栈帧，而后ret到未破坏程序流时正常返回用户空间时的执行位置(一般在KiSystemServiceExit)</li>
 </ul>
 
   </div>
