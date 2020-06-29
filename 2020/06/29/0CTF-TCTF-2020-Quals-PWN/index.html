@@ -15,7 +15,7 @@
 <meta property="og:description" content="感觉比去年好一些自己解决了三道PWN，成功一血  DUETlibc-2.29 程序使用calloc分配heap，只能同时有两个chunk，分配大小：0x80～0x400程序开启了sandbox: 12345678910111213141516171819202122232425262728293031kirin@ubuntu:~&#x2F;tctf$ seccomp-tools dump .&amp;#x">
 <meta property="og:image" content="https://upload-images.jianshu.io/upload_images/7434375-02fdffb7b08b3550.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 <meta property="article:published_time" content="2020-06-29T05:26:05.000Z">
-<meta property="article:modified_time" content="2020-06-29T05:56:29.875Z">
+<meta property="article:modified_time" content="2020-06-29T07:19:37.555Z">
 <meta property="article:author" content="Kirin">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://upload-images.jianshu.io/upload_images/7434375-02fdffb7b08b3550.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
@@ -152,7 +152,7 @@
 <ul>
 <li>calloc不从tcache中分配chunk，先将需要的chunk size对应的tcache bin填满，构造一个0x88字节的unsortedbin，便可以构造overlapping，这样的话布置好堆空间，就可以使得chunk A能够修改chunk B的header(此时利用unsortedbin的fd已经leak libc address)</li>
 <li>而后利用largebin attack：先用chunk A修改B的header构造一个0x400大小的堆，而后free B入unsorted bin，分配0x400(chunksize=0x410)，B就会进入largebin，此时可以利用largebin的 fd_nextsize/bk_nextsize 来leak heap address，再次利用A修改B的bk_nextsize到 &amp;ptr-0x20，此时再free一个largebin范围chunk进入unsortedbin，就可以在下次malloc一个小chunk过程中进行largebin attack(原理见源码)，修改ptr到一个堆地址，完成一次任意地址写heap addr</li>
-<li>考虑到只有两个chunk，且calloc会置0原空间，无法通过写global_max_fast来进行fastbin attack，因为libc-2.29存在vtable check，也没办法覆写vtable</li>
+<li>考虑到只有两个chunk，可以通过写global_max_fast来进行一次fastbin attack，但是calloc会置0原空间，没有好的位置用于劫持程序流，且因为libc-2.29存在vtable check，也没办法直接通过largebin attack覆写vtable劫持程序流</li>
 <li>考虑直接覆盖掉stderr的chain，在exit调用_IO_flush_all_lockp时尝试劫持程序流<strong>(因为在libc-2.29下_IO_strfile没有了像libc-2.24下的fp-&gt;_s._allocate_buffer()这类函数操作，都被修改为了标准函数(malloc…)，所以没办法直接直接像libc-2.24那样直接劫持程序流)</strong>：</li>
 </ul>
 <p>因为存在vtable check，所以只能寻找__libc_IO_vtables内的函数，看到：</p>
